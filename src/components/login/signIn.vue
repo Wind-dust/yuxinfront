@@ -7,11 +7,11 @@
           <el-input placeholder="请输入用户姓名" @keyup.enter.native="submitForm('login')"
                     v-model="userinfo.nick_name"></el-input>
         </el-form-item>
-        <el-form-item prop="passwd" label="密码:" :rules="rule">
+        <el-form-item prop="passwd" class="is-required" label="密码:" :rules="rule">
           <el-input placeholder="至少8位数且有大小写字母" @keyup.enter.native="submitForm('login')" v-model="userinfo.passwd"
                     type="password"></el-input>
         </el-form-item>
-        <el-form-item prop="checkPass" label="确认密码:" :rules="rule1">
+        <el-form-item prop="checkPass" class="is-required" label="确认密码:" :rules="rule1">
           <el-input placeholder="请输入密码" @keyup.enter.native="submitForm('login')" v-model="userinfo.checkPass"
                     type="password"></el-input>
         </el-form-item>
