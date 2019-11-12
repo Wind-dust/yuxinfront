@@ -31,7 +31,8 @@
             placeholder: '默认统一代理商服务价格'
           }
         },
-        ruleForm: {}
+        ruleForm: {},
+        bread:'子账户服务设置'
 
       }
     },
@@ -41,8 +42,12 @@
     mounted() {
       this.setBread()
       this.getService()
+      this.emit()
     },
     methods: {
+      emit(){
+        this.$emit('getBread',this.bread)
+      },
       submit: function (data) {
         let that = this
         that.$request({

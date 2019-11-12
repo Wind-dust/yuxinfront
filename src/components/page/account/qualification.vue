@@ -249,7 +249,8 @@
         district: [],
         proId: '',
         cityId: '',
-        districtId: ''
+        districtId: '',
+        bread:'账户资质'
 
       }
     },
@@ -259,8 +260,12 @@
     mounted() {
       this.setBread()
       this.getProvinceCity()
+      this.emit()
     },
     methods: {
+      emit:function(){
+        this.$emit('getBread',this.bread)
+      },
       submit: function (data) {
         data.ruleForm.province_id = this.proId
         data.ruleForm.city_id = this.cityId

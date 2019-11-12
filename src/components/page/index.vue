@@ -45,17 +45,21 @@
     data() {
       return {
         name: '',
-        userInfo: {}
+        userInfo: {},
+        bread:'控制台'
       }
     },
     components: {},
     computed: {},
     mounted() {
       this.getuserInfo()
-      this.$globalData.bread = '控制台'
+     this.emit()
       document.title = '管理中心|控制台'
     },
     methods: {
+      emit(){
+        this.$emit('getBread',this.bread)
+      },
       getuserInfo() {
         let that = this;
         that.$request({

@@ -38,7 +38,7 @@
     <div class="navigation">
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
-        <el-breadcrumb-item>{{bread}}</el-breadcrumb-item>
+        <el-breadcrumb-item>{{breadText}}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
   </div>
@@ -46,25 +46,23 @@
 
 <script>
   export default {
-    props: ['name'],
+    props: ['name', 'breadText'],
     data() {
       return {
-        bread:''
+        bread: ''
       }
     },
     mounted() {
-this.bread = this.$globalData.bread
+      this.bread = this.$root.bread
     },
-    watch:{
-      'bread':function(oldval,newval){
+    watch: {
+      'bread': function (oldval, newval) {
         console.log('wozhixing ')
-        console.log(newval)
-        // this.bread = newval
       }
     },
     methods: {
       quitlogin() {
-        localStorage.setItem("sup_con_id", '')
+        localStorage.setItem("con_id", '')
         console.log(this.$router)
         this.$router.push({path: '/login'})
       },

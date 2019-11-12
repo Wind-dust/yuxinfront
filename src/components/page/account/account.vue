@@ -85,13 +85,18 @@
         },
         text: '获取手机验证码',
         rule: [{validator: check, trigger: 'blur'}],
-        rule1: [{validator: checkPass, trigger: 'blur'}]
+        rule1: [{validator: checkPass, trigger: 'blur'}],
+        bread:'开通子账户'
 
       }
     },
     mounted() {
+      this.emit()
     },
     methods: {
+      emit(){
+        this.$emit('getBread',this.bread)
+      },
       getCode() {
         if (!this.userinfo.mobile || this.userinfo.mobile.length < 11) {
           Message({message: '手机号错误', type: 'error'})
@@ -164,7 +169,7 @@
   }
 
   .box-card {
-    width: 800px;
+    width: 746px;
   }
 
   .btn {

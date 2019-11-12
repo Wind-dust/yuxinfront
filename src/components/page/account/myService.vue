@@ -61,7 +61,8 @@
           page_num: 10
         },
         page: 1,
-        total: 0
+        total: 0,
+        bread:'我的服务'
       }
     },
     components: {
@@ -70,11 +71,16 @@
       vCard
     },
     mounted() {
+      this.emit()
+      console.log(this.$root)
       this.screen.page = parseInt(localStorage.getItem("goodList")) || 1
       this.page = this.screen.page
       this.getAboutus()
     },
     methods: {
+      emit:function(){
+        this.$emit('getBread',this.bread)
+      },
       getAboutus() {
         let that = this
         that.$request({

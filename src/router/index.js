@@ -22,9 +22,6 @@ const signIn = r => require.ensure([], () => r(require('../components/login/sign
 
 const modifyPwd = r => require.ensure([], () => r(require('../components/page/jurisdiction/modifyPwd')), 'modifyPwd')
 
-const servePay = r => require.ensure([], () => r(require('../components/page/service/servePay')), 'servePay')
-// const serve = r => require.ensure([],()=>r(require('../components/page/service/serveList')),'serveList')
-// const serve = r => require.ensure([], () => r(require('../components/page/service/serve')), 'serve')
 const qualification = r => require.ensure([], () => r(require('../components/page/account/qualification')), 'qualification')
 const account = r => require.ensure([], () => r(require('../components/page/account/account')), 'account')
 const subAccount = r => require.ensure([], () => r(require('../components/page/account/service')), 'subAccount')
@@ -63,10 +60,6 @@ export default new Router({
       {
         path: '/modifyPwd',
         component: modifyPwd
-      },
-      {
-        path: '/servePay',
-        component: servePay
       }, {
         path: '/qualification',
         component: qualification
