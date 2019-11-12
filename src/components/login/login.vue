@@ -7,7 +7,7 @@
         <el-form-item prop="user" label="账号:" :rules="[{ required: true, message: '请输入账号', trigger: 'blur' }]">
           <el-input placeholder="请输入账号" @keyup.enter.native="submitForm('login')" v-model="userinfo.user"></el-input>
         </el-form-item>
-        <el-form-item prop="pwd" label="密码:" :rules="rule">
+        <el-form-item prop="pwd" class="is-required" label="密码:" :rules="rule">
           <el-input placeholder="请输入密码" @keyup.enter.native="submitForm('login')" v-model="userinfo.pwd"
                     type="password"></el-input>
         </el-form-item>

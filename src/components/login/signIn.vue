@@ -1,6 +1,7 @@
 <template>
   <div class="login">
     <el-card class="box-card">
+      <img class="logImg" src="../../assets/imgs/logo.png" alt="">
       <el-form label-position="right" label-width="100px" :model="userinfo" ref='login'>
         <el-form-item prop="nick_name" label="用户姓名:" :rules="[{ required: true, message: '请输入姓名', trigger: 'blur' }]">
           <el-input placeholder="请输入用户姓名" @keyup.enter.native="submitForm('login')"
@@ -35,8 +36,9 @@
         <!--<el-button class="getCode" type="primary" @click.prevent="getCode">{{text}}</el-button>-->
         <!--</el-form-item>-->
         <el-form-item>
-          <el-button class="btn" type="primary" @click="submitForm('login')">确认</el-button>
+          <el-button class="btn" type="primary" @click="submitForm('login')">注册</el-button>
         </el-form-item>
+        <div class="signText">已有账号？<router-link to="/login" class="signIn">点我登陆</router-link></div>
       </el-form>
     </el-card>
   </div>
