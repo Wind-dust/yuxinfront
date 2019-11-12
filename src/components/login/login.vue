@@ -14,7 +14,7 @@
         <el-form-item>
           <el-button class="btn" type="primary" @click="submitForm('login')">登录</el-button>
         </el-form-item>
-        <!--<div class="signText">没有账号？<router-link to="/signIn" class="signIn">点我注册</router-link></div>-->
+        <div class="signText">没有账号？<router-link to="/signIn" class="signIn">点我注册</router-link></div>
       </el-form>
     </el-card>
   </div>
