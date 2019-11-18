@@ -282,3 +282,17 @@ a {
 .border-radius{
   border-radius: 4px;
 }
+.cell{
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  text-align: center!important;
+}
+.el-submenu__title:focus, .el-submenu__title:hover{
+  background: #60bff3!important;
+}
+.el-menu-item:focus, .el-menu-item:hover{
+  background: #60bff3!important;
+}

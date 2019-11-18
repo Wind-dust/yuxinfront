@@ -1,9 +1,9 @@
 <template>
   <div>
     <el-card class="box-card" shadow="never">
-      <div slot="header" class="clearfix">
-        <span>筛选</span>
-      </div>
+      <!--<div slot="header" class="clearfix">-->
+        <!--<span>筛选</span>-->
+      <!--</div>-->
       <el-form :inline="true" class="demo-form-inline">
         <el-form-item v-for="(v,k) in screen" :key="k" :label="v.label">
           <el-input v-if="v.type == 'input'" v-model="v.content" :placeholder="v.placeholder"></el-input>
@@ -17,7 +17,7 @@
         </el-select>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onQuery">查询</el-button>
+          <el-button type="primary" size="small" @click="onQuery">查询</el-button>
         </el-form-item>
       </el-form>
     </el-card>

@@ -28,7 +28,7 @@
           </el-form-item>
           <el-form-item class="flex-cen">
             <el-button  type="primary" @click="submit('cRuleForm')">确定</el-button>
-            <!--<el-button  @click="cHideCard()">取消</el-button>-->
+            <el-button v-if="is_hiden"  @click="cHideCard()">取消</el-button>
           </el-form-item>
         </el-form>
       </el-card>
@@ -38,7 +38,7 @@
 <script>
 import vUpload from './upload';
 export default {
-  props: ['name','width','cardStatus','ruleForm','rules','ruleType'],
+  props: ['name','width','cardStatus','ruleForm','rules','ruleType','is_hiden'],
   data(){
     return {
       toggleCard:false,

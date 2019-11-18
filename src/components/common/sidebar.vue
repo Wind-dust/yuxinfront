@@ -4,12 +4,17 @@
       <el-menu-item index="index">
         <span class="sb-cn">控制台</span>
       </el-menu-item>
-      <el-submenu  v-for="(v,k) in menuList" :key="k" :index="k+''">
+      <el-submenu v-for="(v,k) in menuList" :key="k" :index="k+''">
         <template slot="title">
           <span class="sb-cn">{{v.name}}</span>
         </template>
         <el-menu-item class="bc" v-for="(v1,k1) in v._child" :key="k1" :index="'/'+v1.link">{{v1.name}}</el-menu-item>
       </el-submenu>
+      <el-menu-item>
+        <router-link to="/message">
+        <span class="sb-cn">系统消息</span>
+        </router-link>
+      </el-menu-item>
     </el-menu>
   </div>
 </template>
@@ -23,15 +28,43 @@
             _child: [{
               name: '开通子账户',
               link: 'account'
-            },{
-              name:'账户资质',
-              link:'qualification'
-            },{
-              name:'子账户设置',
-              link:'subAccount'
-            },{
-              name:'我的服务',
-              link:'myService'
+            }, {
+              name: '账户资质',
+              link: 'qualification'
+            }, {
+              name: '子账户设置',
+              link: 'subAccount'
+            }, {
+              name: '我的服务',
+              link: 'myService'
+            }]
+          },
+          {
+            name: '产品中心',
+            _child: [{
+              name: '营销短信',
+              link: 'marketingMessage'
+            }, {
+              name: '行业短信',
+              link: 'businessMessage'
+            }]
+          }, {
+            name: '报表中心',
+            _child: [{
+              name: '数据总览',
+              link: 'dataInfo'
+            }, {
+              name: "明细查询",
+              link: 'dataDetail'
+            }, {
+              name: '模板查询',
+              link: 'templateDetail',
+            }]
+          }, {
+            name: '通讯录',
+            _child: [{
+              name: '通讯录列表',
+              link: 'addressList'
             }]
           }
         ]
@@ -40,9 +73,7 @@
     mounted() {
 
     },
-    methods: {
-
-    },
+    methods: {},
     computed: {
       onRoutes() {
         return '/' + this.$route.path.split('/')[1];
@@ -60,27 +91,30 @@
     z-index: 9999;
     bottom: 0;
     overflow: auto;
-    background: #42485b;
+    background: #17174a;
   }
 
   .sidebar > ul {
     /*height: 100%;*/
     overflow: auto;
     margin-top: 66px;
-    background: #42485b;
+    background: #17174a;
     width: 100%;
   }
 
-  .sb-cn{
+  .sb-cn {
     color: #ffffff;
   }
+
   .el-menu-item, .el-submenu__title {
     font-size: 14px;
 
   }
-  .el-submenu__title:hover{
+
+  .el-submenu__title:hover {
     background: #60bff3;
   }
+
   .material-icons {
     vertical-align: middle;
     margin-right: 5px;
@@ -88,21 +122,26 @@
     text-align: center;
     font-size: 18px;
   }
-  .bc{
-    background: #42485b!important;
+
+  .bc {
+    background: #070844 !important;
     color: #ffffff;
   }
-  .sidebar > ul > li:hover{
-    color: #000!important;
-    background: #60bff3!important;
+
+  .sidebar > ul > li:hover {
+    color: #000 !important;
+    background: #60bff3 !important;
   }
-  .bc:hover{
-    background: #60bff3!important;
+
+  .bc:hover {
+    background: #60bff3 !important;
   }
-  .el-submenu:hover{
-    background: #60bff3!important;
+
+  .el-submenu:hover {
+    background: #60bff3 !important;
   }
+
   /*.is-active{*/
-    /*background: #60bff3!important;*/
+  /*background: #60bff3!important;*/
   /*}*/
 </style>

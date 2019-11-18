@@ -27,6 +27,17 @@ const account = r => require.ensure([], () => r(require('../components/page/acco
 const subAccount = r => require.ensure([], () => r(require('../components/page/account/service')), 'subAccount')
 const myService = r => require.ensure([], () => r(require('../components/page/account/myService')), 'myService')
 
+const businessMessage = r => require.ensure([], () => r(require('../components/page/sms/businessMessage')), 'businessMessage')
+const marketingMessage = r => require.ensure([], () => r(require('../components/page/sms/marketingMessage')), 'marketingMessage')
+
+const dataDetail = r => require.ensure([], () => r(require('../components/page/report/dataDetail')), 'dataDetail')
+const dataInfo = r => require.ensure([], () => r(require('../components/page/report/dataInfo')), 'dataInfo')
+const templateDetail = r => require.ensure([], () => r(require('../components/page/report/templateDetail')), 'templateDetail')
+
+const addressList = r => require.ensure([], () => r(require('../components/page/addressList/addressList')), 'addressList')
+
+const message = r => require.ensure([], () => r(require('../components/page/systemMessage/systemMessage')), 'systemMessage')
+
 Vue.use(Router)
 
 export default new Router({
@@ -72,6 +83,27 @@ export default new Router({
       }, {
         path: '/myService',
         component: myService
+      }, {
+        path: '/marketingMessage',
+        component: marketingMessage
+      }, {
+        path: '/businessMessage',
+        component: businessMessage
+      }, {
+        path: '/templateDetail',
+        component: templateDetail
+      }, {
+        path: '/dataDetail',
+        component: dataDetail
+      }, {
+        path: '/dataInfo',
+        component: dataInfo
+      }, {
+        path: '/addressList',
+        component: addressList
+      }, {
+        path: '/message',
+        component: message
       }]
   }, {
     path: '/login',

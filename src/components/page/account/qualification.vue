@@ -4,27 +4,45 @@
             @submit="submit" @hideCard="">
       <template slot="province">
         <div class="area">
-          <el-form-item  label-width="80px" label="省" :rules="[{ required: true, message: '请选择省份', trigger: 'blur' }]">
+          <el-form-item label-width="80px" label="省" :rules="[{ required: true, message: '请选择省份', trigger: 'change' }]">
             <el-select @change="getProvince" v-model="proId">
               <el-option v-for="item in province" :key="item.id" :label="item.label || ''" :value="item.value || ''">
               </el-option>
             </el-select>
           </el-form-item>
 
-          <el-form-item label-width="80px" label="市" :rules="[{ required: true, message: '请选择城市', trigger: 'blur' }]">
+          <el-form-item label-width="80px" label="市" :rules="[{ required: true, message: '请选择城市', trigger: 'change' }]">
             <el-select @change="getCity" v-model="cityId">
               <el-option v-for="item in city" :key="item.id" :label="item.area_name || ''" :value="item.id || ''">
               </el-option>
             </el-select>
           </el-form-item>
 
-          <el-form-item label-width="80px" label="区" :rules="[{ required: true, message: '请选择区', trigger: 'blur' }]">
+          <el-form-item label-width="80px" label="区" :rules="[{ required: true, message: '请选择区', trigger: 'change' }]">
             <el-select v-model="districtId">
               <el-option v-for="item in district" :key="item.id" :label="item.area_name || ''" :value="item.id || ''">
               </el-option>
             </el-select>
           </el-form-item>
+
         </div>
+
+          <el-form-item label-width="150px" label="主办单位性质" :rules="[{ required: true, message: '请选择单位性质', trigger: 'change' }]">
+            <el-select v-model="companyId" @change="getType">
+              <el-option v-for="item in company" :key="item.id" :label="item.name || ''" :value="item.id || ''">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
+
+
+          <el-form-item label-width="150px" label="主办单位证件类型" :rules="[{ required: true, message: '请选择证件类型', trigger: 'change' }]">
+            <el-select v-model="companyTypeId" @change="getType">
+              <el-option v-for="item in companyType" :key="item.id" :label="item.name || ''" :value="item.id || ''">
+              </el-option>
+            </el-select>
+          </el-form-item>
+
       </template>
     </v-card>
   </div>
@@ -32,12 +50,18 @@
 
 <script>
   import vCard from '../../component/card'
+  import options from '../../../assets/js/options'
+  import type from '../../../assets/js/type'
 
   export default {
     data() {
       return {
+        company: [],
+        companyId: '',
+        companyType:[],
+        companyTypeId:'',
         cardStatus: true,
-        rules: ['company_name', 'company_type', 'company_certificate_type', 'company_certificate_num',
+        rules: ['company_name', 'company_certificate_num',
           'organizers_name', 'identity_address', 'mailingAddress_address', 'user_supp_address', 'investor', 'entity_responsible_person_name',
           'entity_responsible_person_identity_types', 'entity_responsible_person_identity_num', 'entity_responsible_person_mobile_phone',
           'entity_responsible_person_phone', 'entity_responsible_person_msn',
@@ -48,101 +72,6 @@
             type: 'input',
             label: '主办单位或主办人全称',
             placeholder: '请输入主办单位或主办人全称'
-          },
-          'company_type': {
-            type: 'select',
-            label: '主办单位性质',
-            placeholder: '请选择',
-            option: [
-              {
-                value: 1,
-                label: '国防机构'
-              },
-              {
-                value: 2,
-                label: '政府机关'
-              }, {
-                value: 3,
-                label: '事业单位'
-              },
-              {
-                value: 4,
-                label: '企业'
-              }, {
-                value: 5,
-                label: '个人'
-              },
-              {
-                value: 6,
-                label: '社会团体'
-              }, {
-                value: 7,
-                label: '民办非企业单位'
-              },
-              {
-                value: 8,
-                label: '基金会'
-              },
-              {
-                value: 9,
-                label: '律师执业机构'
-              }, {
-                value: 10,
-                label: '外国在华文化中心'
-              }, {
-                value: 11,
-                label: '群众性团体组织'
-              }, {
-                value: 12,
-                label: '司法鉴定机构'
-              },
-              {
-                value: 13,
-                label: '宗教团体'
-              }, {
-                value: 14,
-                label: '境外机构'
-              }, {
-                value: 15,
-                label: '医疗机构'
-              }, {
-                value: 16,
-                label: '公证机构'
-              }
-            ]
-          },
-          'company_certificate_type': {
-            type: 'select',
-            label: '主办单位证件类型',
-            placeholder: '请选择',
-            option: [{
-              value: 1,
-              label: '营业执照'
-            }, {
-              value: 3,
-              label: '组织机构代码'
-            }, {
-              value: 4,
-              label: '事业单位法人证书'
-            }, {
-              value: 5,
-              label: '部队代号'
-            }, {
-              value: 9,
-              label: '组织机构代码证'
-            }, {
-              value: 12,
-              label: '组织机构代码证'
-            }, {
-              value: 13,
-              label: '统一社会信用代码证'
-            }, {
-              value: 23,
-              label: '军队单位对外有偿服务许可证'
-            }, {
-              value: 27,
-              label: '外国企业常驻代表机构登记证'
-            }]
           },
           'company_certificate_num': {
             type: 'input',
@@ -183,34 +112,7 @@
             type: 'select',
             label: '负责人证件类型',
             placeholder: '请选择',
-            option: [{
-              value: 1,
-              label: '营业执照'
-            }, {
-              value: 3,
-              label: '组织机构代码'
-            }, {
-              value: 4,
-              label: '事业单位法人证书'
-            }, {
-              value: 5,
-              label: '部队代号'
-            }, {
-              value: 9,
-              label: '组织机构代码证'
-            }, {
-              value: 12,
-              label: '组织机构代码证'
-            }, {
-              value: 13,
-              label: '统一社会信用代码证'
-            }, {
-              value: 23,
-              label: '军队单位对外有偿服务许可证'
-            }, {
-              value: 27,
-              label: '外国企业常驻代表机构登记证'
-            }]
+            option: []
           },
           'entity_responsible_person_identity_num': {
             type: 'input',
@@ -250,8 +152,7 @@
         proId: '',
         cityId: '',
         districtId: '',
-        bread:'账户资质'
-
+        bread: '账户资质'
       }
     },
     components: {
@@ -261,15 +162,31 @@
       this.setBread()
       this.getProvinceCity()
       this.emit()
+      console.log(options)
+      this.company = options
+      this.ruleType.entity_responsible_person_identity_types.option = type
     },
     methods: {
-      emit:function(){
-        this.$emit('getBread',this.bread)
+      getType() {
+        let id = parseInt(this.companyId)
+        let company = this.company
+        let typeArr = []
+        for (let i = 0; i < company.length; i++) {
+          if (id === parseInt(company[i].id)) {
+            typeArr = company[i].son
+          }
+        }
+        this.companyType = typeArr
+      },
+      emit: function () {
+        this.$emit('getBread', this.bread)
       },
       submit: function (data) {
         data.ruleForm.province_id = this.proId
         data.ruleForm.city_id = this.cityId
         data.ruleForm.county_id = this.districtId
+        data.ruleForm.company_type = this.companyId
+        data.ruleForm.company_certificate_type = this.companyTypeId
         let that = this
         that.$request({
           url: 'user/recordUserQualification',
@@ -338,7 +255,7 @@
 </script>
 
 <style scoped>
-  .area{
+  .area {
     width: 100%;
     display: flex;
     justify-content: space-between;
