@@ -19,7 +19,7 @@
               <el-option label="复制" value="2"></el-option>
               <!--<el-option label="移动" value="3"></el-option>-->
             </el-select>
-            <el-select size="small" multiple style="width: 150px" placehloder="更多维度" collapse-tags v-model="selectOption">
+            <el-select size="small" multiple style="width: 150px" placeholder="更多维度" collapse-tags v-model="selectOption">
               <el-option label="公司" value="1"></el-option>
               <el-option label="职务" value="2"></el-option>
               <el-option label="QQ" value="3"></el-option>
