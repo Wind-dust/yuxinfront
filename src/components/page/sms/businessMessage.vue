@@ -3,7 +3,7 @@
   <el-row>
     <el-col :span="24">
       <div class="box-card box-shadow">
-        <h3 class="title">营销短信</h3>
+        <h3 class="title">行业短信</h3>
         <el-tabs v-model="activeName">
           <el-tab-pane label="产品信息" name="first"></el-tab-pane>
           <el-tab-pane label="短信任务" name="second"></el-tab-pane>
