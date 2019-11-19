@@ -10,7 +10,7 @@
               <el-option label="未读" value="1"></el-option>
               <el-option label="已读" value="2"></el-option>
             </el-select>
-            <el-button size="mini" @click="markRead">标位已读</el-button>
+            <el-button size="mini" @click="markRead">标为已读</el-button>
             <el-button size="mini">删除</el-button>
           </div>
           <div class="table">

@@ -19,12 +19,13 @@
               <el-option label="复制" value="2"></el-option>
               <!--<el-option label="移动" value="3"></el-option>-->
             </el-select>
-            <el-select size="small" multiple style="width: 150px" placeholder="更多维度" collapse-tags v-model="selectOption">
-              <el-option label="公司" value="1"></el-option>
-              <el-option label="职务" value="2"></el-option>
-              <el-option label="QQ" value="3"></el-option>
-              <el-option label="邮箱" value="4"></el-option>
-              <el-option label="号码归属地" value="5"></el-option>
+            <el-select size="small" multiple style="width: 150px" placeholder="更多维度" collapse-tags
+                       v-model="selectOption">
+              <el-option label="公司" value="公司"></el-option>
+              <el-option label="职务" value="职务"></el-option>
+              <el-option label="QQ" value="QQ"></el-option>
+              <el-option label="邮箱" value="邮箱"></el-option>
+              <el-option label="号码归属地" value="号码归属地"></el-option>
             </el-select>
           </div>
           <div class="table">
@@ -56,23 +57,23 @@
         list: [],
         addMobile: '',
         options: [{
-          id:1,
+          id: 1,
           name: '公司',
           status: false
         }, {
-          id:2,
+          id: 2,
           name: '职务',
           status: false
         }, {
-          id:3,
+          id: 3,
           name: 'QQ',
           status: false,
         }, {
-          id:4,
+          id: 4,
           name: '邮箱',
           status: false
         }, {
-          id:5,
+          id: 5,
           name: '号码归属地',
           status: false
         }],
@@ -85,13 +86,13 @@
       },
       selectOption(newVal, oldVal) {
         console.log(newVal)
-        if (newVal.length > 0){
-          for (let i=0;i<newVal.length;i++){
-            //如果
-            this.options[newVal[i] - 1].status = true
+        if (newVal.length > 0) {
+          let options = this.options
+          for (let i = 0; i < options.length; i++) {
+            this.options[i].status = newVal.indexOf(options[i].name) !== -1;
           }
         } else {
-          for (let i=0;i<this.options.length;i++){
+          for (let i = 0; i < this.options.length; i++) {
             this.options[i].status = false
           }
         }

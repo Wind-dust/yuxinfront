@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router>
+    <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark"  unique-opened router>
       <el-menu-item index="index">
         <span class="sb-cn"><i class="icon el-icon-s-home"></i>控制台</span>
       </el-menu-item>
