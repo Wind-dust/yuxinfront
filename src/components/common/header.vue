@@ -57,13 +57,11 @@
     },
     watch: {
       'bread': function (oldval, newval) {
-        console.log('wozhixing ')
       }
     },
     methods: {
       quitlogin() {
         localStorage.setItem("con_id", '')
-        console.log(this.$router)
         this.$router.push({path: '/login'})
       },
       modifyPwd() {

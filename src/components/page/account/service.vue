@@ -26,7 +26,7 @@
             option: []
           },
           'agency_price': {
-            type: 'number',
+            type: 'input',
             label: '代理价格',
             placeholder: '默认统一代理商服务价格'
           }

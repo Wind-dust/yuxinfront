@@ -11,6 +11,7 @@
             <el-option label="行业短信" value="2"></el-option>
           </el-select>
           <el-button size="mini" type="primary">查询</el-button>
+          <div id="main"></div>
           <div class="table">
             <el-table :data="list" style="width: 100%">
               <el-table-column type="index" label="序号"></el-table-column>
@@ -31,6 +32,7 @@
 
 <script>
   import {Message} from 'element-ui'
+  import echarts from 'echarts'
 
   export default {
     components: {},
@@ -48,8 +50,53 @@
     },
     mounted() {
       this.emit()
+      this.createLine()
     },
     methods: {
+      createLine() {
+        //获取元素
+        let main = document.getElementById('main')
+        //初始化echarts
+        let myChart = echarts.init(main,'walden')
+        myChart.setOption({
+          title: {text:'趋势图'},
+          tooltip: { trigger: 'axis'},
+          toolbox: {
+            show : true,
+            feature : {
+              mark : {show: true},
+//            dataView : {show: true, readOnly: false},     //数据视图按钮
+              magicType : {show: true, type: ['line', 'bar']},
+//            restore : {show: true},       //图表右上角刷新按钮
+              saveAsImage : {show: true}
+            }
+          },
+          // x轴
+          xAxis: [{
+            boundaryGap : true,
+            data: ['10-20','10-21','10-22','10-23','10-26','10-28']
+          }],
+          // y 轴
+          yAxis: {
+            // data:[]
+          },
+          // 图裂
+          legend: {
+            data: ['发送条数', '成功条数']
+          },
+          calculable : true,
+          //连接点
+          series: [{
+            name: '发送条数',
+            type: 'line',
+            data: [5, 30, 36, 10, 60, 60] //数据，对应xAxis时间
+          }, {
+            name: '成功条数',
+            type: 'line',
+            data: [10, 20, 20, 20, 50, 10]
+          }]
+        })
+      },
       emit() {
         this.$emit('getBread', '数据总览')
       },
@@ -163,7 +210,14 @@
     display: block;
     margin-top: 20px;
   }
-  .table{
+
+  .table {
     margin-top: 30px;
+  }
+
+  #main {
+    width: 100%;
+    height: 200px;
+    margin-top: 40px;
   }
 </style>

@@ -12,37 +12,34 @@
       <div class="line"></div>
       <div class="info-l">
         <div class="info-text">
-        <p>短信测试</p>
-        <p class="in-bu">
-          <el-input v-model="phone"  placeholder="请输入手机号"></el-input>
-          <el-button size="medium" type="primary">发送短信</el-button>
-        </p>
-        <p>输入手机号码，获得测试短信</p>
-      </div></div>
+          <p>短信测试</p>
+          <p class="in-bu">
+            <el-input v-model="phone" placeholder="请输入手机号"></el-input>
+            <el-button size="medium" type="primary">发送短信</el-button>
+          </p>
+          <p>输入手机号码，获得测试短信</p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
   export default {
-    props:['name','content','type'],
+    props: ['name', 'content', 'type'],
     name: "productTemp",
-    data(){
+    data() {
       return {
-        phone:''
+        phone: ''
       }
     },
-    mounted(){
-      console.log(this.type)
+    mounted() {
     },
-    watch:{
-      'type'(newVal,oldVal){
-        console.log(newVal)
+    watch: {
+      'type'(newVal, oldVal) {
       }
     },
-    methods:{
-
-    }
+    methods: {}
   }
 </script>
 
@@ -73,20 +70,23 @@
   .info-text p:first-child {
     font-size: 14px;
   }
-  .info-text p:nth-of-type(2){
+
+  .info-text p:nth-of-type(2) {
     margin-bottom: 20px;
   }
 
   .line {
-height: 146px;
+    height: 146px;
     width: 1px;
     background: #efefef;
   }
-  .in-bu{
+
+  .in-bu {
     display: flex;
     align-items: center;
   }
-  .el-button{
+
+  .el-button {
     margin-left: 10px;
   }
 </style>
