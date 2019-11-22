@@ -3,6 +3,7 @@ import Router from 'vue-router';
 
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
+  console.log(routerPush.call(this, location))
   return routerPush.call(this, location).catch(error => error)
 }
 
@@ -26,6 +27,7 @@ const qualification = r => require.ensure([], () => r(require('../components/pag
 const account = r => require.ensure([], () => r(require('../components/page/account/account')), 'account')
 const subAccount = r => require.ensure([], () => r(require('../components/page/account/service')), 'subAccount')
 const myService = r => require.ensure([], () => r(require('../components/page/account/myService')), 'myService')
+const license = r => require.ensure([], () => r(require('../components/page/account/license')), 'license')
 
 const businessMessage = r => require.ensure([], () => r(require('../components/page/sms/businessMessage')), 'businessMessage')
 const marketingMessage = r => require.ensure([], () => r(require('../components/page/sms/marketingMessage')), 'marketingMessage')
@@ -37,6 +39,7 @@ const templateDetail = r => require.ensure([], () => r(require('../components/pa
 const addressList = r => require.ensure([], () => r(require('../components/page/addressList/addressList')), 'addressList')
 
 const message = r => require.ensure([], () => r(require('../components/page/systemMessage/systemMessage')), 'systemMessage')
+
 
 Vue.use(Router)
 
@@ -104,6 +107,9 @@ export default new Router({
       }, {
         path: '/message',
         component: message
+      }, {
+        path: '/license',
+        component: license
       }]
   }, {
     path: '/login',

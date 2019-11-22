@@ -5,15 +5,15 @@
         <!--Logo area-->
         <el-col :xs="16" :sm="16" :md="20">
           <div class="logo">
-            <span class="logo_prefix">上海钰晰科技</span>
-            <!--<span class="logo_suffix">CMS</span>-->
+            <!--<span class="logo_prefix">上海钰晰科技</span>-->
           </div>
         </el-col>
         <el-col class="fr" :xs="8" :sm="8" :md="4">
           <div class="user-header">
             <el-dropdown class="dropdown" trigger="click" menu-align="start">
                       <span class="el-dropdown-link">
-                        <img class="userImg fr" src="../../assets/imgs/logoicon.png" width="50px"/>
+                        <img class="userImg fr" v-if="logo" :src="logo" width="50px"/>
+                        <img class="userImg fr" v-else src="../../assets/imgs/logoicon.png" width="50px"/>
                         <span class="name din fr">{{name}}</span>
                       </span>
               <el-dropdown-menu slot="dropdown">
@@ -46,7 +46,7 @@
 
 <script>
   export default {
-    props: ['name', 'breadText'],
+    props: ['name', 'breadText','logo'],
     data() {
       return {
         bread: ''

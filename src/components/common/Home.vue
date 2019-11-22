@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper">
-    <v-head :name='name' :breadText="breadText"></v-head>
+    <v-head :name='name' :breadText="breadText" :logo="logo"></v-head>
     <v-sidebar></v-sidebar>
 
     <div class="content">
@@ -24,7 +24,8 @@
     data() {
       return {
         name: '',
-        breadText:''
+        breadText:'',
+        logo:''
       }
     },
     mounted() {
@@ -42,6 +43,7 @@
           success: function (res) {
             that.$globalData.userInfo = res.data || {};
             that.name = res.data.nick_name
+            that.logo = res.data.logo
           }
         })
       }

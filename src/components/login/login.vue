@@ -1,7 +1,7 @@
 <template>
   <div class="login">
     <el-card class="box-card">
-      <img class="logImg" src="../../assets/imgs/logo.png" alt="钰晰科技" title="钰晰科技">
+      <!--<img class="logImg" src="../../assets/imgs/logo.png" alt="钰晰科技" title="钰晰科技">-->
       <el-form label-position="top" label-width="80px" :model="userinfo" ref='login' :rules="rules">
         <el-form-item prop="user" label="账号:" >
           <el-input placeholder="请输入账号" @keyup.enter.native="submitForm('login')" v-model="userinfo.user"></el-input>
@@ -93,7 +93,7 @@
               url: 'user/login',
               login: true,
               data: {
-                mobile: that.userinfo.user,
+                nick_name: that.userinfo.user,
                 password: that.userinfo.pwd
               },
               success: function (res) {

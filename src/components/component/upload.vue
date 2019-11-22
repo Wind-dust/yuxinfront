@@ -11,14 +11,14 @@
       <i v-if="imaegList.length === 0 && !multiple" class="el-icon-plus avatar-uploader-icon"  @click="fileShow"></i>
       <i v-if="multiple" class="el-icon-plus avatar-uploader-icon"  @click="fileShow"></i>
 
-      <input class="hide" type="file" :multiple="multiple"  @change="fileChange" name="" :id="'fileinp'+num">
+      <input class="hide" type="file" :multiple="multiple" :upType="upType"   @change="fileChange" name="" :id="'fileinp'+num">
   </div>
 </template>
 
 <script>
 import {imageDeal} from '../../assets/js/common';
 export default {
-  props: ['num','image','name','multiple'],
+  props: ['num','image','name','multiple','upType'],
   data(){
     return{
       imaegList:[]
@@ -31,6 +31,7 @@ export default {
   },
   mounted(){
     this.takeImage()
+    console.log(this.upType)
   },
   methods: {
     takeImage(){
@@ -107,14 +108,22 @@ export default {
       let that = this;
       that.$request({
         data: formdata,
-        url: 'upload/uploadfile',
+        url: 'upload/uploadFile',
         success(res){
           that.imaegList =[{image:res.image_path}]
           console.log(that.imaegList)
-          that.$emit('upresult',{
-            image_path: res.image_path,
-            num:that.num
-          })
+          if (that.type == 'logo'){
+            that.$emit('uplogo',{
+              image_path: res.image_path,
+              num:that.num
+            })
+          } else if (that.type == 'license') {
+            that.$emit('uplicense',{
+              image_path: res.image_path,
+              num:that.num
+            })
+          }
+          
         },
         complete(res){
             document.querySelector('#fileinp'+that.num).value = ''

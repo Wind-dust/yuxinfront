@@ -38,6 +38,9 @@
             }, {
               name: '我的服务',
               link: 'myService'
+            },{
+              name:'完善信息',
+              link:'license'
             }]
           },
           {

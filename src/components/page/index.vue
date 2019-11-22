@@ -10,7 +10,8 @@
           <div class="left-title">账户中心</div>
           <div class="left-info">
             <div class="account-info">
-              <img class="avatar" src="../../assets/imgs/logoicon.png" alt="">
+              <img class="avatar" v-if="userInfo.logo" :src="userInfo.logo" alt="">
+              <img class="avatar" v-else src="../../assets/imgs/logoicon.png" alt="">
               <p class="name">Hello! &nbsp;&nbsp;<span>{{name}}</span></p>
               <p class="name">用户等级：0</p>
             </div>
@@ -128,10 +129,10 @@
       disUserInfo(data) {
         switch (parseInt(data.user_type)) {
           case 1:
-            data._user_type = '个人账户';
+            data._user_type = '企业终端用户'; // 个人
             break;
           case 2:
-            data._user_type = '企业账户';
+            data._user_type = '企业管理商账户';// 企业账户
             break;
         }
         switch (parseInt(data.user_status)) {
@@ -244,6 +245,7 @@
   .avatar {
     width: 55px;
     height: 55px;
+    border-radius: 50%;
   }
 
   .name {
