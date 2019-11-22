@@ -48,10 +48,10 @@
             icon: 'el-icon-s-grid',
             _child: [{
               name: '营销短信',
-              link: 'marketingMessage'
+              link: 'businessMessage'
             }, {
               name: '行业短信',
-              link: 'businessMessage'
+              link: 'marketingMessage'
             }]
           }, {
             name: '报表中心',
