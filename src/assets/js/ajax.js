@@ -34,7 +34,6 @@ function Ajax(params = {}) {
 
     // 处理返回数据
     xhr.onreadystatechange = function() {
-        console.log(xhr)
         if (xhr.readyState == 4) {
             if (xhr.status == 200) {
                 params.success(JSON.parse(xhr.responseText));
