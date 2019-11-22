@@ -8,19 +8,19 @@
             <div class="o-info">
               <div>
                 <p>今日发送数（条）</p>
-                <p>200000</p>
+                <p>200009</p>
               </div>
             </div>
             <div class="o-info">
               <div>
                 <p>本周发送数（条）</p>
-                <p>200000</p>
+                <p>200009</p>
               </div>
             </div>
             <div class="o-info">
               <div>
                 <p>本月发送数（条）</p>
-                <p>200000</p>
+                <p>200009</p>
               </div>
             </div>
           </div>
@@ -32,7 +32,12 @@
 
 <script>
     export default {
-        name: "dataInfo"
+        name: "dataInfo",
+      data(){
+          return{
+
+          }
+      },
     }
 </script>
 
