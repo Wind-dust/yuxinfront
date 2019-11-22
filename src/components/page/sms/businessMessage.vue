@@ -10,6 +10,7 @@
           <el-tab-pane label="模板管理" name="third"></el-tab-pane>
           <!--<el-tab-pane label="模板库" name="fourth">模板库</el-tab-pane>-->
           <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
+          <el-tab-pane label="发送列表" name="sixth"></el-tab-pane>
         </el-tabs>
         <div v-if="activeName === 'first'">
           <v-product-temp :name="bread" :content="content" type="business" :message-num="messageNum"></v-product-temp>
@@ -56,7 +57,8 @@
               <span class="upload">
                 <el-upload class="upload-demo" action="" :http-request="upload" :limit="1" accept=".txt,.csv,.xlsx,.xls"
                            :before-upload="beforeAvatarUpload" :on-success="uploadSuccess">
-                  <el-button size="medium" type="primary"><i class="el-icon-upload"></i>本地上传</el-button>
+
+                  <el-button style="margin-top: 20px" size="medium" type="primary"><i class="el-icon-upload"></i>本地上传</el-button>
                 </el-upload>
               </span>
               <span slot="footer" class="dialog-footer">
@@ -80,6 +82,9 @@
         <div v-if="activeName === 'fifth'">
           <v-black-list></v-black-list>
         </div>
+        <div v-if="activeName === 'sixth'">
+          <v-task-list></v-task-list>
+        </div>
       </div>
     </el-col>
   </el-row>
@@ -93,6 +98,7 @@
   import vProductTemp from './components/productTemp'
   import vBlackList from './components/blackList'
   import vDataInfo from './components/dataInfo'
+  import vTaskList from './components/taskList'
 
   export default {
     name: "marketingMessage",
@@ -100,14 +106,15 @@
       vBusinessTemp,
       vProductTemp,
       vBlackList,
-      vDataInfo
+      vDataInfo,
+      vTaskList
     },
     data() {
       return {
         sms_text: '...',
         signatureValue: '',
         signature: [
-          {value: 'XXX', label: 'XXX'}
+
         ],
         dialogVisible:false,
         disabled:false,
@@ -208,13 +215,10 @@
         })
       },
       beforeAvatarUpload(file) {
-        console.log(file)
-        return
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
           this.$message.error('文件大小不能超过 2MB!');
         }
-        return isLt2M;
       },
       emit() {
         this.$emit('getBread', '营销短信')

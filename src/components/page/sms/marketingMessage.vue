@@ -80,7 +80,7 @@
       return {
         sms_text: '',
         signature: [
-          {value: 'XXX', label: 'XXX'}
+
         ],
         ruleForm: {
           content: '',
