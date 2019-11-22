@@ -29,7 +29,7 @@
             <div class="tabs">
               <el-table ref="multipleTable" :data="task_log" tooltip-effect="dark" style="width: 100%">
                 <!--<el-table-column type="selection"></el-table-column>-->
-                <el-table-colum type="index"></el-table-colum>
+                <!--<el-table-colum type="index"></el-table-colum>-->
                 <el-table-column prop="mobile" label="手机号"></el-table-column>
                 <!--<el-table-column prop="task_content" show-overflow-tooltip label="短信内容"></el-table-column>-->
                 <!--<el-table-column prop="send_num" label="条数"></el-table-column>-->
@@ -74,7 +74,7 @@
         zan: true,
         task_log:[],
         detailNum:1,
-        detailTotal:0,
+        detailTotal:20,
         detailPage:1,
         detailScreen:{
           page:1,
@@ -112,7 +112,7 @@
         let that = this
         that.$request({
           url: 'user/getUserSubmitTaskInfo',
-          data: {id},
+          data: {id:id,pageNum:that.detailScreen.pageNum,page:that.detailScreen.page},
           success(res) {
             that.task_log = that.disinfo(res.task_log)
             that.detailTotal = res.total
@@ -141,7 +141,7 @@
         this.getTaskList()
       },
       pageChangeDetail(obj){
-        this.screen.page = obj.page
+        this.detailScreen.page = obj.page
         localStorage.setItem("task_log", obj.page)
         this.getTaskInfoDetail(this.id)
       },
