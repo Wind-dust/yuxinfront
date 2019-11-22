@@ -27,7 +27,7 @@
               </el-form-item>
 
               <el-form-item label="手机号码" prop="phone">
-                <el-input v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
+                <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
                           type="textarea" :disabled="disabled"></el-input>
                 <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
               </el-form-item>
@@ -177,6 +177,12 @@
       }
     },
     methods: {
+      disPhone(){
+        // console.log(this.ruleForm.phone)
+        let phoneStr = this.ruleForm.phone
+        let str = phoneStr.replace(/\r\n/g, ',').replace(/\r/g, ',').replace(/\n/g, ',').replace(/,{2,}/g, ',')
+        this.ruleForm.phone = str
+      },
       getMessageNum() {
         let that = this
         that.$request({
