@@ -41,10 +41,10 @@
                 name: '完善信息',
                 link: 'license',
                 status: false
-              }, {
-                name: '充值记录',
-                link: 'payLog',
-                status: false
+              },{
+              name:'充值记录',
+                link:'payLog',
+                status:false
               }]
           },
           {
@@ -110,16 +110,16 @@
         console.log(user.pid)
         // for (let i = 0; i < data.length; i++) {
         if (parseInt(user.pid) === 0) {
-          data[0]._child[4] = {
+          data[0]._child.push({
             name: '开通子账户',
             link: 'account',
             status: false
-          }
-          data[0]._child[5] = {
+          })
+          data[0]._child.push({
             name: '子账户设置',
             link: 'subAccount',
             status: false
-          }
+          })
           // }
           // for (let j = 0; j < data[i]._child.length; j++) {
           //   if (user.pid != '0' && data[i]._child[j].link == 'account') {
