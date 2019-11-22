@@ -6,7 +6,7 @@
         <div class="info-text">
           <p>{{name}}</p>
           <p>{{content}}</p>
-          <p>当前余额（条）：0</p>
+          <p>当前余额（条）：{{messageNum}}</p>
         </div>
       </div>
       <div class="line"></div>
@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    props: ['name', 'content', 'type'],
+    props: ['name', 'content', 'type','messageNum'],
     name: "productTemp",
     data() {
       return {

@@ -36,7 +36,7 @@
       return {
         date: '',
         type: '',
-        list: [{name: '主题主题主题', date: '2019-10-11'}],
+        list: [],
         mailStatus: '',
         selectMailOptions: []
       }

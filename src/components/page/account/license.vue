@@ -42,8 +42,12 @@
       }
     },
     mounted() {
+      this.emit()
     },
     methods: {
+      emit(){
+        this.$emit('getBread','完善信息')
+      },
       upload(){
         let that = this
         that.$request({

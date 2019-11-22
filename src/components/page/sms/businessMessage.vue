@@ -12,7 +12,7 @@
           <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
         </el-tabs>
         <div v-if="activeName === 'first'">
-          <v-product-temp :name="bread" :content="content" type="business"></v-product-temp>
+          <v-product-temp :name="bread" :content="content" type="business" :message-num="messageNum"></v-product-temp>
         </div>
         <div v-if="activeName === 'second'">
           <div class="content-content">
@@ -140,7 +140,8 @@
         bread:'营销短信',
         content:'网站、APP通过调用API接口，实现手机验证、订单通知等功能。',
         num:1,
-        textLength:0
+        textLength:0,
+        messageNum:0
       }
     },
     watch: {
@@ -161,7 +162,7 @@
           let len = this.sms_text + newVal
           let num = len.length / 67
           console.log(num)
-          this.num = Math.floor(num)
+          this.num = Math.ceil(num)
         }
       },
       'ruleForm.dstime'(val){
@@ -169,6 +170,23 @@
       }
     },
     methods: {
+      getMessageNum() {
+        let that = this
+        that.$request({
+          url: 'user/getUserEquitises',
+          success(res) {
+            that.list = res.userEquities
+            that.getNum(res.userEquities)
+          }
+        })
+      },
+      getNum(data) {
+        for (let i = 0; i < data.length; i++) {
+          if (parseInt(data[i].business_id) === 5) {
+            this.messageNum = data[i].num_balance
+          }
+        }
+      },
       confirmUpload(){
         this.dialogVisible = false
         this.disabled = true
@@ -233,6 +251,7 @@
     },
     mounted() {
       this.emit()
+      this.getMessageNum()
     }
   }
 </script>
@@ -298,6 +317,7 @@
     padding: 15px;
     width: 200px;
     min-height: 10px;
+    word-break: break-all;
   }
 
 </style>

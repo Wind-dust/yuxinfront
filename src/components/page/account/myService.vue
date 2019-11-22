@@ -90,38 +90,7 @@
           }
         })
       },
-      getOneInfo(id) {
-        let that = this
-        that.$request({
-          url: 'aboutus/getAboutus',
-          data: {id},
-          success(res) {
-            that.ruleForm = res.Aboutus || {}
-            that.cardStatus = true
-          }
-        })
-      },
-      disDownload(data) {
-        for (let i = 0; i < data.length; i++) {
-          let text = ''
-          switch (parseInt(data[i].type)) {
-            case 1:
-              text = '服务类';
-              break;
-            case 2:
-              text = '行业平台';
-              break;
-            case 3:
-              text = '验证码';
-              break;
-            case 4:
-              text = '综合SMS平台';
-              break;
-          }
-          data[i]._type = text
-        }
-        return data
-      },
+
       showCard() {
         this.ruleForm = {}
         this.cardStatus = true

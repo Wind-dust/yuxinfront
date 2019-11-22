@@ -8,7 +8,9 @@
         <template slot="title">
           <span class="sb-cn"><i :class="v.icon" class="icon"></i>{{v.name}}</span>
         </template>
-        <el-menu-item class="bc" v-for="(v1,k1) in v._child" :key="k1" :index="'/'+v1.link">{{v1.name}}</el-menu-item>
+        <el-menu-item class="bc" v-for="(v1,k1) in v._child" :key="k1" :hidden="v1.status" :index="'/'+v1.link">
+          {{v1.name}}
+        </el-menu-item>
       </el-submenu>
       <el-menu-item>
         <router-link to="/message">
@@ -26,67 +28,107 @@
           {
             name: '账户管理',
             icon: 'el-icon-s-custom',
-            _child: [{
-              name: '开通子账户',
-              link: 'account'
-            }, {
-              name: '账户资质',
-              link: 'qualification'
-            }, {
-              name: '子账户设置',
-              link: 'subAccount'
-            }, {
-              name: '我的服务',
-              link: 'myService'
-            }, {
-              name: '完善信息',
-              link: 'license'
-            }]
+            _child: [
+              {
+                name: '我的服务',
+                link: 'myService',
+                status: false
+              }, {
+                name: '账户资质',
+                link: 'qualification',
+                status: false
+              }, {
+                name: '完善信息',
+                link: 'license',
+                status: false
+              }, {
+                name: '充值记录',
+                link: 'payLog',
+                status: false
+              }]
           },
           {
             name: '产品中心',
             icon: 'el-icon-s-grid',
             _child: [{
               name: '营销短信',
-              link: 'businessMessage'
+              link: 'businessMessage',
+              status: false
             }, {
               name: '行业短信',
-              link: 'marketingMessage'
+              link: 'marketingMessage',
+              status: false
             }]
-          }, {
+          },
+          {
             name: '报表中心',
             icon: 'el-icon-document',
             _child: [{
               name: '数据总览',
-              link: 'dataInfo'
+              link: 'dataInfo',
+              status: false
             }, {
               name: "明细查询",
-              link: 'dataDetail'
+              link: 'dataDetail',
+              status: false
             }, {
               name: '模板查询',
               link: 'templateDetail',
+              status: false
             }]
           }, {
             name: '通讯录',
             icon: 'el-icon-notebook-1',
             _child: [{
               name: '通讯录列表',
-              link: 'addressList'
+              link: 'addressList',
+              status: false
             }]
           }
-        ]
+        ],
+        user: {}
       }
     },
     mounted() {
-      this.disBar()
+      this.getuserInfo()
     },
     methods: {
-      disBar() {
+      getuserInfo() {
+        let that = this;
+        that.$request({
+          url: 'user/getuser',
+          success: function (res) {
+            that.$globalData.userInfo = res.data || {};
+            that.user = res.data || {}
+            console.log(res.data.pid)
+            that.disBar(res.data)
+          }
+        })
+      },
+      disBar(user) {
         let data = this.menuList
-        let user = this.$globalData.userInfo
-        console.log(user)
-        for (let i = 0; i < data.length; i++) {
-
+        console.log(user.pid)
+        // for (let i = 0; i < data.length; i++) {
+        if (parseInt(user.pid) === 0) {
+          data[0]._child[4] = {
+            name: '开通子账户',
+            link: 'account',
+            status: false
+          }
+          data[0]._child[5] = {
+            name: '子账户设置',
+            link: 'subAccount',
+            status: false
+          }
+          // }
+          // for (let j = 0; j < data[i]._child.length; j++) {
+          //   if (user.pid != '0' && data[i]._child[j].link == 'account') {
+          //     data[i]._child[j].status = true
+          //   }
+          //   if (user.pid != 0 && data[i]._child[j].link == 'subAccount') {
+          //     data[i]._child[j].status = true
+          //   }
+          // }
         }
       }
     },

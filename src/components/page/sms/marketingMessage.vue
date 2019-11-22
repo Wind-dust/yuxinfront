@@ -12,7 +12,7 @@
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName === 'first'">
-            <v-product-temp :name="bread" :content="content" type="marketing"></v-product-temp>
+            <v-product-temp :name="bread" :content="content" type="marketing" :messageNum="messageNum"></v-product-temp>
           </div>
           <div v-if="activeName === 'second'">
             <div class="content-content">
@@ -29,8 +29,9 @@
                 </el-form-item>
 
                 <el-form-item label="短信内容" prop="content">
-                  <el-input type="textarea" v-model="ruleForm.content"></el-input>
-                  <p>现共输入  <span style="color: #3a8ee6">{{textLength}}</span>  个字符（包含短信签名、短信内容），合计短信计费条数  <span style="color: #3a8ee6;">{{num}}</span>  条</p>
+                  <el-input type="textarea" :rows="4" v-model="ruleForm.content"></el-input>
+                  <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
+                    style="color: #3a8ee6;">{{num}}</span> 条</p>
                 </el-form-item>
 
                 <el-form-item>
@@ -104,7 +105,8 @@
         dialogVisible: false,
         num: 1,
         textLength: 0,
-        disabled:false
+        disabled: false,
+        messageNum:0
       }
     },
     watch: {
@@ -116,7 +118,7 @@
       'ruleForm.content'(newVal, oldVal) {
         let len = this.sms_text + newVal
         this.textLength = len.length
-        if (len.length <= 70 ) {
+        if (len.length <= 70) {
           let num = len.length / 70
           this.num = Math.ceil(num)
         } else {
@@ -127,7 +129,23 @@
       }
     },
     methods: {
-
+      getMessageNum() {
+        let that = this
+        that.$request({
+          url: 'user/getUserEquitises',
+          success(res) {
+            that.list = res.userEquities
+            that.getNum(res.userEquities)
+          }
+        })
+      },
+      getNum(data) {
+        for (let i = 0; i < data.length; i++) {
+          if (parseInt(data[i].business_id) === 6) {
+            this.messageNum = data[i].num_balance
+          }
+        }
+      },
       emit() {
         this.$emit('getBread', '行业短信')
       },
@@ -160,6 +178,7 @@
     ,
     mounted() {
       this.emit()
+      this.getMessageNum()
     }
   }
 </script>
@@ -225,6 +244,7 @@
     padding: 15px;
     width: 200px;
     min-height: 10px;
+    word-break: break-all;
   }
 
   .import {
