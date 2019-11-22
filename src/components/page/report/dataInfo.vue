@@ -50,7 +50,7 @@
     },
     mounted() {
       this.emit()
-      this.createLine()
+      // this.createLine()
     },
     methods: {
       createLine() {
@@ -216,8 +216,8 @@
   }
 
   #main {
-    width: 100%;
-    height: 200px;
-    margin-top: 40px;
+    /*width: 100%;*/
+    /*height: 200px;*/
+    /*margin-top: 40px;*/
   }
 </style>

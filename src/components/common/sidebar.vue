@@ -41,10 +41,10 @@
                 name: '完善信息',
                 link: 'license',
                 status: false
-              },{
-              name:'充值记录',
-                link:'payLog',
-                status:false
+              }, {
+                name: '充值记录',
+                link: 'payLog',
+                status: false
               }]
           },
           {
@@ -63,19 +63,26 @@
           {
             name: '报表中心',
             icon: 'el-icon-document',
-            _child: [{
-              name: '数据总览',
-              link: 'dataInfo',
-              status: false
-            }, {
-              name: "明细查询",
-              link: 'dataDetail',
-              status: false
-            }, {
-              name: '模板查询',
-              link: 'templateDetail',
-              status: false
-            }]
+            _child: [
+              //   {
+              //   name: '数据总览',
+              //   link: 'dataInfo',
+              //   status: false
+              // }, {
+              //   name: "明细查询",
+              //   link: 'dataDetail',
+              //   status: false
+              // }, {
+              //   name: '模板查询',
+              //   link: 'templateDetail',
+              //   status: false
+              // }
+              {
+                name: '明细查询',
+                link: 'sendDetail',
+                status: false
+              }
+            ]
           }, {
             name: '通讯录',
             icon: 'el-icon-notebook-1',

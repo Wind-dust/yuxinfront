@@ -75,7 +75,7 @@
       }
     },
     mounted() {
-      this.screen.page = parseInt(localStorage.getItem("task")) || 1
+      // this.screen.page = parseInt(localStorage.getItem("task")) || 1
       this.page = this.screen.page
       this.getTaskList()
     },

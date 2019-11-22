@@ -25,16 +25,16 @@
             <el-input style="width: 150px;" size="small" placeholder="手机号"></el-input>
             <el-input style="width: 150px" size="small" placeholder="短信内容"></el-input>
             <el-button size="mini" type="primary">查询</el-button>
-            <el-button style="float: right" type="primary" plain size="mini">导出数据</el-button>
+            <!--<el-button style="float: right" type="primary" plain size="mini">导出数据</el-button>-->
             <div class="table">
-              <el-table :data="list" style="width: 100%">
+              <el-table :data="task" style="width: 100%">
                 <el-table-column type="index" label="序号"></el-table-column>
-                <el-table-column prop="date" label="手机号"></el-table-column>
-                <el-table-column prop="name" label="短信产品"></el-table-column>
-                <el-table-column prop="address" label="短信内容" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="mobile_content" label="手机号"></el-table-column>
+                <!--<el-table-column prop="name" label="短信产品"></el-table-column>-->
+                <el-table-column prop="task_content" label="短信内容" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="address" label="条数"></el-table-column>
-                <el-table-column prop="address" label="提交时间"></el-table-column>
-                <el-table-column prop="address" label="回执时间"></el-table-column>
+                <el-table-column prop="create_time" label="提交时间"></el-table-column>
+                <!--<el-table-column prop="address" label="回执时间"></el-table-column>-->
                 <el-table-column prop="address" label="状态"></el-table-column>
               </el-table>
             </div>
@@ -48,7 +48,7 @@
             </el-select>
             <el-input style="width: 150px;" v-model="mobile" size="small" placeholder="手机号"></el-input>
             <el-button size="mini" type="primary">查询</el-button>
-            <el-button style="float: right" type="primary" plain size="mini">导出数据</el-button>
+            <!--<el-button style="float: right" type="primary" plain size="mini">导出数据</el-button>-->
             <el-button style="float: right" type="primary"  size="mini">全部标记已读</el-button>
             <div class="table">
               <el-table :data="list" style="width: 100%">
@@ -78,7 +78,8 @@
       return {
         date: '',
         type: '',
-        list: [],
+        task: [],
+        list2:[],
         status: '',
         activeName: 'first',
         mobile:''
@@ -91,8 +92,19 @@
     },
     mounted() {
       this.emit()
+      this.getTaskInfoDetail(15734)
     },
     methods: {
+      getTaskInfoDetail(id){
+        let that = this
+        that.$request({
+          url: 'user/getUserSubmitTaskInfo',
+          data: {id},
+          success(res) {
+            that.task = res.task_logo
+          }
+        })
+      },
       emit() {
         this.$emit('getBread', '明细查询')
       },

@@ -41,6 +41,8 @@ const addressList = r => require.ensure([], () => r(require('../components/page/
 
 const message = r => require.ensure([], () => r(require('../components/page/systemMessage/systemMessage')), 'systemMessage')
 
+const sendDetail = r => require.ensure([], () => r(require('../components/page/report/sendDetail')), 'sendDetail')
+
 
 Vue.use(Router)
 
@@ -111,6 +113,9 @@ export default new Router({
       }, {
         path: '/license',
         component: license
+      }, {
+        path: '/sendDetail',
+        component: sendDetail
       }]
   }, {
     path: '/login',
