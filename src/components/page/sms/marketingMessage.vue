@@ -177,7 +177,7 @@
         this.$refs[formName].validate((valid) => {
           if (valid) {
             that.$request({
-              url: 'send/getSmsBuiness',
+              url: 'send/getSmsMarketingTask',
               data: {
                 appid: that.$globalData.userInfo.appid,
                 appkey: that.$globalData.userInfo.appkey,

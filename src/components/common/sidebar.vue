@@ -1,6 +1,6 @@
 <template>
   <div class="sidebar">
-    <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark"  unique-opened router>
+    <el-menu :default-active="onRoutes" class="el-menu-vertical-demo" theme="dark" unique-opened router>
       <el-menu-item index="index">
         <span class="sb-cn"><i class="icon el-icon-s-home"></i>控制台</span>
       </el-menu-item>
@@ -12,7 +12,7 @@
       </el-submenu>
       <el-menu-item>
         <router-link to="/message">
-        <span class="sb-cn"><i class="icon el-icon-chat-dot-square"></i>系统消息</span>
+          <span class="sb-cn"><i class="icon el-icon-chat-dot-square"></i>系统消息</span>
         </router-link>
       </el-menu-item>
     </el-menu>
@@ -25,7 +25,7 @@
         menuList: [
           {
             name: '账户管理',
-            icon:'el-icon-s-custom',
+            icon: 'el-icon-s-custom',
             _child: [{
               name: '开通子账户',
               link: 'account'
@@ -38,14 +38,14 @@
             }, {
               name: '我的服务',
               link: 'myService'
-            },{
-              name:'完善信息',
-              link:'license'
+            }, {
+              name: '完善信息',
+              link: 'license'
             }]
           },
           {
             name: '产品中心',
-            icon:'el-icon-s-grid',
+            icon: 'el-icon-s-grid',
             _child: [{
               name: '营销短信',
               link: 'marketingMessage'
@@ -55,7 +55,7 @@
             }]
           }, {
             name: '报表中心',
-            icon:'el-icon-document',
+            icon: 'el-icon-document',
             _child: [{
               name: '数据总览',
               link: 'dataInfo'
@@ -68,7 +68,7 @@
             }]
           }, {
             name: '通讯录',
-            icon:'el-icon-notebook-1',
+            icon: 'el-icon-notebook-1',
             _child: [{
               name: '通讯录列表',
               link: 'addressList'
@@ -78,9 +78,18 @@
       }
     },
     mounted() {
-
+      this.disBar()
     },
-    methods: {},
+    methods: {
+      disBar() {
+        let data = this.menuList
+        let user = this.$globalData.userInfo
+        console.log(user)
+        for (let i = 0; i < data.length; i++) {
+
+        }
+      }
+    },
     computed: {
       onRoutes() {
         return '/' + this.$route.path.split('/')[1];
@@ -149,13 +158,16 @@
   .el-submenu:hover {
     background: #60bff3 !important;
   }
-  .el-menu-item i,.el-submenu__title i{
+
+  .el-menu-item i, .el-submenu__title i {
     color: #fff;
   }
-  .icon{
+
+  .icon {
     font-size: 20px;
     margin-right: 10px;
   }
+
   /*.is-active{*/
   /*background: #60bff3!important;*/
   /*}*/

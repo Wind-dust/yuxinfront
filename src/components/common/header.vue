@@ -143,6 +143,7 @@
     line-height: 10px;
     padding-top: 7px;
     font-size: 12px;
+    float: right;
   }
 
   .user-header img {
