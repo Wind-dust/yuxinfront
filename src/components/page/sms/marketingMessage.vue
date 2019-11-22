@@ -116,8 +116,14 @@
       'ruleForm.content'(newVal, oldVal) {
         let len = this.sms_text + newVal
         this.textLength = len.length
-        let num = len.length / 70
-        this.num = Math.ceil(num)
+        if (len.length <= 70 ) {
+          let num = len.length / 70
+          this.num = Math.ceil(num)
+        } else {
+          let num = len.length / 67
+          this.num = Math.ceil(num)
+        }
+
       }
     },
     methods: {
@@ -138,7 +144,7 @@
                 mobile: that.ruleForm.phone
               },
               success(res) {
-                Message({message: '发送成功', type: 'success'})
+                Message({message: '提交成功', type: 'success'})
               }
             })
           } else {

@@ -17,8 +17,8 @@
         </el-form-item>
         <el-form-item prop="user_type" label="账户类型:" :rules="[{required:true,message:'请选择账户类型',trigger:'change'}]">
           <el-select v-model="userinfo.user_type" placeholder="请选择账户类型" @keyup.enter.native="submitForm('login')">
-            <el-option label="个人账户" value="1"></el-option>
-            <el-option label="企业账户" value="2"></el-option>
+            <el-option label="企业终端用户" value="1"></el-option>
+            <el-option label="企业管理商账户" value="2"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item prop="email" label="邮箱:" :rules="[{ required: true, message: '请输入邮箱', trigger: 'blur' }]">

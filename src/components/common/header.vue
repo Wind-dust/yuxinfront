@@ -185,7 +185,9 @@
     font-size: 12px;
     color: #209e91;
   }
-
+.fr{
+  float: right!important;
+}
   .task-div {
     clear: both;
     height: 55px;

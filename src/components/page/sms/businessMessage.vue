@@ -153,8 +153,16 @@
       'ruleForm.content'(newVal,oldVal){
         let len = this.sms_text + newVal
         this.textLength = len.length
-        let num = len.length / 70
-        this.num = Math.ceil(num)
+        if (len.length <= 70 ) {
+          // 字数/70 = 条数
+          let num = len.length / 70
+          this.num = Math.ceil(num)
+        } else {
+          let len = this.sms_text + newVal
+          let num = len.length / 67
+          console.log(num)
+          this.num = Math.floor(num)
+        }
       },
       'ruleForm.dstime'(val){
         console.log(val)
@@ -202,10 +210,10 @@
             that.$request({
               url: 'send/getSmsMarketingTask',
               data: {
-                appid: that.$globalData.userInfo.appid,
-                appkey: that.$globalData.userInfo.appkey,
+                appid: that.$globalData.userInfo.appid || '',
+                appkey: that.$globalData.userInfo.appkey || '',
                 content: that.sms_text + that.ruleForm.content,
-                mobile: that.ruleForm.phone,
+                mobile: that.ruleForm.phone ,
                 dstime: that.ruleForm.dstime,
                 taskname: that.ruleForm.taskName
               },
