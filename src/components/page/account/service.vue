@@ -51,7 +51,7 @@
       submit: function (data) {
         let that = this
         that.$request({
-          url: 'user/apportionSonUser',
+          url: 'user/seetingUserEquities',
           data: data.ruleForm,
           form: 1,
           success(res) {

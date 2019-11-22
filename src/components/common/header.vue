@@ -6,6 +6,7 @@
         <el-col :xs="16" :sm="16" :md="20">
           <div class="logo">
             <!--<span class="logo_prefix">上海钰晰科技</span>-->
+            <span class="logo_prefix"></span>
           </div>
         </el-col>
         <el-col class="fr" :xs="8" :sm="8" :md="4">
