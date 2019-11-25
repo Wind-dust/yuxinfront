@@ -8,7 +8,7 @@
             <div class="o-info">
               <div>
                 <p>今日发送数（条）</p>
-                <p>100002</p>
+                <p>0</p>
               </div>
             </div>
             <div class="o-info">
