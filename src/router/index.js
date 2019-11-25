@@ -29,6 +29,7 @@ const account = r => require.ensure([], () => r(require('../components/page/acco
 const subAccount = r => require.ensure([], () => r(require('../components/page/account/service')), 'subAccount')
 const myService = r => require.ensure([], () => r(require('../components/page/account/myService')), 'myService')
 const license = r => require.ensure([], () => r(require('../components/page/account/license')), 'license')
+const accountList = r => require.ensure([], () => r(require('../components/page/account/accountList')), 'accountList')
 
 const businessMessage = r => require.ensure([], () => r(require('../components/page/sms/businessMessage')), 'businessMessage')
 const marketingMessage = r => require.ensure([], () => r(require('../components/page/sms/marketingMessage')), 'marketingMessage')
@@ -42,6 +43,10 @@ const addressList = r => require.ensure([], () => r(require('../components/page/
 const message = r => require.ensure([], () => r(require('../components/page/systemMessage/systemMessage')), 'systemMessage')
 
 const sendDetail = r => require.ensure([], () => r(require('../components/page/report/sendDetail')), 'sendDetail')
+
+const settlement = r => require.ensure([], () => r(require('../components/page/settlement/settlement')), 'settlement')
+
+// const payRank = r => require.ensure([],()=>r(require('../components/page/settlement/settlement')),'settlement')
 
 
 Vue.use(Router)
@@ -116,6 +121,12 @@ export default new Router({
       }, {
         path: '/sendDetail',
         component: sendDetail
+      }, {
+        path: "/accountList",
+        component: accountList
+      }, {
+        path: '/settlement',
+        component: settlement
       }]
   }, {
     path: '/login',

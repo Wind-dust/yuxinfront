@@ -41,10 +41,6 @@
                 name: '完善信息',
                 link: 'license',
                 status: false
-              }, {
-                name: '充值记录',
-                link: 'payLog',
-                status: false
               }]
           },
           {
@@ -60,6 +56,14 @@
               status: false
             }]
           },
+          // {
+          //   name:'充值服务',
+          //   _child:[{
+          //     name:'充值记录',
+          //     link:'settlement',
+          //     status:false
+          //   }]
+          // },
           {
             name: '报表中心',
             icon: 'el-icon-document',
@@ -125,6 +129,11 @@
           data[0]._child.push({
             name: '子账户设置',
             link: 'subAccount',
+            status: false
+          })
+          data[0]._child.push({
+            name: '子账户列表',
+            link: 'accountList',
             status: false
           })
           // }
