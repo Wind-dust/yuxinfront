@@ -35,7 +35,8 @@
                 <!--<el-table-column prop="send_num" label="条数"></el-table-column>-->
                 <el-table-column prop="create_time" label="提交时间" show-overflow-tooltip></el-table-column>
                 <!--<el-table-column prop="create_time" label="回执时间" show-overflow-tooltip></el-table-column>-->
-                <el-table-column prop="_send_status" label="状态"  show-overflow-tooltip>
+                <el-table-column prop="_send_status" label="状态"  show-overflow-tooltip></el-table-column>
+                <el-table-column prop="status_message" label="实际发送状态"  show-overflow-tooltip>
                 </el-table-column>
               </el-table>
               <v-pagination @pageChange="pageChangeDetail" :num='detailNum' :total="detailTotal" :page-size="10"

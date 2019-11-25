@@ -6,7 +6,9 @@
       </el-menu-item>
       <el-submenu v-for="(v,k) in menuList" :key="k" :index="k+''">
         <template slot="title">
-          <span class="sb-cn"><i :class="v.icon" class="icon"></i>{{v.name}}</span>
+          <span class="sb-cn" v-if="v.link"><router-link :to="v.link"><i :class="v.icon"
+                                                                         class="icon"></i>{{v.name}}</router-link></span>
+          <span class="sb-cn" v-else><i :class="v.icon" class="icon"></i>{{v.name}}</span>
         </template>
         <el-menu-item class="bc" v-for="(v1,k1) in v._child" :key="k1" :hidden="v1.status" :index="'/'+v1.link">
           {{v1.name}}
@@ -93,6 +95,67 @@
             }]
           }
         ],
+        //管理商
+        manageMenu: [{
+          name: '账户管理',
+          _child: [{
+            name: '账户列表',
+            link: 'subAccount'
+          }, {
+            name: '资质认证',
+            link: 'qualification'
+          }]
+        }, {
+          name: '充值服务',
+          _child: [{
+            name: '充值记录',
+            link: 'payLog'
+          }, {
+            name: '后付费账单',
+            link: 'laterPay'
+          }]
+        }, {
+          name: '报表统计',
+          _child: [{
+            name: '发送明细',
+            link: 'sendLog'
+          }]
+        }, {
+          name: '平台配置',
+          link: 'platformConfig'
+        }, {
+          name: '系统消息',
+          link: 'systemMessage'
+        }],
+        //终端
+        terminalMenu: [
+          {
+            name: '产品中心',
+            _child: [{
+              name: '营销短信',
+              link: 'businessMessage',
+              status: false
+            }, {
+              name: '行业短信',
+              link: 'marketingMessage',
+              status: false
+            }]
+          }, {
+            name: '明细查询',
+            _child: [
+              {
+                name: '明细查询',
+                link: 'sendDetail'
+              }
+            ]
+          }, {
+            name: '系统配置',
+            link: 'systemConfig'
+          }, {
+            name: '系统消息',
+            link: 'systemMessage'
+          }
+        ],
         user: {}
       }
     },
@@ -114,8 +177,7 @@
       },
       disBar(user) {
         let data = this.menuList
-        console.log(user.pid)
-        // for (let i = 0; i < data.length; i++) {
+
         if (parseInt(user.pid) === 0) {
           data[0]._child.push({
             name: '开通子账户',
@@ -127,15 +189,6 @@
             link: 'subAccount',
             status: false
           })
-          // }
-          // for (let j = 0; j < data[i]._child.length; j++) {
-          //   if (user.pid != '0' && data[i]._child[j].link == 'account') {
-          //     data[i]._child[j].status = true
-          //   }
-          //   if (user.pid != 0 && data[i]._child[j].link == 'subAccount') {
-          //     data[i]._child[j].status = true
-          //   }
-          // }
         }
       }
     },

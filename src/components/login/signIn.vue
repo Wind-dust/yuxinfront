@@ -29,6 +29,10 @@
           <el-input placeholder="请输入手机号" @keyup.enter.native="submitForm('login')" v-model="userinfo.mobile"
                     type="number"></el-input>
         </el-form-item>
+        <el-form-item prop="mobile" label="公司名称:" >
+          <el-input placeholder="请输入公司名称" @keyup.enter.native="submitForm('login')" v-model="userinfo.company"
+                    type="number"></el-input>
+        </el-form-item>
         <!--<el-form-item prop="vercode" label="验证码:" :rules="[{ required: true, message: '请输入验证码', trigger: 'blur' }]">-->
         <!--<el-input class="vercode" placeholder="请输入验证码" @keyup.enter.native="submitForm('login')"-->
         <!--v-model="userinfo.vercode"-->
@@ -38,14 +42,17 @@
         <el-form-item>
           <el-button class="btn" type="primary" @click="submitForm('login')">注册</el-button>
         </el-form-item>
-        <div class="signText">已有账号？<router-link to="/login" class="signIn">点我登陆</router-link></div>
+        <div class="signText">已有账号？
+          <router-link to="/login" class="signIn">点我登陆</router-link>
+        </div>
       </el-form>
     </el-card>
   </div>
 </template>
 
 <script>
-  import { Message} from 'element-ui'
+  import {Message} from 'element-ui'
+
   export default {
     data() {
       let check = (rule, value, callback) => {
@@ -82,12 +89,13 @@
           user_type: '',
           mobile: '',
           email: '',
-          checkPass: ''
+          checkPass: '',
+          company:''
         },
         text: '获取手机验证码',
         rule: [{validator: check, trigger: 'blur'}],
         rule1: [{validator: checkPass, trigger: 'blur'}],
-        bread:'开通子账户'
+        bread: '开通子账户'
 
       }
     },
@@ -96,8 +104,8 @@
     },
     methods: {
       getCode() {
-        if (!this.userinfo.mobile || this.userinfo.mobile.length < 11){
-          Message({message:'手机号错误',type:'error'})
+        if (!this.userinfo.mobile || this.userinfo.mobile.length < 11) {
+          Message({message: '手机号错误', type: 'error'})
           return
         }
         let that = this
@@ -107,7 +115,7 @@
             mobile: that.userinfo.mobile,
             stype: 1
           },
-          login:true,
+          login: true,
           success(res) {
             that.timeout()
             that.disabled = true
@@ -137,9 +145,9 @@
               data: {
                 nick_name: that.userinfo.nick_name,
                 user_type: that.userinfo.user_type,
-                passwd:that.userinfo.passwd,
-                mobile:that.userinfo.mobile,
-                email:that.userinfo.email
+                passwd: that.userinfo.passwd,
+                mobile: that.userinfo.mobile,
+                email: that.userinfo.email
               },
               success: function (res) {
                 localStorage.setItem("con_id", res.con_id)

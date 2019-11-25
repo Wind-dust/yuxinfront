@@ -98,6 +98,7 @@
               },
               success: function (res) {
                 localStorage.setItem("con_id", res.con_id)
+
                 that.$router.push({path: '/index'})
               }
             })
