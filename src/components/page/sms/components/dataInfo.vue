@@ -14,13 +14,13 @@
             <div class="o-info">
               <div>
                 <p>本周发送数（条）</p>
-                <p>300005</p>
+                <p>300012</p>
               </div>
             </div>
             <div class="o-info">
               <div>
                 <p>本月发送数（条）</p>
-                <p>300005</p>
+                <p>300012</p>
               </div>
             </div>
           </div>
