@@ -51,14 +51,14 @@
           <div class="left-info display">
 
             <div class="product">
-              <router-link class="go" to="/marketingMessage">
+              <router-link class="go" to="/businessMessage">
                 <img src="http://imagesdev.shyuxi.com/yx.png" alt="">
                 <p>营销短信</p>
               </router-link>
             </div>
 
             <div class="product">
-              <router-link class="go" to="/businessMessage">
+              <router-link class="go" to="/marketingMessage">
                 <img src="http://imagesdev.shyuxi.com/hangye.png" alt="">
                 <p>行业短信</p>
               </router-link>
