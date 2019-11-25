@@ -3,8 +3,8 @@
     <el-card class="box-card">
       <!--<img class="logImg" src="../../assets/imgs/logo.png" alt="">-->
       <el-form label-position="right" label-width="100px" :model="userinfo" ref='login'>
-        <el-form-item prop="nick_name" label="用户姓名:" :rules="[{ required: true, message: '请输入姓名', trigger: 'blur' }]">
-          <el-input placeholder="请输入用户姓名" @keyup.enter.native="submitForm('login')"
+        <el-form-item prop="nick_name" label="用户名:" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
+          <el-input placeholder="请输入用户名" @keyup.enter.native="submitForm('login')"
                     v-model="userinfo.nick_name"></el-input>
         </el-form-item>
         <el-form-item prop="passwd" class="is-required" label="密码:" :rules="rule">
