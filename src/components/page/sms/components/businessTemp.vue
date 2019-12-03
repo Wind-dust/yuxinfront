@@ -1,7 +1,7 @@
 <template>
   <div class="tcontent">
     <div class="table-header clearfix">
-      <el-button size="small" class="add fr" type="primary" icon="el-icon-plus" @click="showCard()">新建模板</el-button>
+      <el-button size="small" class="add fr" type="primary" icon="el-icon-plus" @click="createTemp()">新建模板</el-button>
     </div>
 
     <!--<v-screen :screen="screenQuery" @query="onQuery"></v-screen>-->
@@ -21,10 +21,6 @@
       </el-table-column>
     </el-table>
     <v-pagination @pageChange="pageChange" :num='num' :total="total" :page="page"></v-pagination>
-
-    <v-card :name='name' width="120" :cardStatus="cardStatus" :ruleType="ruleType" :ruleForm="ruleForm" :rules="rules"
-            @sumbit="sumbit" @hideCard="hideCard" :is_hiden="true"></v-card>
-
   </div>
 </template>
 
@@ -66,16 +62,8 @@
       this.page = this.screen.page
     },
     methods: {
-      showCard() {
-        this.ruleForm = {}
-        this.cardStatus = true
-      },
-      hideCard() {
-        this.cardStatus = false
-      },
-      sumbit(data) {
-        console.log(data)
-        parseInt(data.ruleForm.type) === 1 ? this.setUser(data.ruleForm) : this.setAccount(data.ruleForm)
+      createTemp() {
+        this.$router.push({path:'/sms/template'})
       },
       setUser(data) {
         let that = this

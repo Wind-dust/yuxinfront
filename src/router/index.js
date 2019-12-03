@@ -26,9 +26,10 @@ const modifyPwd = r => require.ensure([], () => r(require('../components/page/ju
 
 const qualification = r => require.ensure([], () => r(require('../components/page/account/qualification')), 'qualification')
 const account = r => require.ensure([], () => r(require('../components/page/account/account')), 'account')
-const subAccount = r => require.ensure([], () => r(require('../components/page/account/service')), 'subAccount')
+const subAccount = r => require.ensure([], () => r(require('../components/page/account/subAccount')), 'subAccount')
 const myService = r => require.ensure([], () => r(require('../components/page/account/myService')), 'myService')
 const license = r => require.ensure([], () => r(require('../components/page/account/license')), 'license')
+const createUser = r => require.ensure([], () => r(require('../components/page/account/createUser')), 'createUser')
 
 const businessMessage = r => require.ensure([], () => r(require('../components/page/sms/businessMessage')), 'businessMessage')
 const marketingMessage = r => require.ensure([], () => r(require('../components/page/sms/marketingMessage')), 'marketingMessage')
@@ -42,6 +43,15 @@ const addressList = r => require.ensure([], () => r(require('../components/page/
 const message = r => require.ensure([], () => r(require('../components/page/systemMessage/systemMessage')), 'systemMessage')
 
 const sendDetail = r => require.ensure([], () => r(require('../components/page/report/sendDetail')), 'sendDetail')
+
+const rechargeLog = r => require.ensure([], () => r(require('../components/page/recharge/rechargelog')), 'rechargelog')
+const bill = r => require.ensure([], () => r(require('../components/page/recharge/bill')), 'bill')
+
+const sendlog = r => require.ensure([], () => r(require('../components/page/report/sendlog')), 'sendlog')
+const platformConfig = r => require.ensure([], () => r(require('../components/page/config/platformConfig')), 'platformConfig')
+const systemConfig = r => require.ensure([], () => r(require('../components/page/config/systemConfig')), 'systemConfig')
+const whiteList = r => require.ensure([], () => r(require('../components/page/config/whiteList')), 'whiteList')
+const template = r => require.ensure([], () => r(require('../components/page/sms/components/tempManage')), 'template')
 
 
 Vue.use(Router)
@@ -116,6 +126,30 @@ export default new Router({
       }, {
         path: '/sendDetail',
         component: sendDetail
+      }, {
+        path: '/createUser',
+        component: createUser
+      }, {
+        path: '/rechargeLog',
+        component: rechargeLog
+      }, {
+        path: '/bill',
+        component: bill
+      }, {
+        path: '/sendlog',
+        component: sendlog
+      }, {
+        path: '/platformConfig',
+        component: platformConfig
+      }, {
+        path: '/systemConfig',
+        component: systemConfig
+      }, {
+        path: '/whiteList',
+        component: whiteList
+      }, {
+        path: '/sms/template',
+        component: template
       }]
   }, {
     path: '/login',

@@ -4,23 +4,30 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <h3 class="title">系统消息</h3>
-          <div class="">
-            <el-select size="small" style="width: 150px" v-model="mailStatus">
-              <el-option label="全部" value=""></el-option>
-              <el-option label="未读" value="1"></el-option>
-              <el-option label="已读" value="2"></el-option>
-            </el-select>
-            <el-button size="mini" @click="markRead">标为已读</el-button>
-            <el-button size="mini">删除</el-button>
-          </div>
-          <div class="table">
-            <el-table :data="list" style="width: 100%" @selection-change="selectMail">
-              <el-table-column type="selection"></el-table-column>
-              <el-table-column type="index" label="序号"></el-table-column>
-              <el-table-column show-overflow-tooltip prop="name" label="主题"></el-table-column>
-              <el-table-column prop="date" label="日期"></el-table-column>
-            </el-table>
-          </div>
+          <el-tabs v-model="activeName">
+            <el-tab-pane label="系统消息" name="first">
+              <div class="mt">
+                <el-select size="small" style="width: 150px" v-model="mailStatus">
+                  <el-option label="全部" value=""></el-option>
+                  <el-option label="未读" value="1"></el-option>
+                  <el-option label="已读" value="2"></el-option>
+                </el-select>
+                <el-button size="mini" @click="markRead">标为已读</el-button>
+                <el-button size="mini">删除</el-button>
+              </div>
+              <div class="table">
+                <el-table :data="list" style="width: 100%" @selection-change="selectMail">
+                  <el-table-column type="selection"></el-table-column>
+                  <el-table-column type="index" label="序号"></el-table-column>
+                  <el-table-column show-overflow-tooltip prop="name" label="主题"></el-table-column>
+                  <el-table-column prop="date" label="日期"></el-table-column>
+                </el-table>
+              </div>
+            </el-tab-pane>
+            <el-tab-pane label="余额预警" name="second">
+              <v-balance></v-balance>
+            </el-tab-pane>
+          </el-tabs>
         </div>
       </el-col>
     </el-row>
@@ -29,16 +36,37 @@
 
 <script>
   import {Message} from 'element-ui'
+  import vBalance from './setBalance'
 
   export default {
-    components: {},
+    components: {
+      vBalance
+    },
     data() {
       return {
         date: '',
+        activeName: 'first',
         type: '',
         list: [],
         mailStatus: '',
-        selectMailOptions: []
+        selectMailOptions: [],
+        status: false,
+        form: {},
+        ruleForm: {},
+        ruleType: {
+          "balance": {
+            type: 'number',
+            label: '设置余额(条)',
+            placeholder: '请输入提醒余额'
+          },
+          "mobile": {
+            type: "input",
+            inpType: 'textarea',
+            label: '接收手机号',
+            placeholder: "最多十条手机号，用英文逗号隔开"
+          }
+        },
+        rules: []
       }
     },
     watch: {},
@@ -46,6 +74,12 @@
       this.emit()
     },
     methods: {
+      setBalance() {
+        this.status = true
+      },
+      hiddenCard() {
+        this.status = false
+      },
       selectMail(val) {
         this.selectMailOptions = val
       },
@@ -99,6 +133,7 @@
     background: #ffffff;
     border-radius: 4px;
     padding: 20px;
+    position: relative;
   }
 
   .title {
@@ -177,6 +212,14 @@
 
   .table {
     margin-top: 30px;
+  }
+
+  .card {
+    width: 480px;
+    position: absolute;
+    top: 0;
+    left: 0;
+
   }
 
   .float-right {

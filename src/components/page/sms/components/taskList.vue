@@ -4,17 +4,14 @@
     <div v-if="status">
       <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%">
         <!--<el-table-column type="selection"></el-table-column>-->
-        <el-table-column prop="task_name" label="名称"></el-table-column>
-        <el-table-column prop="task_content" show-overflow-tooltip label="内容"></el-table-column>
-        <el-table-column prop="mobile_content" show-overflow-tooltip label="手机号"></el-table-column>
-        <el-table-column prop="send_num" label="发送数量"></el-table-column>
-        <el-table-column prop="source" label="来源" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="create_time" label="创建时间" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="address" label="操作" show-overflow-tooltip>
-          <template slot-scope="scope">
-            <el-button size="small" type="primary" @click="getTaskInfo(scope.row.id)">查看</el-button>
-          </template>
-        </el-table-column>
+        <el-table-column type="index" label="序号"></el-table-column>
+        <el-table-column prop="task_name" label="创建时间"></el-table-column>
+        <el-table-column prop="task_content" show-overflow-tooltip label="发送时间"></el-table-column>
+        <!--总号码数，成功数，失败数，未知数-->
+        <el-table-column prop="mobile_content" show-overflow-tooltip label="发送详情"></el-table-column>
+        <el-table-column prop="send_num" label="总条数"></el-table-column>
+        <!--定时/立即发送-->
+        <el-table-column prop="source" label="发送类型" show-overflow-tooltip></el-table-column>
       </el-table>
       <v-pagination @pageChange="pageChange" :num='num' :total="total" :page-size="10" :page="page"></v-pagination>
     </div>
@@ -75,7 +72,6 @@
       }
     },
     mounted() {
-      // this.screen.page = parseInt(localStorage.getItem("task")) || 1
       this.page = this.screen.page
       this.getTaskList()
     },

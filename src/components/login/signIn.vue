@@ -3,9 +3,14 @@
     <el-card class="box-card">
       <!--<img class="logImg" src="../../assets/imgs/logo.png" alt="">-->
       <el-form label-position="right" label-width="100px" :model="userinfo" ref='login'>
+
         <el-form-item prop="nick_name" label="用户名:" :rules="[{ required: true, message: '请输入用户名', trigger: 'blur' }]">
           <el-input placeholder="请输入用户名" @keyup.enter.native="submitForm('login')"
                     v-model="userinfo.nick_name"></el-input>
+        </el-form-item>
+        <el-form-item prop="company" label="公司名称:">
+          <el-input placeholder="请输入公司名称" @keyup.enter.native="submitForm('login')"
+                    v-model="userinfo.company"></el-input>
         </el-form-item>
         <el-form-item prop="passwd" class="is-required" label="密码:" :rules="rule">
           <el-input placeholder="至少8位数且有大小写字母" @keyup.enter.native="submitForm('login')" v-model="userinfo.passwd"
@@ -29,10 +34,7 @@
           <el-input placeholder="请输入手机号" @keyup.enter.native="submitForm('login')" v-model="userinfo.mobile"
                     type="number"></el-input>
         </el-form-item>
-        <el-form-item prop="mobile" label="公司名称:" >
-          <el-input placeholder="请输入公司名称" @keyup.enter.native="submitForm('login')" v-model="userinfo.company"
-                    type="number"></el-input>
-        </el-form-item>
+
         <!--<el-form-item prop="vercode" label="验证码:" :rules="[{ required: true, message: '请输入验证码', trigger: 'blur' }]">-->
         <!--<el-input class="vercode" placeholder="请输入验证码" @keyup.enter.native="submitForm('login')"-->
         <!--v-model="userinfo.vercode"-->
@@ -52,8 +54,12 @@
 
 <script>
   import {Message} from 'element-ui'
+  import test from '../component/test'
 
   export default {
+    components: {
+      test
+    },
     data() {
       let check = (rule, value, callback) => {
         console.log(value)
@@ -90,7 +96,7 @@
           mobile: '',
           email: '',
           checkPass: '',
-          company:''
+          company: ''
         },
         text: '获取手机验证码',
         rule: [{validator: check, trigger: 'blur'}],

@@ -4,14 +4,14 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <h3 class="title">明细查询</h3>
-          <el-tabs v-model="activeName" >
+          <el-tabs v-model="activeName">
             <el-tab-pane label="短信明细" name="first"></el-tab-pane>
             <el-tab-pane label="上行查询" name="second"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName == 'first'">
             <el-date-picker style="width:240px" size="small" v-model="date" type="daterange" range-separator="--"
                             start-placeholder="开始日期"
-                            end-placeholder="结束日期"></el-date-picker>
+                            end-placeholder="结束日期" :picker-options="pickerOptions"></el-date-picker>
             <el-select style="width: 150px" size="small" v-model="type" placeholder="请选择产品">
               <el-option label="营销短信" value="1"></el-option>
               <el-option label="行业短信" value="2"></el-option>
@@ -25,23 +25,28 @@
             <el-input style="width: 150px;" size="small" placeholder="手机号"></el-input>
             <el-input style="width: 150px" size="small" placeholder="短信内容"></el-input>
             <el-button size="mini" type="primary">查询</el-button>
-            <!--<el-button style="float: right" type="primary" plain size="mini">导出数据</el-button>-->
+            <el-tooltip class="item" effect="dark" content="连续跨度不超过31天" placement="top-start">
+              <span style="color: #1889ff;font-size: 20px"><i class="el-icon-question"></i></span>
+            </el-tooltip>
+
+            <el-button style="float: right" type="primary" plain size="mini">导出数据</el-button>
             <div class="table">
               <el-table :data="task" style="width: 100%">
                 <el-table-column type="index" label="序号"></el-table-column>
                 <el-table-column prop="mobile_content" label="手机号"></el-table-column>
-                <!--<el-table-column prop="name" label="短信产品"></el-table-column>-->
+                <el-table-column prop="name" label="短信产品"></el-table-column>
                 <el-table-column prop="task_content" label="短信内容" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="address" label="条数"></el-table-column>
                 <el-table-column prop="create_time" label="提交时间"></el-table-column>
-                <!--<el-table-column prop="address" label="回执时间"></el-table-column>-->
+                <el-table-column prop="address" label="回执时间"></el-table-column>
                 <el-table-column prop="address" label="状态"></el-table-column>
               </el-table>
             </div>
           </div>
           <div v-if="activeName == 'second'">
-            <el-date-picker style="width:240px" size="small" v-model="date" type="daterange" range-separator="--" start-placeholder="开始日期"
-                            end-placeholder="结束日期" ></el-date-picker>
+            <el-date-picker style="width:240px" size="small" v-model="date" type="daterange" range-separator="--"
+                            start-placeholder="开始日期"
+                            end-placeholder="结束日期"></el-date-picker>
             <el-select style="width: 150px" size="small" v-model="type" placeholder="请选择产品">
               <el-option label="营销短信" value="1"></el-option>
               <el-option label="行业短信" value="2"></el-option>
@@ -49,7 +54,7 @@
             <el-input style="width: 150px;" v-model="mobile" size="small" placeholder="手机号"></el-input>
             <el-button size="mini" type="primary">查询</el-button>
             <!--<el-button style="float: right" type="primary" plain size="mini">导出数据</el-button>-->
-            <el-button style="float: right" type="primary"  size="mini">全部标记已读</el-button>
+            <el-button style="float: right" type="primary" size="mini">全部标记已读</el-button>
             <div class="table">
               <el-table :data="list" style="width: 100%">
                 <el-table-column type="index" label="序号"></el-table-column>
@@ -77,12 +82,35 @@
     data() {
       return {
         date: '',
+        pickerMinDate: '',
         type: '',
         task: [],
-        list2:[],
+        list: [],
         status: '',
         activeName: 'first',
-        mobile:''
+        mobile: '',
+        pickerOptions: {
+          disabledDate(time) {
+            let seconds = Date.parse(new Date(Date.now())) / 1000
+              // //2592000 获取 30天前的秒数
+              let before = (seconds - 2592000) * 1000
+            // 只能选本月前的   time.getTime()  > before - 8.64e6
+            return time.getTime() > Date.now() - 8.64e6 // 本月之前不可选
+          }
+          // disabledDate(time) {
+          //    //当前时间向前推的30天,全部转成秒进行计算
+          //   //获取当前时间的秒数
+          //   // let seconds = Date.parse(new Date(Date.now())) / 1000
+          //   // //2592000 获取 30天前的秒数
+          //   // let before = (seconds - 2592000) * 1000
+          //   // //秒数转换成日期
+          //   // let newdate = new Date(before)
+          //   // console.log(new Date())
+          //   // return newdate < new Date()
+          //
+          //
+          // }
+        }
       }
     },
     watch: {
@@ -92,10 +120,10 @@
     },
     mounted() {
       this.emit()
-      this.getTaskInfoDetail(15734)
+      // this.getTaskInfoDetail(15734)
     },
     methods: {
-      getTaskInfoDetail(id){
+      getTaskInfoDetail(id) {
         let that = this
         that.$request({
           url: 'user/getUserSubmitTaskInfo',

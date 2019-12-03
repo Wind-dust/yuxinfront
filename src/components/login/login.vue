@@ -3,20 +3,21 @@
     <el-card class="box-card">
       <!--<img class="logImg" src="../../assets/imgs/logo.png" alt="钰晰科技" title="钰晰科技">-->
       <el-form label-position="top" label-width="80px" :model="userinfo" ref='login' :rules="rules">
-        <el-form-item prop="user" label="账号:" >
+        <el-form-item prop="user" label="账号:">
           <el-input placeholder="请输入账号" @keyup.enter.native="submitForm('login')" v-model="userinfo.user"></el-input>
         </el-form-item>
-        <el-form-item prop="pwd" class="is-required" label="密码:" >
+        <el-form-item prop="pwd" class="is-required" label="密码:">
           <el-input placeholder="请输入密码" @keyup.enter.native="submitForm('login')" v-model="userinfo.pwd"
                     type="password"></el-input>
         </el-form-item>
-        <el-form-item prop="vercode" class="is-required" label="验证码:">
-          <div class="vercode">
-            <el-input placeholder="请输入验证码" @keyup.enter.native="submitForm('login')" v-model="userinfo.vercode"
-                      type="text"></el-input>
-            <v-code :identifyCode="identifyCode" @randomStr="randomStr"></v-code>
-          </div>
-        </el-form-item>
+        <!--<el-form-item prop="vercode" class="is-required" label="验证码:">-->
+        <!--<div class="vercode">-->
+        <!--<el-input placeholder="请输入验证码" @keyup.enter.native="submitForm('login')" v-model="userinfo.vercode"-->
+        <!--type="text"></el-input>-->
+        <!--<v-code :identifyCode="identifyCode" @randomStr="randomStr"></v-code>-->
+        <!--</div>-->
+        <test @isCheck="isCheck"></test>
+        <!--</el-form-item>-->
         <el-form-item>
           <el-button class="btn" type="primary" @click="submitForm('login')">登录</el-button>
         </el-form-item>
@@ -31,10 +32,12 @@
 <script>
   import {Message} from 'element-ui'
   import vCode from '../component/imgCode'
+  import test from '../../components/component/test'
 
   export default {
     components: {
-      vCode
+      vCode,
+      test
     },
     data() {
       let check = (rule, value, callback) => {
@@ -65,11 +68,12 @@
           vercode: ''
         },
         identifyCode: '',
-        rules:{
-          user:[{ required: true, message: '请输入账号', trigger: 'blur' }],
-          pwd:[{validator: check, trigger: 'blur'}],
-          vercode:[{validator: checkCode, trigger: 'blur'}]
-        }
+        rules: {
+          user: [{required: true, message: '请输入账号', trigger: 'blur'}],
+          pwd: [{validator: check, trigger: 'blur'}],
+          vercode: [{validator: checkCode, trigger: 'blur'}]
+        },
+        is_check: false
       }
     },
     mounted() {
@@ -77,6 +81,10 @@
       this.randomStr()
     },
     methods: {
+      isCheck(status) {
+        console.log(status)
+        this.is_check = status
+      },
       randomStr() {
         let seed = ['1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'z', 'y', 'm', 'n', 'w', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z', 'X', 'C', 'V', 'B', 'N', 'M'];
         let a = Math.floor(Math.random() * (seed.length))
@@ -86,6 +94,10 @@
         this.identifyCode = seed[a] + seed[b] + seed[c] + seed[d] + ''
       },
       submitForm(formName) {
+        if (!this.is_check) {
+          this.$message.error('请先通过安全验证')
+          return
+        }
         let that = this;
         this.$refs[formName].validate((valid) => {
           if (valid) {

@@ -1,7 +1,9 @@
 <template>
   <div class="tcontent">
-    <v-screen :screen="screenQuery" @query="onQuery"></v-screen>
-
+    <div class="margin">
+    <el-input style="width:180px" size="small" placeholder="请输入手机号"></el-input>
+    <el-button size="mini" type="primary">查询</el-button>
+    </div>
     <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" @selection-change="handleSelectionChange">
       <el-table-column type="selection" ></el-table-column>
       <el-table-column type="index" label="ID"></el-table-column>

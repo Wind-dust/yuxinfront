@@ -10,7 +10,7 @@
                                                                          class="icon"></i>{{v.name}}</router-link></span>
           <span class="sb-cn" v-else><i :class="v.icon" class="icon"></i>{{v.name}}</span>
         </template>
-        <el-menu-item class="bc" v-for="(v1,k1) in v._child" :key="k1" :hidden="v1.status" :index="'/'+v1.link">
+        <el-menu-item class="bc" v-for="(v1,k1) in v._child" :key="k1" :index="'/'+v1.link">
           {{v1.name}}
         </el-menu-item>
       </el-submenu>
@@ -27,77 +27,79 @@
     data() {
       return {
         menuList: [
-          {
-            name: '账户管理',
-            icon: 'el-icon-s-custom',
-            _child: [
-              {
-                name: '我的服务',
-                link: 'myService',
-                status: false
-              }, {
-                name: '账户资质',
-                link: 'qualification',
-                status: false
-              }, {
-                name: '完善信息',
-                link: 'license',
-                status: false
-              }, {
-                name: '充值记录',
-                link: 'payLog',
-                status: false
-              }]
-          },
-          {
-            name: '产品中心',
-            icon: 'el-icon-s-grid',
-            _child: [{
-              name: '营销短信',
-              link: 'businessMessage',
-              status: false
-            }, {
-              name: '行业短信',
-              link: 'marketingMessage',
-              status: false
-            }]
-          },
-          {
-            name: '报表中心',
-            icon: 'el-icon-document',
-            _child: [
-              //   {
-              //   name: '数据总览',
-              //   link: 'dataInfo',
-              //   status: false
-              // }, {
-              //   name: "明细查询",
-              //   link: 'dataDetail',
-              //   status: false
-              // }, {
-              //   name: '模板查询',
-              //   link: 'templateDetail',
-              //   status: false
-              // }
-              {
-                name: '明细查询',
-                link: 'sendDetail',
-                status: false
-              }
-            ]
-          }, {
-            name: '通讯录',
-            icon: 'el-icon-notebook-1',
-            _child: [{
-              name: '通讯录列表',
-              link: 'addressList',
-              status: false
-            }]
-          }
+          // {
+          //   name: '账户管理',
+          //   icon: 'el-icon-s-custom',
+          //   _child: [
+          //     {
+          //       name: '我的服务',
+          //       link: 'myService',
+          //       status: false
+          //     }, {
+          //       name: '账户资质',
+          //       link: 'qualification',
+          //       status: false
+          //     }, {
+          //       name: '完善信息',
+          //       link: 'license',
+          //       status: false
+          //     }, {
+          //       name: '充值记录',
+          //       link: 'payLog',
+          //       status: false
+          //     }]
+          // },
+          // {
+          //   name: '产品中心',
+          //   icon: 'el-icon-s-grid',
+          //   _child: [{
+          //     name: '营销短信',
+          //     link: 'businessMessage',
+          //     status: false
+          //   }, {
+          //     name: '行业短信',
+          //     link: 'marketingMessage',
+          //     status: false
+          //   }]
+          // },
+          // {
+          //   name: '报表中心',
+          //   icon: 'el-icon-document',
+          //   _child: [
+          //     //   {
+          //     //   name: '数据总览',
+          //     //   link: 'dataInfo',
+          //     //   status: false
+          //     // }, {
+          //     //   name: "明细查询",
+          //     //   link: 'dataDetail',
+          //     //   status: false
+          //     // }, {
+          //     //   name: '模板查询',
+          //     //   link: 'templateDetail',
+          //     //   status: false
+          //     // }
+          //     {
+          //       name: '明细查询',
+          //       link: 'sendDetail',
+          //       status: false
+          //     }
+          //   ]
+          // },
+          // {
+          //   name: '通讯录',
+          //   icon: 'el-icon-notebook-1',
+          //   _child: [{
+          //     name: '通讯录列表',
+          //     link: 'addressList',
+          //     status: false
+          //   }]
+          // }
         ],
         //管理商
         manageMenu: [{
           name: '账户管理',
+          icon: 'el-icon-edit',
           _child: [{
             name: '账户列表',
             link: 'subAccount'
@@ -107,53 +109,68 @@
           }]
         }, {
           name: '充值服务',
+          icon: 'el-icon-news',
           _child: [{
             name: '充值记录',
-            link: 'payLog'
+            link: 'rechargeLog'
           }, {
-            name: '后付费账单',
-            link: 'laterPay'
+            name: '客户账单',
+            link: 'bill'
           }]
         }, {
           name: '报表统计',
+          icon: 'el-icon-document',
           _child: [{
             name: '发送明细',
-            link: 'sendLog'
+            link: 'sendlog'
           }]
         }, {
           name: '平台配置',
-          link: 'platformConfig'
-        }, {
-          name: '系统消息',
-          link: 'systemMessage'
+          icon: 'el-icon-edit-outline',
+          _child: [{
+            name: '平台配置',
+            link: 'platformConfig'
+          }]
         }],
         //终端
         terminalMenu: [
           {
             name: '产品中心',
+            icon: 'el-icon-s-grid',
             _child: [{
               name: '营销短信',
-              link: 'businessMessage',
-              status: false
+              link: 'businessMessage'
             }, {
               name: '行业短信',
-              link: 'marketingMessage',
-              status: false
+              link: 'marketingMessage'
             }]
           }, {
-            name: '明细查询',
+            name: '数据查询',
+            icon: 'el-icon-document',
             _child: [
               {
+                name: '数据总览',
+                link: 'dataInfo'
+              },
+              {
                 name: '明细查询',
-                link: 'sendDetail'
+                link: 'dataDetail'
+              },{
+                name:'数据分析',
+                link:'dataAnalyze'
               }
+
             ]
           }, {
             name: '系统配置',
-            link: 'systemConfig'
-          }, {
-            name: '系统消息',
-            link: 'systemMessage'
+            icon: 'el-icon-edit-outline',
+            _child: [{
+              name: '数据推送',
+              link: 'systemConfig'
+            }, {
+              name: '服务器白名单',
+              link: 'whiteList'
+            }]
           }
         ],
         user: {}
@@ -163,6 +180,7 @@
       this.getuserInfo()
     },
     methods: {
+      //根据用户类型展示不同菜单
       getuserInfo() {
         let that = this;
         that.$request({
@@ -170,8 +188,13 @@
           success: function (res) {
             that.$globalData.userInfo = res.data || {};
             that.user = res.data || {}
-            console.log(res.data.pid)
-            that.disBar(res.data)
+            that.menuList = []
+            if (parseInt(res.data.user_type) === 1) {
+              that.menuList = that.terminalMenu
+            } else if (parseInt(res.data.user_type) === 2) {
+              that.menuList = that.manageMenu
+            }
+            // that.disBar(res.data)
           }
         })
       },
@@ -268,6 +291,10 @@
   .icon {
     font-size: 20px;
     margin-right: 10px;
+  }
+
+  a {
+    color: #fff;
   }
 
   /*.is-active{*/

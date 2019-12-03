@@ -167,7 +167,10 @@ function login() {
 let request = function(params = {}) {
     if (!params.url) throw new Error('url 未传值')
 
-    if (!localStorage.getItem("con_id") && !params.login && login()) return
+    if (!localStorage.getItem("con_id") && !params.login ){
+      login();
+      return
+    }
 
     let data = params.login ? params.data : addConId(params.data);
 

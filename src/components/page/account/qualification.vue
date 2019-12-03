@@ -1,50 +1,40 @@
 <template>
   <div class="tcontent">
-    <v-card width="180" name="账户资质" :card-status="cardStatus" :rules="rules" :rule-form="ruleForm" :rule-type="ruleType"
-            @submit="submit" @hideCard="">
-      <template slot="province">
-        <div class="area">
-          <el-form-item label-width="80px" label="省" :rules="[{ required: true, message: '请选择省份', trigger: 'change' }]">
-            <el-select @change="getProvince" v-model="proId">
-              <el-option v-for="item in province" :key="item.id" :label="item.label || ''" :value="item.value || ''">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label-width="80px" label="市" :rules="[{ required: true, message: '请选择城市', trigger: 'change' }]">
-            <el-select @change="getCity" v-model="cityId">
-              <el-option v-for="item in city" :key="item.id" :label="item.area_name || ''" :value="item.id || ''">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-          <el-form-item label-width="80px" label="区" :rules="[{ required: true, message: '请选择区', trigger: 'change' }]">
-            <el-select v-model="districtId">
-              <el-option v-for="item in district" :key="item.id" :label="item.area_name || ''" :value="item.id || ''">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
+    <el-row>
+      <el-col :span="24">
+        <div class="box-card box-shadow">
+          <h3 class="title">资质认证</h3>
+          <div class="hint">根据《中华人民共和国网络安全法》第二十四条的相关规定，使用我司服务需先进行实名认证。</div>
+          <el-form ref="form" :model="form" label-width="150px" style="width: 350px">
+            <el-form-item label="公司名称" :rules="[{required:true,message:'请输入公司名称',trigger:'blur'}]">
+              <el-input v-model="form.name" size="small" placeholder="请输入公司名称"></el-input>
+            </el-form-item>
+            <el-form-item label="法人姓名" :rules="[{required:true,message:'请输入法人姓名',trigger:'blur'}]">
+              <el-input v-model="form.legal_person" size="small" placeholder="请输入法人姓名"></el-input>
+            </el-form-item>
+            <el-form-item label="公司地址" :rules="[{required:true,message:'请输入公司地址',trigger:'blur'}]">
+              <el-input v-model="form.company_name" size="small" placeholder="请输入公司地址"></el-input>
+            </el-form-item>
+            <el-form-item label="联系电话" :rules="[{required:true,message:'请输入联系电话',trigger:'blur'}]">
+              <el-input v-model="form.phone" size="small" placeholder="请输入联系电话"></el-input>
+            </el-form-item>
+            <el-form-item label="上传证件" class="is-required">
+              <el-upload class="avatar-uploader" action="" :http-request="uploadImg" accept=".jpeg,.jpg,.png,.gif,.psd,.bmp" :show-file-list="false"  :before-upload="beforeAvatarUpload">
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
+              <p class="up-hint">1、请上传营业执照照片</p>
+              <p class="up-hint">2、大小不超过2M</p>
+              <p class="up-hint">3、上传照片请保持文字清晰可见</p>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="submit">提交</el-button>
+              <!--<el-button >取消</el-button>-->
+            </el-form-item>
+          </el-form>
         </div>
-
-          <el-form-item label-width="150px" label="主办单位性质" :rules="[{ required: true, message: '请选择单位性质', trigger: 'change' }]">
-            <el-select v-model="companyId" @change="getType">
-              <el-option v-for="item in company" :key="item.id" :label="item.name || ''" :value="item.id || ''">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-
-
-          <el-form-item label-width="150px" label="主办单位证件类型" :rules="[{ required: true, message: '请选择证件类型', trigger: 'change' }]">
-            <el-select v-model="companyTypeId" @change="getType">
-              <el-option v-for="item in companyType" :key="item.id" :label="item.name || ''" :value="item.id || ''">
-              </el-option>
-            </el-select>
-          </el-form-item>
-
-      </template>
-    </v-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
@@ -56,103 +46,9 @@
   export default {
     data() {
       return {
-        company: [],
-        companyId: '',
-        companyType:[],
-        companyTypeId:'',
-        cardStatus: true,
-        rules: ['company_name', 'company_certificate_num',
-          'organizers_name', 'identity_address', 'mailingAddress_address', 'user_supp_address', 'investor', 'entity_responsible_person_name',
-          'entity_responsible_person_identity_types', 'entity_responsible_person_identity_num', 'entity_responsible_person_mobile_phone',
-          'entity_responsible_person_phone', 'entity_responsible_person_msn',
-          'entity_responsible_person_email'
-        ],
-        ruleType: {
-          'company_name': {
-            type: 'input',
-            label: '主办单位或主办人全称',
-            placeholder: '请输入主办单位或主办人全称'
-          },
-          'company_certificate_num': {
-            type: 'input',
-            label: '主办单位证件号码',
-            placeholder: '请输入'
-          },
-          'organizers_name': {
-            type: 'input',
-            label: '主办单位或主办人名称',
-            placeholder: '请输入'
-          },
-          'identity_address': {
-            type: 'input',
-            label: '主办单位证件住所',
-            placeholder: '请输入'
-          },
-          'mailingAddress_address': {
-            type: 'input',
-            label: '主办单位通讯地址',
-            placeholder: '地区级'
-          },
-          'user_supp_address': {
-            type: 'input',
-            label: "主办单位通讯地址",
-            placeholder: '街道门牌号级'
-          },
-          'investor': {
-            type: 'input',
-            label: '投资人或主管单位',
-            placeholder: '请输入'
-          },
-          'entity_responsible_person_name': {
-            type: 'input',
-            label: '负责人姓名',
-            placeholder: '请输入'
-          },
-          'entity_responsible_person_identity_types': {
-            type: 'select',
-            label: '负责人证件类型',
-            placeholder: '请选择',
-            option: []
-          },
-          'entity_responsible_person_identity_num': {
-            type: 'input',
-            label: '负责人证件号码',
-            placeholder: '请输入'
-          },
-          'entity_responsible_person_mobile_phone': {
-            type: 'input',
-            placeholder: '请输入',
-            label: '联系方式1'
-          },
-          'entity_responsible_person_phone': {
-            type: 'input',
-            placeholder: '请输入',
-            label: '联系方式2'
-          },
-          'entity_responsible_person_msn': {
-            type: 'input',
-            placeholder: '请输入',
-            label: '应急联系电话'
-          },
-          'entity_responsible_person_email': {
-            type: 'input',
-            label: '电子邮件',
-            placeholder: '请输入'
-          },
-          'entity_remark': {
-            type: 'input',
-            inpType: 'textarea',
-            label: '留言'
-          }
-        },
-        ruleForm: {},
-        province: [],
-        city: [],
-        district: [],
-        proId: '',
-        cityId: '',
-        districtId: '',
-        bread: '账户资质'
+        form:{},
+        bread: '资质认证',
+        imageUrl:''
       }
     },
     components: {
@@ -167,6 +63,25 @@
       this.ruleType.entity_responsible_person_identity_types.option = type
     },
     methods: {
+      beforeAvatarUpload(file){
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error('上传图片大小不能超过 2MB!');
+        }
+        return isLt2M;
+      },
+      uploadImg(file){
+        let that = this
+        let formData = new FormData()
+        formData.append('image',file.file)
+        that.$request({
+          url:'upload/uploadfile',
+          data:formData,
+          success(res){
+            that.imageUrl = res.image_path
+          }
+        })
+      },
       getType() {
         let id = parseInt(this.companyId)
         let company = this.company
@@ -260,5 +175,46 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+  }
+  .hint{
+    width: 100%;
+    padding: 8px 48px 8px 16px;
+    font-size: 12px;
+    border: 1px solid #abdcff;
+    background-color: #f0faff;
+    box-sizing: border-box;
+    border-radius: 4px;
+    margin: 15px 0 20px 0;
+  }
+  .avatar-uploader  {
+    width: 160px;
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .el-upload{
+    display: block!important;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 160px;
+    height: 160px;
+    line-height: 160px;
+    text-align: center;
+  }
+  .avatar {
+    width: 160px;
+    height: 160px;
+    display: block;
+  }
+  .up-hint{
+    font-size: 12px;
+    line-height: 25px;
   }
 </style>

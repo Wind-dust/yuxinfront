@@ -296,3 +296,37 @@ a {
 .el-menu-item:focus, .el-menu-item:hover{
   background: #60bff3!important;
 }
+.box-card {
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 20px;
+}
+
+.title {
+  position: relative;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.title::before {
+  content: '';
+  width: 3px;
+  height: 15px;
+  background: #1889ff;
+  position: absolute;
+  top: 4px;
+  left: -10px;
+}
+.table{
+  margin-top: 20px;
+}
+.float-right{
+  float: right;
+  margin-right: 10px;
+}
+.mt{
+  margin-top: 25px;
+}
+.margin{
+  margin: 14px 0;
+}

@@ -5,6 +5,7 @@
         <!--Logo area-->
         <el-col :xs="16" :sm="16" :md="20">
           <div class="logo">
+            <!--显示logo和平台名称-->
             <!--<span class="logo_prefix">上海钰晰科技</span>-->
             <span class="logo_prefix"></span>
           </div>

@@ -50,7 +50,7 @@
     },
     mounted() {
       this.emit()
-      // this.createLine()
+      this.createLine()
     },
     methods: {
       createLine() {
@@ -80,7 +80,7 @@
           yAxis: {
             // data:[]
           },
-          // 图裂
+          // 图示
           legend: {
             data: ['发送条数', '成功条数']
           },
@@ -216,8 +216,8 @@
   }
 
   #main {
-    /*width: 100%;*/
-    /*height: 200px;*/
-    /*margin-top: 40px;*/
+    width: 100%;
+    height: 200px;
+    margin-top: 40px;
   }
 </style>

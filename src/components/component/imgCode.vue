@@ -12,7 +12,7 @@
       },
       fontSizeMin: {
         type: Number,
-        default: 16
+        default: 20
       },
       fontSizeMax: {
         type: Number,
