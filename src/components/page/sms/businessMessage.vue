@@ -88,7 +88,7 @@
       </div>
     </el-col>
   </el-row>
-    <v-data-info v-if="activeName === 'first'"></v-data-info>
+    <!--<v-data-info v-if="activeName === 'first'"></v-data-info>-->
   </div>
 </template>
 
