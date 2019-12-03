@@ -37,11 +37,7 @@
                 name: '账户资质',
                 link: 'qualification',
                 status: false
-              }, {
-                name: '完善信息',
-                link: 'license',
-                status: false
-              }]
+              }, ]
           },
           {
             name: '产品中心',
@@ -136,6 +132,13 @@
             link: 'accountList',
             status: false
           })
+          data[0]._child.push(
+            {
+              name: '完善信息',
+              link: 'license',
+              status: false
+            }
+          )
           // }
           // for (let j = 0; j < data[i]._child.length; j++) {
           //   if (user.pid != '0' && data[i]._child[j].link == 'account') {
