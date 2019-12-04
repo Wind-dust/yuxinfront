@@ -12,12 +12,12 @@
     data() {
       return {
         cardStatus: true,
-        rules: ['business_id', 'mobile'],
+        rules: [],
         ruleType: {
-          'mobile': {
+          'nick_name': {
             type: 'input',
-            label: '账户手机号',
-            placeholder: '需要设置的账户手机号'
+            label: '账户名',
+            placeholder: '需要设置的账户名'
           },
           'business_id': {
             type: 'select',
