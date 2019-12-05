@@ -155,6 +155,7 @@
           if (valid) {
             that.$request({
               url: 'send/getSmsBuiness',
+              form:1,
               data: {
                 appid: that.$globalData.userInfo.appid,
                 appkey: that.$globalData.userInfo.appkey,
@@ -162,7 +163,10 @@
                 mobile: that.ruleForm.phone
               },
               success(res) {
-                Message({message: '提交成功', type: 'success'})
+                if (res.code == 200){
+                  Message({message: '提交成功', type: 'success'})
+                }
+
               }
             })
           } else {
