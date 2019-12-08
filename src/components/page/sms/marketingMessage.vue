@@ -3,13 +3,39 @@
     <el-row>
       <el-col :span="24">
         <div class="box-card box-shadow">
+          <div v-if="selectTemp" class="center">
+            <el-card class="box-card" body-style	="width:800px">
+              <div slot="header" class="clearfix">
+                <span style="font-size: 14px;">选择模板</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="selectTemp = false">关闭</el-button>
+              </div>
+              <el-input size="small" style="width: 120px;" placeholder="模板名称"></el-input>
+              <el-button size="mini" type="primary" palin>搜索</el-button>
+              <div>
+                <el-table :data="tempList" style="width: 100%">
+                  <el-table-column type="index" label="序号"></el-table-column>
+                  <el-table-column prop="date" label="模板名称" width=""></el-table-column>
+                  <el-table-column prop="date" label="短信内容" width=""></el-table-column>
+                  <el-table-column prop="date" label="字数" width=""></el-table-column>
+                  <el-table-column  label="操作" width="">
+                    <template slot-scope>
+                      <el-button size="mini">选择</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <el-pagination layout="prev, pager, next" :total="0" hide-on-single-page></el-pagination>
+            </el-card>
+          </div>
           <h3 class="title">行业短信</h3>
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
             <el-tab-pane label="短信任务" name="second"></el-tab-pane>
+            <el-tab-pane label="个性化发送" name="seventh"></el-tab-pane>
             <el-tab-pane label="模板管理" name="third"></el-tab-pane>
             <!--<el-tab-pane label="模板库" name="fourth">模板库</el-tab-pane>-->
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
+            <el-tab-pane label="发送列表" name="sixth"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName === 'first'">
             <v-product-temp :name="bread" :content="content" type="marketing" :messageNum="messageNum"></v-product-temp>
@@ -17,28 +43,82 @@
           <div v-if="activeName === 'second'">
             <div class="content-content">
               <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="短信签名" prop="signatureValue">
-                  <el-select v-model="ruleForm.signatureValue" placeholder="请选择" filterable allow-create
-                             default-first-option>
-                    <el-option v-for="item in signature" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
+                <el-form-item label="发送方式:">
+                  <el-switch v-model="messageType" active-text="自定义发送" active-color="#13ce66" inactive-color="#1889ff"
+                             :width="50" inactive-text="模板发送"></el-switch>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="phone">
-                  <el-input v-model="ruleForm.phone"></el-input>
+                <el-form-item label="任务名称:" prop="taskName">
+                  <el-input type="text" v-model="ruleForm.taskName"></el-input>
                 </el-form-item>
+                <div v-if="!messageType">
+                  <el-form-item label="模板选择:" prop="signatureValue">
+                    <el-input v-model="ruleForm.tempTitle" disabled></el-input>
+                    <el-button size="mini" type="primary" plain @click="selectTemp = true">选择模板</el-button>
+                  </el-form-item>
 
-                <el-form-item label="短信内容" prop="content">
-                  <el-input type="textarea" :rows="4" v-model="ruleForm.content"></el-input>
-                  <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
-                    style="color: #3a8ee6;">{{num}}</span> 条</p>
-                </el-form-item>
+                  <el-form-item label="短信内容:" prop="content">
+                    <el-tooltip class="item" effect="dark" placement="top-start">
+                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费</div>
+                      <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
+                    </el-tooltip>
+                    <el-input disabled type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
+                              v-model="ruleForm.tempContent"></el-input>
+                    <p>现共输入 <span style="color: #3a8ee6">{{tempTextLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
+                      style="color: #3a8ee6;">{{tempNum}}</span> 条</p>
+                  </el-form-item>
+                </div>
+                <div v-else>
+                  <el-form-item label="短信签名:" prop="signatureValue">
+                    <el-select v-model="ruleForm.signatureValue" placeholder="请选择" filterable allow-create
+                               default-first-option>
+                      <el-option v-for="item in signature" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
 
+                  <el-form-item label="短信内容:" prop="content">
+                    <el-tooltip class="item" effect="dark" placement="top-start">
+                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符</div>
+                      <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
+                    </el-tooltip>
+                    <el-input type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
+                              v-model="ruleForm.content"></el-input>
+                    <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
+                      style="color: #3a8ee6;">{{num}}</span> 条</p>
+                  </el-form-item>
+                </div>
+                <el-form-item label="手机号码:" prop="phone">
+                  <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
+                            type="textarea" :disabled="disabled"></el-input>
+                  <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
+                </el-form-item>
+                <el-form-item label="发送时间:" prop="dstime">
+                  <el-date-picker v-model="ruleForm.dstime" type="datetime" placeholder="发送日期时间">
+                  </el-date-picker>
+                </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
                   <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
               </el-form>
+              <el-dialog title="导入文件" :visible.sync="dialogVisible" width="30%">
+                <p>1：导入文件支持txt、csv、xlsx、xls</p>
+                <p>2：单次最大上传不超过2M！,若导入失败，尝试拆分导入</p>
+                <p>3：若上传了文件，将覆盖原先输入框中号码</p>
+                <p>4：若需重新上传，请先删除上传列表中的文件</p>
+                <span class="upload">
+                <el-upload class="upload-demo" action="" :http-request="upload" :limit="1" accept=".txt,.csv,.xlsx,.xls"
+                           :before-upload="beforeAvatarUpload" :on-success="uploadSuccess">
+
+                  <el-button style="margin-top: 20px" size="medium" type="primary"><i
+                    class="el-icon-upload"></i>本地上传</el-button>
+                </el-upload>
+              </span>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="confirmUpload">确 定</el-button>
+              </span>
+              </el-dialog>
             </div>
             <div class="right">
               <div class="preview">
@@ -47,12 +127,19 @@
                 </div>
               </div>
             </div>
+
           </div>
           <div v-if="activeName === 'third'">
             <v-business-temp></v-business-temp>
           </div>
           <div v-if="activeName === 'fifth'">
             <v-black-list></v-black-list>
+          </div>
+          <div v-if="activeName === 'sixth'">
+            <v-task-list :type="2"></v-task-list>
+          </div>
+          <div v-if="activeName === 'seventh'">
+            <v-custom-send></v-custom-send>
           </div>
         </div>
       </el-col>
@@ -67,6 +154,8 @@
   import vBusinessTemp from './components/businessTemp'
   import vBlackList from './components/blackList'
   import vDataInfo from './components/dataInfo'
+  import vTaskList from './components/taskList'
+  import vCustomSend from './components/customSend'
 
   export default {
     name: "marketingMessage",
@@ -74,18 +163,21 @@
       vProductTemp,
       vBusinessTemp,
       vBlackList,
-      vDataInfo
+      vDataInfo,
+      vTaskList,
+      vCustomSend
     },
     data() {
       return {
+        tempList:[],
+        selectTemp:false,
         sms_text: '',
-        signature: [
-
-        ],
+        signature: [],
         ruleForm: {
           content: '',
           phone: '',
-          signatureValue: ''
+          signatureValue: '',
+          tempContent: ''
         },
         rules: {
           phone: [
@@ -106,7 +198,10 @@
         num: 1,
         textLength: 0,
         disabled: false,
-        messageNum:0
+        messageNum: 0,
+        tempTextLength: 0,
+        tempNum: 0,
+        messageType: false,
       }
     },
     watch: {
@@ -126,9 +221,53 @@
           this.num = Math.ceil(num)
         }
 
+      },
+      'ruleForm.tempContent'(val) {
+        this.tempTextLength = val.length
+        if (val.length <= 70) {
+          let num = val.length / 70
+          this.tempNum = Math.ceil(num)
+        } else {
+          let num = val.length / 67
+          this.tempNum = Math.ceil(num)
+        }
+
       }
     },
     methods: {
+      disPhone() {
+        // console.log(this.ruleForm.phone)
+        let phoneStr = this.ruleForm.phone
+        phoneStr = phoneStr.trim()
+        this.ruleForm.phone = phoneStr.replace(/\s+/g, ",").replace(/\r\n/g, ',').replace(/\r/g, ',').replace(/\n/g, ',').replace(/,{2,}/g, ',')
+      },
+      confirmUpload() {
+        this.dialogVisible = false
+        this.disabled = true
+      },
+      uploadSuccess(res, file, list) {
+
+      },
+      upload(file) {
+        console.log(file.file)
+        let formData = new FormData()
+        formData.append('filename', file.file)
+        let that = this
+        that.$request({
+          url: 'upload/uploadUserExcel',
+          data: formData,
+          success(res) {
+            that.ruleForm.phone = res.phone
+          }
+        })
+      },
+      beforeAvatarUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error('文件大小不能超过 2MB!');
+          return
+        }
+      },
       getMessageNum() {
         let that = this
         that.$request({
@@ -162,7 +301,7 @@
                 mobile: that.ruleForm.phone
               },
               success(res) {
-                Message({message: '提交成功', type: 'success'})
+
               }
             })
           } else {
@@ -184,10 +323,23 @@
 </script>
 
 <style scoped>
+  .center{
+    position: fixed;
+    left:0;
+    top: 0;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.6);
+  }
   .box-card {
     background: #ffffff;
     border-radius: 4px;
     padding: 20px;
+    position: relative;
   }
 
   .title {

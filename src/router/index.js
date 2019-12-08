@@ -3,9 +3,7 @@ import Router from 'vue-router';
 
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
-  // console.log(routerPush.call(this, location))
-  return routerPush.call(this, location)
-    .catch(error => error)
+  return routerPush.call(this, location).catch(error => error)
 }
 
 const Home = r => require.ensure([], () => r(require('../components/common/Home')), 'Home')
@@ -52,6 +50,8 @@ const platformConfig = r => require.ensure([], () => r(require('../components/pa
 const systemConfig = r => require.ensure([], () => r(require('../components/page/config/systemConfig')), 'systemConfig')
 const whiteList = r => require.ensure([], () => r(require('../components/page/config/whiteList')), 'whiteList')
 const template = r => require.ensure([], () => r(require('../components/page/sms/components/tempManage')), 'template')
+const dataAnalyze = r => require.ensure([], () => r(require('../components/page/report/dataAnalyze')), 'dataAnalyze')
+const numCate = r => require.ensure([], () => r(require('../components/page/report/numCate')), 'numCate')
 
 
 Vue.use(Router)
@@ -83,74 +83,79 @@ export default new Router({
     }, {
       path: '/jurisdictionList',
       component: jurisdictionList
-    },
-      {
-        path: '/modifyPwd',
-        component: modifyPwd
-      }, {
-        path: '/qualification',
-        component: qualification
-      }, {
-        path: '/account',
-        component: account
-      }, {
-        path: '/subAccount',
-        component: subAccount
-      }, {
-        path: '/myService',
-        component: myService
-      }, {
-        path: '/marketingMessage',
-        component: marketingMessage
-      }, {
-        path: '/businessMessage',
-        component: businessMessage
-      }, {
-        path: '/templateDetail',
-        component: templateDetail
-      }, {
-        path: '/dataDetail',
-        component: dataDetail
-      }, {
-        path: '/dataInfo',
-        component: dataInfo
-      }, {
-        path: '/addressList',
-        component: addressList
-      }, {
-        path: '/message',
-        component: message
-      }, {
-        path: '/license',
-        component: license
-      }, {
-        path: '/sendDetail',
-        component: sendDetail
-      }, {
-        path: '/createUser',
-        component: createUser
-      }, {
-        path: '/rechargeLog',
-        component: rechargeLog
-      }, {
-        path: '/bill',
-        component: bill
-      }, {
-        path: '/sendlog',
-        component: sendlog
-      }, {
-        path: '/platformConfig',
-        component: platformConfig
-      }, {
-        path: '/systemConfig',
-        component: systemConfig
-      }, {
-        path: '/whiteList',
-        component: whiteList
-      }, {
-        path: '/sms/template',
-        component: template
-      }]
+    }, {
+      path: '/modifyPwd',
+      component: modifyPwd
+    }, {
+      path: '/qualification',
+      component: qualification
+    }, {
+      path: '/account',
+      component: account
+    }, {
+      path: '/subAccount',
+      component: subAccount
+    }, {
+      path: '/myService',
+      component: myService
+    }, {
+      path: '/marketingMessage',
+      component: marketingMessage
+    }, {
+      path: '/businessMessage',
+      component: businessMessage
+    }, {
+      path: '/templateDetail',
+      component: templateDetail
+    }, {
+      path: '/dataDetail',
+      component: dataDetail
+    }, {
+      path: '/dataInfo',
+      component: dataInfo
+    }, {
+      path: '/addressList',
+      component: addressList
+    }, {
+      path: '/message',
+      component: message
+    }, {
+      path: '/license',
+      component: license
+    }, {
+      path: '/sendDetail',
+      component: sendDetail
+    }, {
+      path: '/createUser',
+      component: createUser
+    }, {
+      path: '/rechargeLog',
+      component: rechargeLog
+    }, {
+      path: '/bill',
+      component: bill
+    }, {
+      path: '/sendlog',
+      component: sendlog
+    }, {
+      path: '/platformConfig',
+      component: platformConfig
+    }, {
+      path: '/systemConfig',
+      component: systemConfig
+    }, {
+      path: '/whiteList',
+      component: whiteList
+    }, {
+      path: '/sms/template',
+      component: template
+    }, {
+      path: '/dataAnalyze',
+      component: dataAnalyze
+    }, {
+      path: '/numCate',
+      component: numCate
+    }]
   }, {
     path: '/login',
     component: login

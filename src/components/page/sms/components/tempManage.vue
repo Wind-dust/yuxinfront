@@ -15,6 +15,10 @@
                   <el-alert title="建议输入产品名称或公司名称" type="warning"></el-alert>
                 </el-form-item>
                 <el-form-item label="短信内容：">
+                  <el-tooltip class="item" effect="dark" placement="top-start">
+                    <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符</div>
+                    <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
+                  </el-tooltip>
                   <el-input type="textarea" placeholder="请输入短信内容，不超过500字" v-model="form.content" :rows="6"></el-input>
                   <p class="content-ex">现在共输入 <span>{{inner.length}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span>{{num}}</span> 条
                   </p>
@@ -59,7 +63,7 @@
           sign: '',
           content: ''
         },
-        inner: '...',
+        inner: '',
         num: 0
       }
     },
@@ -72,7 +76,7 @@
         this.inner = '【' + newVal + '】' + this.form.content
       },
       'form.content'(newVal, oldVal) {
-        this.inner = newVal
+        this.inner = '【'+this.form.sign+ '】'+newVal
       },
       inner(val) {
         if (val.length <= 70) {

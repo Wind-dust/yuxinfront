@@ -13,7 +13,7 @@
               <img class="avatar" v-if="userInfo.logo" :src="userInfo.logo" alt="">
               <img class="avatar" v-else src="../../assets/imgs/logoicon.png" alt="">
               <p class="name">Hello! &nbsp;&nbsp;<span>{{name}}</span></p>
-              <p class="name">用户等级：<span class="more"><router-link to="/qualification">去认证 <i class="el-icon-d-arrow-right"></i></router-link></span></p>
+              <p class="name">用户等级：<span class="more"><router-link to="/qualification">未认证 <i class="el-icon-d-arrow-right"></i></router-link></span></p>
             </div>
             <div class="account-type">
               <p>账户类型：{{userInfo._user_type}}</p>

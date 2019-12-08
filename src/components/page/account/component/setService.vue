@@ -1,43 +1,18 @@
 <template>
-  <!--<div>-->
-    <!--<ul class="ul mt">-->
-      <!--<li class="li">-->
-        <!--&lt;!&ndash;<el-checkbox :indeterminate="isIndeterminate" v-model="checkAll" @change="handleCheckAllChange"></el-checkbox>&ndash;&gt;-->
-        <!--短信产品-->
-      <!--</li>-->
-      <!--<li class="li">价格</li>-->
-      <!--<li class="li">赠送条数</li>-->
-    <!--</ul>-->
-    <!--<div class="line"></div>-->
-
-    <!--<ul class="ul " v-for="(v,k) in product" :key="k">-->
-      <!--<li class="li">-->
-        <!--<el-checkbox @change="selected(v.business_id)" :checked=" status ? status:v.status">{{v.business_name}}-->
-        <!--</el-checkbox>-->
-      <!--</li>-->
-      <!--<li class="li">-->
-        <!--<el-input style="width: 80px;" v-model="v.son_price" size="mini"></el-input>-->
-      <!--</li>-->
-      <!--<li class="li">-->
-        <!--<el-input style="width: 80px" v-model="v.num" size="mini"></el-input>-->
-      <!--</li>-->
-    <!--</ul>-->
-    <!--<el-button size="small" type="primary" @click="submit()">保存</el-button>-->
-  <!--</div>-->
   <div>
     <el-table :data="product" style="width: 100%">
       <el-table-column prop="business_name" label="产品类型" width="180"></el-table-column>
       <el-table-column label="价格">
         <template slot-scope="scope">
-          <el-input style="width:100px" v-model="scope.row.son_price"></el-input>
+          <el-input style="width:100px" size="small" v-model="scope.row.son_price"></el-input>
         </template>
       </el-table-column>
       <el-table-column label="赠送条数">
         <template slot-scope="scope">
-          <el-input style="width:100px" v-model="scope.row.gift_num"></el-input>
+          <el-input style="width:100px" size="small" v-model="scope.row.gift_num"></el-input>
         </template>
       </el-table-column>
-      <el-table-column label="赠送条数">
+      <el-table-column label="操作">
         <template slot-scope="scope">
           <el-button type="primary" size="mini" @click="submit(scope.row)">保存</el-button>
         </template>
@@ -49,6 +24,7 @@
 <script>
   export default {
     name: "setService",
+    props:['nickName'],
     data() {
       return {
         service: [],
@@ -60,15 +36,24 @@
         marketing: {},
         status: false,
         price:'',
-        gift_num:''
+        gift_num:'',
+        name:''
+      }
+    },
+    watch:{
+      nickName:{
+        handler(val){
+          this.name = val
+        },
+        deep:true
       }
     },
     mounted() {
       this.getService()
     },
     methods: {
-      submit(id){
-        console.log(id)
+      submit(data){
+        console.log(data)
       },
       handleCheckAllChange(val) {
         console.log(val)

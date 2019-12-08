@@ -21,16 +21,21 @@
             <el-table :data="list" style="width: 100%" @selection-change="handleSelectionChange">
               <el-table-column type="selection" width="55"></el-table-column>
               <el-table-column type="index" label="序号"></el-table-column>
-              <el-table-column prop="date" label="用户名"></el-table-column>
-              <el-table-column prop="name" label="企业名称"></el-table-column>
-              <el-table-column prop="address" label="付费方式"></el-table-column>
-              <el-table-column prop="address" label="状态"></el-table-column>
+              <el-table-column prop="nick_name" label="用户名"></el-table-column>
+              <el-table-column prop="company_name" label="企业名称"></el-table-column>
+              <el-table-column prop="_reservation_service" label="付费方式"></el-table-column>
+              <el-table-column  label="用户状态">
+                <template slot-scope="scope">
+                  <el-switch @change="stopOrUse(scope.row.id,scope.row.user_status)" v-model="scope.row.user_status" active-text="启用" inactive-text="停用" :active-value="2" :inactive-value="1"></el-switch>
+                </template>
+              </el-table-column>
               <el-table-column prop="address" label="产品类型"></el-table-column>
               <el-table-column prop="address" label="单价"></el-table-column>
               <el-table-column prop="address" label="金额"></el-table-column>
               <el-table-column prop="address" label="余额"></el-table-column>
             </el-table>
           </div>
+          <div class="flex-cen" ><el-pagination :layout="total ? layout : ''" :total="total" background></el-pagination></div>
         </div>
       </el-col>
     </el-row>
@@ -46,15 +51,19 @@
         user_status: '',
         type: '',
         name: '',
-        selected: []
+        selected: [],
+        total:0,
+        layout:'prev, pager, next'
       }
     },
     mounted() {
-      this.emit()
+      this.$emit('getBread','账户列表')
+      this.getSubAccount()
     },
     methods: {
-      emit(){
-        this.$emit('getBread','账户列表')
+      //启停
+      stopOrUse(id,status){
+        
       },
       createUser(){
         this.$router.push({path:'/createUser'})
@@ -75,6 +84,38 @@
           return
         }
         alert(123)
+      },
+      getSubAccount(){
+        let that = this
+        that.$request({
+          url:'user/getUserSonAccount',
+          data:that.screen,
+          success(res){
+            that.list = that.disAccount(res.result)
+            that.total = res.total || 0
+          }
+        })
+      },
+      disAccount(data){
+        for (let i =0 ;i<data.length;i++){
+          switch (parseInt(data[i].user_status)) {
+            case 1:
+              data[i]._user_status = '停用';
+              break;
+            case 2:
+              data[i]._user_status = '启用';
+              break;
+          }
+          switch (parseInt(data[i].reservation_service)) {
+            case 1:
+              data[i]._reservation_service = '预付费';
+              break;
+            case 2:
+              data[i]._reservation_service = '后付费';
+              break;
+          }
+        }
+        return data
       }
     }
   }
@@ -105,5 +146,8 @@
 
   .table {
     margin-top: 20px;
+  }
+  .flex-cen{
+    margin-top: 10px;
   }
 </style>

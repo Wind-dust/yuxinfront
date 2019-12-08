@@ -22,7 +22,7 @@
         <el-input placeholder="请输入邮箱" @keyup.enter.native="submitForm('login')" v-model="userinfo.email"
                   type="text"></el-input>
       </el-form-item>
-      <el-form-item prop="mobile" label="手机号:" :rules="[{ required: true, message: '请输入手机号', trigger: 'blur' }]">
+      <el-form-item prop="mobile" label="手机号:" :rules="[{ required: true, message: '请输入手机号', trigger: 'blur' },{min:11,max:11,message:'请检查手机号',trigger:'blur'}]">
         <el-input placeholder="请输入手机号" @keyup.enter.native="submitForm('login')" v-model="userinfo.mobile"
                   type="number"></el-input>
       </el-form-item>
@@ -97,6 +97,7 @@
       back() {
         this.$emit('back')
       },
+      //需要把添加成功的用户信息返给我
       submitForm(formName) {
         let that = this;
         this.$refs[formName].validate((valid) => {
@@ -106,13 +107,16 @@
               data: that.userinfo,
               form: 1,
               success: function (res) {
-                that.userinfo = {
-                  nick_name: '',
-                  passwd: '',
-                  user_type: '',
-                  mobile: '',
-                  email: '',
-                  checkPass: ''
+                if (res.code == 200) {
+                  that.$emit('getActiveName',{active:'second',name:'woke'})
+                  that.userinfo = {
+                    nick_name: '',
+                    passwd: '',
+                    user_type: '',
+                    mobile: '',
+                    email: '',
+                    checkPass: ''
+                  }
                 }
               }
             })

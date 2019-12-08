@@ -158,6 +158,9 @@
               },{
                 name:'数据分析',
                 link:'dataAnalyze'
+              },{
+              name:'号码分网',
+                link:'numCate'
               }
 
             ]

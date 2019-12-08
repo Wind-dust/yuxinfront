@@ -4,9 +4,34 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <h3 class="title">营销短信</h3>
+          <div v-if="selectTemp" class="center">
+            <el-card class="box-card" body-style="width:800px">
+              <div slot="header" class="clearfix">
+                <span style="font-size: 14px;">选择模板</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="selectTemp = false">关闭</el-button>
+              </div>
+              <el-input size="small" style="width: 120px;" placeholder="模板名称"></el-input>
+              <el-button size="mini" type="primary" palin>搜索</el-button>
+              <div>
+                <el-table :data="tempList" style="width: 100%">
+                  <el-table-column type="index" label="序号"></el-table-column>
+                  <el-table-column prop="date" label="模板名称" width=""></el-table-column>
+                  <el-table-column prop="date" label="短信内容" width=""></el-table-column>
+                  <el-table-column prop="date" label="字数" width=""></el-table-column>
+                  <el-table-column label="操作" width="">
+                    <template slot-scope>
+                      <el-button size="mini">选择</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <el-pagination layout="prev, pager, next" :total="0" hide-on-single-page></el-pagination>
+            </el-card>
+          </div>
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
             <el-tab-pane label="短信任务" name="second"></el-tab-pane>
+            <el-tab-pane label="个性化发送" name="seventh"></el-tab-pane>
             <el-tab-pane label="模板管理" name="third"></el-tab-pane>
             <!--<el-tab-pane label="模板库" name="fourth">模板库</el-tab-pane>-->
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
@@ -18,33 +43,57 @@
           <div v-if="activeName === 'second'">
             <div class="content-content">
               <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
-                <el-form-item label="任务名称" prop="taskName">
+                <el-form-item label="发送方式:">
+                  <el-switch v-model="messageType" active-text="自定义发送" active-color="#13ce66" inactive-color="#1889ff"
+                             :width="50" inactive-text="模板发送"></el-switch>
+                </el-form-item>
+                <el-form-item label="任务名称:" prop="taskName">
                   <el-input type="text" v-model="ruleForm.taskName"></el-input>
                 </el-form-item>
-                <el-form-item label="短信签名" prop="signatureValue">
-                  <el-select v-model="ruleForm.signatureValue" placeholder="请选择" filterable allow-create
-                             default-first-option>
-                    <el-option v-for="item in signature" :key="item.value" :label="item.label" :value="item.value">
-                    </el-option>
-                  </el-select>
-                </el-form-item>
+                <div v-if="!messageType">
+                  <el-form-item label="模板选择:" prop="signatureValue">
+                    <el-input v-model="ruleForm.tempTitle" disabled></el-input>
+                    <el-button size="mini" type="primary" plain>选择模板</el-button>
+                  </el-form-item>
 
-                <el-form-item label="短信内容" prop="content">
-                  <el-tooltip class="item" effect="dark" placement="top-start">
-                    <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费</div>
-                    <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
-                  </el-tooltip>
-                  <el-input type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
-                            v-model="ruleForm.content"></el-input>
-                  <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
-                    style="color: #3a8ee6;">{{num}}</span> 条</p>
-                </el-form-item>
-                <el-form-item label="手机号码" prop="phone">
+                  <el-form-item label="短信内容:" prop="content">
+                    <el-tooltip class="item" effect="dark" placement="top-start">
+                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费</div>
+                      <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
+                    </el-tooltip>
+                    <el-input disabled type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
+                              v-model="ruleForm.tempContent"></el-input>
+                    <p>现共输入 <span style="color: #3a8ee6">{{tempTextLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
+                      style="color: #3a8ee6;">{{tempNum}}</span> 条</p>
+                  </el-form-item>
+                </div>
+                <div v-else>
+                  <el-form-item label="短信签名:" prop="signatureValue">
+                    <el-select v-model="ruleForm.signatureValue" placeholder="请选择" filterable allow-create
+                               default-first-option>
+                      <el-option v-for="item in signature" :key="item.value" :label="item.label" :value="item.value">
+                      </el-option>
+                    </el-select>
+                  </el-form-item>
+
+                  <el-form-item label="短信内容:" prop="content">
+                    <el-tooltip class="item" effect="dark" placement="top-start">
+                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符</div>
+                      <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
+                    </el-tooltip>
+                    <el-input type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
+                              v-model="ruleForm.content"></el-input>
+                    <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
+                      style="color: #3a8ee6;">{{num}}</span> 条</p>
+                  </el-form-item>
+                </div>
+                <el-form-item label="手机号码:" prop="phone">
                   <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
                             type="textarea" :disabled="disabled"></el-input>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
+                  <div class="phone-num">总数：<span>4</span>个，联通：<span>4</span>个，移动：<span>4</span>个，电信：<span>4</span>个，未知：<span>0</span>个</div>
                 </el-form-item>
-                <el-form-item label="发送时间" prop="dstime">
+                <el-form-item label="发送时间:" prop="dstime">
                   <el-date-picker v-model="ruleForm.dstime" type="datetime" placeholder="发送日期时间">
                   </el-date-picker>
                 </el-form-item>
@@ -88,7 +137,10 @@
             <v-black-list></v-black-list>
           </div>
           <div v-if="activeName === 'sixth'">
-            <v-task-list></v-task-list>
+            <v-task-list :type="1"></v-task-list>
+          </div>
+          <div v-if="activeName === 'seventh'">
+            <v-custom-send></v-custom-send>
           </div>
         </div>
       </el-col>
@@ -103,6 +155,7 @@
   import vBlackList from './components/blackList'
   import vDataInfo from './components/dataInfo'
   import vTaskList from './components/taskList'
+  import vCustomSend from './components/customSend'
 
   export default {
     name: "marketingMessage",
@@ -111,10 +164,13 @@
       vProductTemp,
       vBlackList,
       vDataInfo,
-      vTaskList
+      vTaskList,
+      vCustomSend
     },
     data() {
       return {
+        selectTemp: false,
+        messageType: false,
         sms_text: '...',
         signatureValue: '',
         signature: [],
@@ -125,7 +181,9 @@
           phone: '',
           signatureValue: '',
           taskName: '',
-          dstime: ''
+          dstime: '',
+          tempTitle: '',
+          tempContent: ''
         },
         rules: {
           phone: [
@@ -150,7 +208,9 @@
         content: '网站、APP通过调用API接口，实现手机验证、订单通知等功能。',
         num: 1,
         textLength: 0,
-        messageNum: 0
+        messageNum: 0,
+        tempTextLength: 0,
+        tempNum: 0
       }
     },
     watch: {
@@ -176,6 +236,17 @@
       },
       'ruleForm.dstime'(val) {
         console.log(val)
+      },
+      'ruleForm.tempContent'(val) {
+        this.tempTextLength = val.length
+        if (val.length <= 70) {
+          let num = val.length / 70
+          this.tempNum = Math.ceil(num)
+        } else {
+          let num = val.length / 67
+          this.tempNum = Math.ceil(num)
+        }
+
       }
     },
     methods: {
@@ -249,7 +320,7 @@
                 taskname: that.ruleForm.taskName
               },
               success(res) {
-                Message({message: '提交成功', type: 'success'})
+
               }
             })
           } else {
@@ -337,5 +408,7 @@
     min-height: 10px;
     word-break: break-all;
   }
-
+.phone-num span{
+  color: #1889ff;
+}
 </style>
