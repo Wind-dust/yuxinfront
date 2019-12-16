@@ -52,6 +52,10 @@ const whiteList = r => require.ensure([], () => r(require('../components/page/co
 const template = r => require.ensure([], () => r(require('../components/page/sms/components/tempManage')), 'template')
 const dataAnalyze = r => require.ensure([], () => r(require('../components/page/report/dataAnalyze')), 'dataAnalyze')
 const numCate = r => require.ensure([], () => r(require('../components/page/report/numCate')), 'numCate')
+const mms = r => require.ensure([], () => r(require('../components/page/sms/mms')), 'mms')
+const videosms = r => require.ensure([], () => r(require('../components/page/sms/videosms')), 'videosms')
+const createVideo = r => require.ensure([], () => r(require('../components/page/sms/components/createVideoTemp')), 'createVideo')
+const createMms = r => require.ensure([], () => r(require('../components/page/sms/components/createMmsTemp')), 'createMms')
 
 
 Vue.use(Router)
@@ -155,6 +159,18 @@ export default new Router({
     }, {
       path: '/numCate',
       component: numCate
+    }, {
+      path: '/mms',
+      component: mms
+    }, {
+      path: '/videosms',
+      component: videosms
+    }, {
+      path: '/createVideo',
+      component: createVideo
+    }, {
+      path: '/createMms',
+      component: createMms
     }]
   }, {
     path: '/login',

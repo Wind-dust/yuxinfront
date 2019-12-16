@@ -1,0 +1,44 @@
+{
+  "id": "1557774",
+  "name": "yuxi",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "1788974",
+      "name": "拖动",
+      "font_class": "tuodong",
+      "unicode": "e6a8",
+      "unicode_decimal": 59048
+    },
+    {
+      "icon_id": "2471398",
+      "name": "文字效果",
+      "font_class": "wenzixiaoguo",
+      "unicode": "e67d",
+      "unicode_decimal": 59005
+    },
+    {
+      "icon_id": "5477163",
+      "name": "图片",
+      "font_class": "tupian",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "5964559",
+      "name": "视频",
+      "font_class": "shipin",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "10622217",
+      "name": "音乐",
+      "font_class": "dilanxianxingiconyihuifu_huabanfuben",
+      "unicode": "e602",
+      "unicode_decimal": 58882
+    }
+  ]
+}

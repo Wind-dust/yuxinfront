@@ -4,7 +4,7 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <div v-if="selectTemp" class="center">
-            <el-card class="box-card" body-style	="width:800px">
+            <el-card class="box-card" body-style="width:800px">
               <div slot="header" class="clearfix">
                 <span style="font-size: 14px;">选择模板</span>
                 <el-button style="float: right; padding: 3px 0" type="text" @click="selectTemp = false">关闭</el-button>
@@ -17,7 +17,7 @@
                   <el-table-column prop="date" label="模板名称" width=""></el-table-column>
                   <el-table-column prop="date" label="短信内容" width=""></el-table-column>
                   <el-table-column prop="date" label="字数" width=""></el-table-column>
-                  <el-table-column  label="操作" width="">
+                  <el-table-column label="操作" width="">
                     <template slot-scope>
                       <el-button size="mini">选择</el-button>
                     </template>
@@ -91,6 +91,9 @@
                   <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
                             type="textarea" :disabled="disabled"></el-input>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
+                  <div class="phone-num" v-if="ruleForm.phone">
+                    总数：<span>{{upload_num}}</span>个，联通：<span>{{lt_num}}</span>个，移动：<span>{{yd_num}}</span>个，电信：<span>{{dx_num}}</span>个，未知：<span>{{wz_num}}</span>个，虚拟：<span>{{xn_num}}</span>个
+                  </div>
                 </el-form-item>
                 <el-form-item label="发送时间:" prop="dstime">
                   <el-date-picker v-model="ruleForm.dstime" type="datetime" placeholder="发送日期时间">
@@ -169,8 +172,8 @@
     },
     data() {
       return {
-        tempList:[],
-        selectTemp:false,
+        tempList: [],
+        selectTemp: false,
         sms_text: '',
         signature: [],
         ruleForm: {
@@ -193,7 +196,7 @@
         },
         activeName: 'first',
         bread: '行业短信',
-        content: '通过短信的形式，将企业的产品及服务信息推广至用户。',
+        content: '网站、APP通过调用API接口，实现手机验证、订单通知等功能。',
         dialogVisible: false,
         num: 1,
         textLength: 0,
@@ -202,6 +205,12 @@
         tempTextLength: 0,
         tempNum: 0,
         messageType: false,
+        yd_num: 0,
+        lt_num: 0,
+        dx_num: 0,
+        wz_num: 0,
+        xn_num: 0,
+        upload_num: 0
       }
     },
     watch: {
@@ -235,11 +244,34 @@
       }
     },
     methods: {
+      phoneAnalyze(phone = '') {
+        if (phone === '') {
+          return
+        }
+        let that = this
+        that.$request({
+          url: 'send/getMobilesDetail',
+          data: {
+            phone: phone,
+            appid: that.$globalData.userInfo.appid,
+            appkey: that.$globalData.userInfo.appkey
+          },
+          success(res) {
+            that.yd_num = res.mobile_num
+            that.lt_num = res.unicom_num
+            that.dx_num = res.telecom_num
+            that.wz_num = res.unknown_num
+            that.xn_num = res.virtual_num
+            that.upload_num = res.submit_num
+          }
+        })
+      },
       disPhone() {
         // console.log(this.ruleForm.phone)
         let phoneStr = this.ruleForm.phone
         phoneStr = phoneStr.trim()
         this.ruleForm.phone = phoneStr.replace(/\s+/g, ",").replace(/\r\n/g, ',').replace(/\r/g, ',').replace(/\n/g, ',').replace(/,{2,}/g, ',')
+        this.phoneAnalyze(this.ruleForm.phone)
       },
       confirmUpload() {
         this.dialogVisible = false
@@ -258,6 +290,7 @@
           data: formData,
           success(res) {
             that.ruleForm.phone = res.phone
+            that.phoneAnalyze(res.phone)
           }
         })
       },
@@ -323,9 +356,9 @@
 </script>
 
 <style scoped>
-  .center{
+  .center {
     position: fixed;
-    left:0;
+    left: 0;
     top: 0;
     z-index: 99;
     display: flex;
@@ -333,8 +366,9 @@
     align-items: center;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,.6);
+    background: rgba(0, 0, 0, .6);
   }
+
   .box-card {
     background: #ffffff;
     border-radius: 4px;
@@ -362,6 +396,10 @@
     width: 50%;
     margin-top: 20px;
     float: left;
+  }
+
+  .phone-num span {
+    color: #1889ff;
   }
 
   .right {

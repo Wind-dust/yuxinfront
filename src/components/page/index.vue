@@ -13,7 +13,8 @@
               <img class="avatar" v-if="userInfo.logo" :src="userInfo.logo" alt="">
               <img class="avatar" v-else src="../../assets/imgs/logoicon.png" alt="">
               <p class="name">Hello! &nbsp;&nbsp;<span>{{name}}</span></p>
-              <p class="name">用户等级：<span class="more"><router-link to="/qualification">未认证 <i class="el-icon-d-arrow-right"></i></router-link></span></p>
+              <p class="name">用户等级：<span class="more"><router-link to="/qualification">未认证 <i
+                class="el-icon-d-arrow-right"></i></router-link></span></p>
             </div>
             <div class="account-type">
               <p>账户类型：{{userInfo._user_type}}</p>
@@ -49,14 +50,12 @@
         <div class="box-shadow border-radius left">
           <div class="left-title">产品中心</div>
           <div class="left-info display">
-
             <div class="product">
               <router-link class="go" to="/businessMessage">
                 <img src="http://imagesdev.shyuxi.com/yx.png" alt="">
                 <p>营销短信</p>
               </router-link>
             </div>
-
             <div class="product">
               <router-link class="go" to="/marketingMessage">
                 <img src="http://imagesdev.shyuxi.com/hangye.png" alt="">
@@ -95,17 +94,28 @@
       return {
         name: '',
         userInfo: {},
-        bread: '控制台'
+        bread: '控制台',
+        service:[]
       }
     },
     components: {},
     computed: {},
     mounted() {
       this.getuserInfo()
+      this.getMyService()
       this.emit()
       document.title = '管理中心|控制台'
     },
     methods: {
+      getMyService() {
+        let that = this
+        that.$request({
+          url: 'user/getUserEquitises',
+          success(res) {
+            that.service = res.userEquities
+          }
+        })
+      },
       emit() {
         this.$emit('getBread', this.bread)
       },
@@ -182,7 +192,7 @@
   }
 
   .product {
-    width: 50%;
+    /*width: 50%;*/
     text-align: center;
   }
 
@@ -190,11 +200,13 @@
     width: 103px;
     height: 106px;
   }
-
+  .product p {
+    font-size: 14px;
+  }
   .display {
     display: flex;
     align-items: flex-start;
-    justify-content: center;
+    justify-content: space-around;
   }
 
   .screen .right {
@@ -261,14 +273,16 @@
     font-size: 14px;
     margin-top: 20px;
   }
-  .more{
+
+  .more {
     float: right;
     display: inline-block;
     font-size: 14px;
     font-weight: normal;
 
   }
-  .more a{
+
+  .more a {
     color: #1889ff;
   }
 </style>

@@ -8,6 +8,7 @@ import { request } from './assets/js/ajax'
 import { globalData } from './assets/js/globalData'
 import 'element-ui/lib/theme-chalk/index.css';
 import VueClipboard from 'vue-clipboard2';
+// import VueDraggable from 'vue-draggable'
 
 Vue.prototype.$request = request
 Vue.prototype.$globalData = globalData
@@ -15,6 +16,7 @@ Vue.prototype.$globalData = globalData
 Vue.config.productionTip = false
 Vue.use(ElementUI);
 Vue.use(VueClipboard)
+// Vue.use(VueDraggable)
 /* eslint-disable no-new */
 new Vue({
     el: '#app',

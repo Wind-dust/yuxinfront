@@ -26,76 +26,7 @@
   export default {
     data() {
       return {
-        menuList: [
-          // {
-          //   name: '账户管理',
-          //   icon: 'el-icon-s-custom',
-          //   _child: [
-          //     {
-          //       name: '我的服务',
-          //       link: 'myService',
-          //       status: false
-          //     }, {
-          //       name: '账户资质',
-          //       link: 'qualification',
-          //       status: false
-          //     }, {
-          //       name: '完善信息',
-          //       link: 'license',
-          //       status: false
-          //     }, {
-          //       name: '充值记录',
-          //       link: 'payLog',
-          //       status: false
-          //     }]
-          // },
-          // {
-          //   name: '产品中心',
-          //   icon: 'el-icon-s-grid',
-          //   _child: [{
-          //     name: '营销短信',
-          //     link: 'businessMessage',
-          //     status: false
-          //   }, {
-          //     name: '行业短信',
-          //     link: 'marketingMessage',
-          //     status: false
-          //   }]
-          // },
-          // {
-          //   name: '报表中心',
-          //   icon: 'el-icon-document',
-          //   _child: [
-          //     //   {
-          //     //   name: '数据总览',
-          //     //   link: 'dataInfo',
-          //     //   status: false
-          //     // }, {
-          //     //   name: "明细查询",
-          //     //   link: 'dataDetail',
-          //     //   status: false
-          //     // }, {
-          //     //   name: '模板查询',
-          //     //   link: 'templateDetail',
-          //     //   status: false
-          //     // }
-          //     {
-          //       name: '明细查询',
-          //       link: 'sendDetail',
-          //       status: false
-          //     }
-          //   ]
-          // },
-          // {
-          //   name: '通讯录',
-          //   icon: 'el-icon-notebook-1',
-          //   _child: [{
-          //     name: '通讯录列表',
-          //     link: 'addressList',
-          //     status: false
-          //   }]
-          // }
-        ],
+        menuList: [],
         //管理商
         manageMenu: [{
           name: '账户管理',
@@ -143,6 +74,12 @@
             }, {
               name: '行业短信',
               link: 'marketingMessage'
+            },{
+              name:'图文彩信',
+              link:'mms'
+            },{
+              name:'视频彩信',
+              link:'videosms'
             }]
           }, {
             name: '数据查询',

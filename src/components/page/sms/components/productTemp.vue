@@ -2,18 +2,18 @@
   <div class="tcontent">
     <div class="info">
       <div class="info-l">
-        <img width="60" src="http://imagesdev.shyuxi.com/me.png" alt="">
+        <img width="60" :src="icon || 'http://imagesdev.shyuxi.com/me.png'" alt="">
         <div class="info-text">
           <p>{{name}}</p>
           <p>{{content}}</p>
           <p>当前余额（条）：{{messageNum}}</p>
         </div>
       </div>
-      <div class="line"></div>
-      <div class="info-l">
-        <div class="info-text">
+      <div class="line" v-if="!test"></div>
+      <div class="info-l" >
+        <div class="info-text" v-if="!test">
           <p>短信测试</p>
-          <p class="in-bu">
+          <p class="in-bu" >
             <el-input v-model="phone" placeholder="请输入手机号"></el-input>
             <el-button size="medium" type="primary">发送短信</el-button>
           </p>
@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    props: ['name', 'content', 'type','messageNum'],
+    props: ['name', 'content', 'type','messageNum','test','icon'],
     name: "productTemp",
     data() {
       return {

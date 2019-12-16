@@ -9,8 +9,7 @@
     <el-table :data="list"  style="width: 99%">
       <el-table-column type="index" label="序号"></el-table-column>
       <el-table-column prop="name" label="模板名称"></el-table-column>
-      <el-table-column prop="type" :show-overflow-tooltip="true" label="短信内容">
-      </el-table-column>
+      <el-table-column prop="type" :show-overflow-tooltip="true" label="短信内容"></el-table-column>
       <el-table-column prop="mobile" label="	创建时间"></el-table-column>
       <el-table-column prop="email" label="状态"></el-table-column>
       <el-table-column fixed="right" label="操作" width="350">
