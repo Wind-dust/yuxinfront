@@ -57,6 +57,7 @@ const videosms = r => require.ensure([], () => r(require('../components/page/sms
 const createVideo = r => require.ensure([], () => r(require('../components/page/sms/components/createVideoTemp')), 'createVideo')
 const createMms = r => require.ensure([], () => r(require('../components/page/sms/components/createMmsTemp')), 'createMms')
 
+const test = r=> require.ensure([],()=>r(require('../components/page/sms/test')),'test')
 
 Vue.use(Router)
 
@@ -67,6 +68,9 @@ export default new Router({
     path: '/',
     component: Home,
     children: [{
+      path:'/test',
+      component:test
+    },{
       path: '',
       component: index
     }, {

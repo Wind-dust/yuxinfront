@@ -1,7 +1,8 @@
 <template>
-  <div class="item text" :class="inactive ? 'active':''" @mouseover="mouseOver"
-       @mouseleave="mouseLeave" @click="selectCard(ind)">
-    <p>添加文字</p>
+  <div class="item text" @mouseover="mouseOver"
+       @mouseleave="mouseLeave" @click="selectCard(ind,selected)">
+    <!--<el-input v-model="$store.state.text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="6" style="width: 100%;height: 100%" :maxlength="500"></el-input>-->
+   <p>添加文字</p>
     <div class="btn-handle" :style="active">
       <div class="icon-jt jt-left">
         <i class="icon iconfont icon-tuodong down"></i>
@@ -10,29 +11,42 @@
         <i class="el-icon-delete" @click="del"></i>
       </div>
     </div>
+
   </div>
 </template>
 
 <script>
   export default {
     name: "vText",
-    props: ['selected', 'ind', 'dom'],
+    props: ['selected', 'ind', 'arr'],
     data() {
       return {
         active: '',
         draggable: false,
         fromDom: null,
         idx: -1,
-        inactive:false
+        inactive: false,
+        selectStatus: 0,
+        index: 0,
+        text: '',
       }
     },
     watch: {
-
+      //没有触发，也就是不是值改变的
+      text(val) {
+        this.content = val
+      },
+      arr(val){
+        console.log(val)
+      }
     },
     mounted() {
 
     },
     methods: {
+      showcard(){
+        this.$emit('showC')
+      },
       del() {
         this.$emit('del', this.ind)
       },
@@ -42,9 +56,19 @@
       mouseLeave() {
         this.active = 'display:none'
       },
-      selectCard(idx) {
+      selectCard(idx, selected) {
+        this.index = -1
+        this.index = idx
+        this.selectStatus = selected
+        this.$emit('getInd',idx)
 
-        this.inactive = idx === this.ind;
+        //点击当前卡片，如果下标，和
+        //点击卡片获取卡片内容，这里没问题
+        // this.inactive = idx === this.ind;
+        // let dom = document.getElementsByClassName('p-text')[idx]
+        // let text = dom.innerHTML
+        // console.log(text)
+        // this.$emit('getText', text)
       }
 
     }
@@ -54,6 +78,10 @@
 <style scoped>
   @import '../../../../../assets/font/iconfont.css';
 
+  .el-textarea__inner {
+    height: 100% !important;
+  }
+
   .ic {
     font-size: 40px;
   }
@@ -61,9 +89,11 @@
   .iconfont {
     font-size: 24px;
   }
-  ._active{
+
+  ._active {
     box-shadow: none;
   }
+
   .btn-handle {
     position: absolute;
     bottom: 0;

@@ -1,8 +1,14 @@
 <template>
-  <div class="item img" draggable="true" :class="selected === 5 ? 'active' : ''" @mouseover="mouseOver"
+  <div class="item img"  @mouseover="mouseOver"
        @mouseleave="mouseLeave">
-    <i class="icon iconfont icon-shipin ic"></i>
-    <p>添加视频</p>
+
+    <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess">
+      <video v-if="video" :src="video" class="avatar"></video>
+      <div v-else>
+        <i class="icon iconfont icon-shipin ic"></i>
+        <p class="">添加视频</p>
+      </div>
+    </el-upload>
     <div class="btn-handle" :style="active">
       <div class="icon-jt jt-left">
         <i class="icon iconfont icon-tuodong down"></i>
@@ -20,10 +26,14 @@
     props: ['selected', 'ind'],
     data() {
       return {
-        active: ''
+        active: '',
+        video:''
       }
     },
     methods: {
+      handleAvatarSuccess(res, file) {
+        this.video = URL.createObjectURL(file.raw);
+      },
       del(){
         this.$emit('del',this.ind)
       },
