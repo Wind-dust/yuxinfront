@@ -146,7 +146,7 @@
         activeName: 'first',
         bread:'营销短信',
         content:'网站、APP通过调用API接口，实现手机验证、订单通知等功能。',
-        num:1,
+        num:0,
         textLength:0,
         messageNum:0
       }

@@ -25,7 +25,9 @@
                   </el-select>
                 </el-form-item>
                 <el-form-item label="手机号码" prop="phone">
-                  <el-input v-model="ruleForm.phone"></el-input>
+                  <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
+                            type="textarea" :disabled="disabled"></el-input>
+                  <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
                 </el-form-item>
 
                 <el-form-item label="短信内容" prop="content">
@@ -39,6 +41,23 @@
                   <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
               </el-form>
+              <el-dialog title="导入文件" :visible.sync="dialogVisible" width="30%">
+                <p>1：导入文件支持txt、csv、xlsx、xls</p>
+                <p>2：单次最大上传不超过2M！,若导入失败，尝试拆分导入</p>
+                <p>3：若上传了文件，将覆盖原先输入框中号码</p>
+                <p>4：若需重新上传，请先删除上传列表中的文件</p>
+                <span class="upload">
+                <el-upload class="upload-demo" action="" :http-request="upload" :limit="1" accept=".txt,.csv,.xlsx,.xls"
+                           :before-upload="beforeAvatarUpload" :on-success="uploadSuccess">
+
+                  <el-button style="margin-top: 20px" size="medium" type="primary"><i class="el-icon-upload"></i>本地上传</el-button>
+                </el-upload>
+              </span>
+                <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="confirmUpload">确 定</el-button>
+              </span>
+              </el-dialog>
             </div>
             <div class="right">
               <div class="preview">
@@ -103,7 +122,7 @@
         bread: '行业短信',
         content: '通过短信的形式，将企业的产品及服务信息推广至用户。',
         dialogVisible: false,
-        num: 1,
+        num: 0,
         textLength: 0,
         disabled: false,
         messageNum:0
@@ -129,6 +148,33 @@
       }
     },
     methods: {
+      confirmUpload(){
+        this.dialogVisible = false
+        this.disabled = true
+      },
+      uploadSuccess(res,file,list){
+
+      },
+      upload(file) {
+        console.log(file.file)
+        let formData = new FormData()
+        formData.append('filename',file.file)
+        let that = this
+        that.$request({
+          url:'upload/uploadUserExcel',
+          data:formData,
+          success(res) {
+            that.ruleForm.phone = res.phone
+          }
+        })
+      },
+      beforeAvatarUpload(file) {
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isLt2M) {
+          this.$message.error('文件大小不能超过 2MB!');
+          return
+        }
+      },
       getMessageNum() {
         let that = this
         that.$request({
