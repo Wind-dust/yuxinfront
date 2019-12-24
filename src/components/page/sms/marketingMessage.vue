@@ -148,6 +148,12 @@
       }
     },
     methods: {
+      disPhone(){
+        // console.log(this.ruleForm.phone)
+        let phoneStr = this.ruleForm.phone
+        let str = phoneStr.replace(/\r\n/g, ',').replace(/\r/g, ',').replace(/\n/g, ',').replace(/,{2,}/g, ',')
+        this.ruleForm.phone = str
+      },
       confirmUpload(){
         this.dialogVisible = false
         this.disabled = true
