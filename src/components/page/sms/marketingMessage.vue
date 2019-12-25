@@ -120,7 +120,7 @@
         },
         activeName: 'first',
         bread: '行业短信',
-        content: '通过短信的形式，将企业的产品及服务信息推广至用户。',
+        content: '网站、APP通过调用API接口，实现手机验证、订单通知等功能。',
         dialogVisible: false,
         num: 0,
         textLength: 0,
