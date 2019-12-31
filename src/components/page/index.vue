@@ -32,7 +32,7 @@
               <p>我的余额：{{userInfo.money}}</p>
             </div>
             <div class="account-type">
-              <p>我的账号：{{userInfo.mobile}}</p>
+              <p>手机号：{{userInfo.mobile}}</p>
             </div>
             <div class="account-type">
               <p>APPID：{{userInfo.appid}}</p>
