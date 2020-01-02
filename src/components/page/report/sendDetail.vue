@@ -6,6 +6,10 @@
           <!--<v-screen :screen="screenQuery" @query="onQuery"></v-screen>-->
           <div v-if="status">
             <h3 class="title">任务列表</h3>
+            <el-select style="width: 150px" size="small" v-model="type" placeholder="请选择产品" @change="query(type)">
+              <el-option v-for="(v,k) in service" :key="k" :label="v.business_name" :value="v.business_id" ></el-option>
+            </el-select>
+            <!--<el-button size="mini" type="primary" @click="query(type)">查询</el-button>-->
             <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%">
               <!--<el-table-column type="selection"></el-table-column>-->
               <el-table-column prop="task_name" label="名称"></el-table-column>
@@ -20,8 +24,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <v-pagination @pageChange="pageChange" :num='num' :total="total" :page-size="10"
-                          :page="page"></v-pagination>
+            <v-pagination  @pageChange="pageChange" :num='num' :total="total" :page-size="10" :page="page"></v-pagination>
           </div>
           <div v-else>
             <h3 class="title">明细查询</h3>
@@ -66,6 +69,10 @@
           page: 1,
           pageNum: 10
         },
+        codeScreen:{
+          page:1,
+          pageNum:10
+        },
         page: 1,
         total: 0,
         multipleSelection: [],
@@ -79,7 +86,9 @@
         detailScreen:{
           page:1,
           pageNum:10
-        }
+        },
+        service:[],
+        type:''
       }
     },
     mounted() {
@@ -87,10 +96,56 @@
       // this.detailScreen.page = parseInt(localStorage.getItem("task_log")) || 1
       this.page = this.screen.page
       this.detailPage = this.detailScreen.page
-      this.getTaskList()
       this.emit()
+      this.getService()
     },
     methods: {
+      query(type){
+        this.screen.page = 1
+        this.screen.pageNum = 10
+        this.num = 1
+        this.total = 0
+        this.page = 1
+        this.list = []
+        console.log(this.type)
+        if (this.type == 5){
+          this.getTaskList()
+        } else if (this.type == 6) {
+          this.getCodeTask()
+        }
+      },
+      getCodeTask(){
+        let that = this
+        let screen = that.screen
+        that.$request({
+          url: 'user/getUserBusinessSubmitTask',
+          data: screen,
+          success(res) {
+            that.list = res.data
+            that.total = res.total
+          }
+        })
+      },
+      getService() {
+        let that = this
+        that.$request({
+          url: 'user/getUserEquitises',
+          success(res) {
+            // that.disService(res.userEquities)
+            that.service = res.userEquities
+            that.type = res.userEquities[0].business_id
+            that.query(res.userEquities[0].business_id)
+          }
+        })
+      },
+      disService(data) {
+        for (let i = 0; i < data.length; i++) {
+          this.ruleType.business_id.option.push({
+            value:data[i].business_id,
+            label:data[i].business_name
+          })
+        }
+      },
       emit(){
         this.$emit('getBread','明细查询')
       },
@@ -104,9 +159,26 @@
       getTaskInfo(id) {
         this.id = id
         this.status = false
-        this.getTaskInfoDetail(id)
-        // let data = this.task_log
-        // this.disinfo(data)
+        this.task_log = []
+        this.detailTotal = 0
+        this.detailScreen.pageNum = 10
+        this.detailScreen.page = 1
+        if (this.type == 5){
+          this.getTaskInfoDetail(id)
+        } else if(this.type == 6){
+          this.getCodeTaskDetail(id)
+        }
+      },
+      getCodeTaskDetail(id){
+        let that = this
+        that.$request({
+          url: 'user/getUserBusinessSubmitTaskInfo',
+          data: {id:id,pageNum:that.detailScreen.pageNum,page:that.detailScreen.page},
+          success(res) {
+            that.task_log = that.disinfo(res.task_log)
+            that.detailTotal = res.total
+          }
+        })
       },
       getTaskInfoDetail(id) {
         let that = this
@@ -201,4 +273,5 @@
     display: inline-block;
     word-break: break-all
   }
+
 </style>
