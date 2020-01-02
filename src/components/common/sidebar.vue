@@ -141,7 +141,7 @@
       disBar(user) {
         let data = this.menuList
 
-        if (parseInt(user.pid) === 0) {
+        if (parseInt(user.user_type) === 2) {
           data[0]._child.push({
             name: '开通子账户',
             link: 'account',

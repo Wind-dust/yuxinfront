@@ -3,7 +3,7 @@
        @mouseleave="mouseLeave">
 
     <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess">
-      <audio v-if="audio" :src="audio" class="avatar"></audio>
+      <audio v-if="audio" :src="audio" class="avatar value"></audio>
       <div v-else>
         <i class="icon iconfont icon-dilanxianxingiconyihuifu_huabanfuben ic"></i>
         <p class="">添加音频</p>

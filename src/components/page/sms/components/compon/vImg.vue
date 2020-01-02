@@ -1,7 +1,7 @@
 <template>
   <div class="item img" @mouseover="mouseOver"
        @mouseleave="mouseLeave">
-    <img draggable="false" v-if="imageUrl" :src="imageUrl" class="avatar">
+    <img  v-if="imageUrl" :src="imageUrl" class="avatar value" @click="showMask">
     <div v-else @click="showMask">
       <i class="icon iconfont icon-tupian ic"></i>
       <p class="">添加图片</p>
@@ -20,7 +20,7 @@
     </el-dialog>
     <el-dialog :visible.sync="mask">
     <el-card >
-      <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess">
+      <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess" :file-list="file_list" >
         <i class="icon iconfont icon-tupian ic"></i>
       </el-upload>
     </el-card>
@@ -37,7 +37,17 @@
         active: '',
         imageUrl:'',
         dialogVisible:false,
-        mask:false
+        mask:false,
+        file_list:[]
+      }
+    },
+    watch:{
+      imageUrl(val,old){
+        console.log(123)
+        console.log(val,old)
+      },
+      file_list(val,old){
+        console.log(val)
       }
     },
     methods: {
@@ -51,7 +61,10 @@
         this.dialogVisible = true
       },
       handleAvatarSuccess(res, file) {
+        console.log(this.ind)
         this.imageUrl = URL.createObjectURL(file.raw);
+        this.mask = false
+        this.$emit('getText',{value:this.imageUrl,type:'img'})
       },
       del() {
         this.$emit('del', this.ind)
@@ -81,18 +94,18 @@
   }
 
   .btn-handle {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 38px;
-    background: rgba(0, 0, 0, .7);
-    padding: 0 10px;
-    display: none;
-    justify-content: space-between;
-    align-items: center;
-    box-sizing: border-box;
-  }
+     position: absolute;
+     bottom: 0;
+     left: 0;
+     width: 100%;
+     height: 38px;
+     background: rgba(0, 0, 0, .7);
+     padding: 0 10px;
+     display: none;
+     justify-content: space-between;
+     align-items: center;
+     box-sizing: border-box;
+   }
 
   .icon-jt {
     color: #fff;
@@ -114,7 +127,7 @@
   }
   .avatar{
     margin: 0 auto;
-    max-width: 216px;
+    max-width: 200px;
     max-height: 94px;
     object-fit: contain;
   }

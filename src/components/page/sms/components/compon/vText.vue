@@ -1,8 +1,8 @@
 <template>
   <div class="item text" @mouseover="mouseOver"
-       @mouseleave="mouseLeave" @click="selectCard(ind,selected)">
-    <!--<el-input v-model="$store.state.text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="6" style="width: 100%;height: 100%" :maxlength="500"></el-input>-->
-   <p>添加文字</p>
+       @mouseleave="mouseLeave" @click="selectCard(ind)">
+
+   <p @click="showcard = true" class="value">{{text?text:'添加文字'}}</p>
     <div class="btn-handle" :style="active">
       <div class="icon-jt jt-left">
         <i class="icon iconfont icon-tuodong down"></i>
@@ -11,7 +11,14 @@
         <i class="el-icon-delete" @click="del"></i>
       </div>
     </div>
-
+    <el-dialog :visible.sync="showcard" draggable="false">
+      <el-card >
+        <el-input v-model="text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="6"
+                  style="width: 100%;height: 100%" :maxlength="500"></el-input>
+        <el-button type="primary" size="small" @click="save">保存</el-button>
+        <el-button type="primary" size="small" plain @click="showcard = false">取消</el-button>
+      </el-card>
+    </el-dialog>
   </div>
 </template>
 
@@ -29,6 +36,7 @@
         selectStatus: 0,
         index: 0,
         text: '',
+        showcard:false
       }
     },
     watch: {
@@ -43,9 +51,11 @@
     mounted() {
 
     },
+
     methods: {
-      showcard(){
-        this.$emit('showC')
+      save(){
+        this.showcard = false
+        this.$emit('getText',{value:this.text,type:'text'})
       },
       del() {
         this.$emit('del', this.ind)
@@ -61,14 +71,6 @@
         this.index = idx
         this.selectStatus = selected
         this.$emit('getInd',idx)
-
-        //点击当前卡片，如果下标，和
-        //点击卡片获取卡片内容，这里没问题
-        // this.inactive = idx === this.ind;
-        // let dom = document.getElementsByClassName('p-text')[idx]
-        // let text = dom.innerHTML
-        // console.log(text)
-        // this.$emit('getText', text)
       }
 
     }

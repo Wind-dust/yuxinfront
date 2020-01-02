@@ -120,14 +120,7 @@
       </el-card>
     </div>
 
-    <el-dialog :visible.sync="showcard">
-      <el-card >
-        <el-input v-model="$store.state.text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="6"
-                  style="width: 100%;height: 100%" :maxlength="500"></el-input>
-        <el-button type="primary" size="small" @click="save">保存</el-button>
-        <el-button type="primary" size="small" plain @click="showcard = false">取消</el-button>
-      </el-card>
-    </el-dialog>
+
   </div>
 </template>
 

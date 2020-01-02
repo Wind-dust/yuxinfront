@@ -15,11 +15,11 @@
             </div>
             <div class="item pre-title" @click="selected = 1" :class="selected === 1?'active':''" v-else>添加主题</div>
             <div class="item pre-title" @click="selected = 2" :class="selected === 2?'active':''">添加签名</div>
-            <draggable v-model="dom"
-                       :options="{ group: 'people',animation:150,scroll:true,scrollSensitivity:200,}"
-                       @start="drag = true" @end="drag = false">
-              <component  v-for="(v,k) in dom" :key="k" :is="v" :selected="selected" @del="del" :ind="k"
-                          :text="text" @getText="getText" :arr="arr"></component >
+            <draggable
+              :options="{ group: 'people',animation:150,scroll:true,scrollSensitivity:200,}"
+              @start="drag = true" @end="update" id="draggable">
+              <component v-for="(v,k) in dom" :key="k" :is="v" :selected="selected" @del="del" :ind="k"
+                         @getText="getText"></component>
             </draggable>
           </div>
           <div>
@@ -37,18 +37,22 @@
       <div class="right">
         <el-card class="card">
           <!--<div slot="header" style="border: none">-->
-          <!--<el-button style="float: right; padding: 3px 0" type="text" @click="mask = false">关闭</el-button>-->
+          <el-button style="float: right; padding: 3px 0" type="text" @click="mask = false">关闭</el-button>
           <!--</div>-->
           <div>
             <div class="pre">
               <div class="inner">
-                <div class="sms-text">
-                  <p style="color: #848a9f;font-weight: bold"></p>
-                  <div>
-                    <p><img class="img" src="" alt=""></p>
-                    <p></p>
+                <div class="sms-text " id="c" v-for="(v,k) in arrCopy">
+                  <div v-html="v.firstChild"></div>
+                </div>
+                <div class="sms-text" v-for="(v,k) in arr" :key="k">
+                  <div >
+                    <p><img class="img" v-if="v.type === 'img'" :src="v.value" alt=""/></p>
+                    <p v-if="v.type==='text'">{{v.value}}</p>
+                    <p v-if="v.type==='video'">
+                      <video :src="v.value"></video>
+                    </p>
                   </div>
-                  <p></p>
                 </div>
               </div>
             </div>
@@ -64,13 +68,14 @@
         <div>
           <div class="pre">
             <div class="inner">
-              <div class="sms-text">
-                <p style="color: #848a9f;font-weight: bold"></p>
-                <div>
-                  <p><img class="img" src="" alt=""></p>
-                  <p></p>
+              <div class="sms-text" v-for="(v,k) in arr" :key="k">
+                <div >
+                  <p><img class="img" v-if="v.type === 'img'" :src="v.value" alt=""/></p>
+                  <p v-if="v.type==='text'">{{v.value}}</p>
+                  <p v-if="v.type==='video'">
+                    <video :src="v.value"></video>
+                  </p>
                 </div>
-                <p></p>
               </div>
             </div>
           </div>
@@ -112,47 +117,52 @@
         imgs: '',
         audio: '',
         video: '',
-        oldval:'',
-        //点击当前的卡片，找到对应这个卡片下标的form（arr）里面的内容
         arr: [],
-        num:0,
-        s:[],
+        arrCopy: []
       }
     },
     computed: {},
-    //点击卡片把值传给输入框，输入框值改变就传给卡片，双向绑定
-    watch: {
-      text(val,oldval){
-        console.log(val)
-      },
-      dom(val,old){
-        console.log(val,old)
-      }
-    },
-    mounted() {
-    },
+  watch:{
+    arr(val,old){
+      console.log(val,old)
+    }
+  },
     methods: {
-      //现在需要考虑的是怎么把输入框的值传给卡片
-      getText(val){
-        this.text = val
+      update(e) {
+        //只可能是在拖动完成后，才换位置,根据左边的顺序是最好的
+        //每次拖动完成触发该方法，获取里面的元素
+        let dom = document.getElementById('draggable')
+        console.log(dom.childNodes[0].firstChild)
+        // this.arrCopy = []
+        // this.arrCopy.push(e.srcElement.firstChild.firstChild)
+        // //获取所有item的值
+        // let item = document.querySelectorAll('.value')
+        // let arr = []
+        // item.forEach((v, k) => {
+        //   arr.push(v)
+        // })
+        this.arrCopy = dom.childNodes
+        console.log(this.arrCopy)
+      },
+      getText(val) {
+        this.arr.push(val)
+        console.log(this.arr)
       },
       getNowCard() {
-        //点击其中一个卡片，比如是下标是2，
-        //或者说右边输入框永远都只有一个，当输入的时候，就把值存进某个数据，
+
       },
       del(idx) {
+        console.log(this.dom)
         this.dom.splice(idx, 1)
+        this.arr.splice(idx,1)
+        console.log(this.dom)
       },
       back() {
         this.$router.go(-1)
       },
       add(type, num) {
         this.dom.push(type)
-        let s = this.s
-        this.$set(this.form,type+s,'')
-        this.s++
         this.selected = num
-        console.log(this)
       },
 
     }
@@ -305,6 +315,8 @@
     text-align: center;
     padding-top: 14px;
     box-sizing: border-box;
+    width: 94%;
+    object-fit: contain;
   }
 
   .text {
@@ -340,13 +352,23 @@
     height: 620px;
     width: 300px;
     /*background-position-x: 150px;*/
+    position: relative;
   }
 
   .inner {
-    width: 100%;
-    margin: 0px 20px 0 30px;
-    padding-top: 100px;
-    max-height: 430px;
+    margin-bottom: 5px;
+    border-radius: 16px;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    padding: 15px;
+    width: 222px;
+    min-height: 10px;
+    word-break: break-all;
+    max-height: 435px;
+    overflow: auto;
+    position: absolute;
+    top: 96px;
+    left: 10px;
   }
 
   .sms-text {
@@ -361,6 +383,9 @@
     word-break: break-all;
     max-height: 435px;
     overflow: auto;
+  }
+
+  .avatar {
   }
 
 </style>

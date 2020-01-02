@@ -3,7 +3,7 @@
        @mouseleave="mouseLeave">
 
     <el-upload action="https://jsonplaceholder.typicode.com/posts/" :show-file-list="false" :on-success="handleAvatarSuccess">
-      <video v-if="video" :src="video" class="avatar"></video>
+      <video v-if="video" :src="video" class="avatar value"></video>
       <div v-else>
         <i class="icon iconfont icon-shipin ic"></i>
         <p class="">添加视频</p>
