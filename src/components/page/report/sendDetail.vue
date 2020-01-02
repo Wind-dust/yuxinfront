@@ -12,7 +12,7 @@
             <!--<el-button size="mini" type="primary" @click="query(type)">查询</el-button>-->
             <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%">
               <!--<el-table-column type="selection"></el-table-column>-->
-              <el-table-column prop="task_name" label="名称"></el-table-column>
+              <el-table-column prop="task_name" show-overflow-tooltip label="名称"></el-table-column>
               <el-table-column prop="task_content" show-overflow-tooltip label="内容"></el-table-column>
               <el-table-column prop="mobile_content" show-overflow-tooltip label="手机号"></el-table-column>
               <el-table-column prop="send_num" label="发送数量"></el-table-column>
