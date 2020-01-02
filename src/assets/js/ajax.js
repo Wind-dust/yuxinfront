@@ -116,7 +116,7 @@ function network(code) {
         case 503:
         case 504:
         case 505:
-            text = "服务器错误"
+            text = "内部错误"+code
             break;
         default:
             text = "网络错误"

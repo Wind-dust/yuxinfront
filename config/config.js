@@ -1,1 +1,1 @@
-const CMS_URL = 'http://sendapidev.shyuxi.com/index/'
+const CMS_URL = 'http://sendapidev.shyuxi.com/index/';
