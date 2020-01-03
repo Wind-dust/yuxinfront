@@ -209,8 +209,8 @@
               url: 'send/getSmsBuiness',
               form:1,
               data: {
-                appid: that.$globalData.userInfo.appid,
-                appkey: that.$globalData.userInfo.appkey,
+                appid: that.$globalData.userInfo.appid || '',
+                appkey: that.$globalData.userInfo.appkey || '',
                 content: that.sms_text + that.ruleForm.content,
                 mobile: that.ruleForm.phone
               },
