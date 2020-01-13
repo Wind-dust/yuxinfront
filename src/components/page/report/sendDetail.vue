@@ -39,7 +39,7 @@
                 <el-table-column prop="create_time" label="提交时间" show-overflow-tooltip></el-table-column>
                 <!--<el-table-column prop="create_time" label="回执时间" show-overflow-tooltip></el-table-column>-->
                 <el-table-column prop="_send_status" label="状态"  show-overflow-tooltip></el-table-column>
-                <el-table-column prop="status_message" label="回执状态"  show-overflow-tooltip></el-table-column>
+                <el-table-column prop="explanation" label="回执状态"  show-overflow-tooltip></el-table-column>
               </el-table>
               <v-pagination @pageChange="pageChangeDetail" :num='detailNum' :total="detailTotal" :page-size="10"
                             :page="detailPage"></v-pagination>
