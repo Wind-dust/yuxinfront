@@ -146,7 +146,7 @@ function successHint(type = 0) {
     let text = ''
     switch (parseInt(type)) {
         case 1:
-            text = '提交成功22'
+            text = '提交成功'
             break;
         case 2:
             text = '删除成功'

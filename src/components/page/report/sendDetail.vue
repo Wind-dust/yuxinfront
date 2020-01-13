@@ -209,7 +209,6 @@
       },
       pageChange(obj) {
         this.screen.page = obj.page
-        localStorage.setItem("task", obj.page)
         if (this.type === 5) {
           this.getTaskList()
         } else if (this.type===6){
