@@ -210,7 +210,12 @@
       pageChange(obj) {
         this.screen.page = obj.page
         localStorage.setItem("task", obj.page)
-        this.getTaskList()
+        if (this.type === 5) {
+          this.getTaskList()
+        } else if (this.type===6){
+          this.getCodeTask()
+        }
+
       },
       pageChangeDetail(obj){
         this.detailScreen.page = obj.page
