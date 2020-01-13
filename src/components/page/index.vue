@@ -11,7 +11,7 @@
           <div class="left-info">
             <div class="account-info">
               <img class="avatar" v-if="userInfo.logo" :src="userInfo.logo" alt="">
-              <img class="avatar" v-else src="../../assets/imgs/logoicon.png" alt="">
+              <img class="avatar" v-else src="../../assets/imgs/xjylogo.png" alt="">
               <p class="name">Hello! &nbsp;&nbsp;<span>{{name}}</span></p>
               <p class="name">用户等级：0</p>
             </div>
