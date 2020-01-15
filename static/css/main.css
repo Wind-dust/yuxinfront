@@ -296,3 +296,19 @@ a {
 .el-menu-item:focus, .el-menu-item:hover{
   background: #60bff3!important;
 }
+.box-shadow{
+  box-shadow: 0 0 10px 0 rgba(154,161,171,.15);
+  background: #fff;
+}
+.margin-top{
+  margin-top: 30px;
+}
+.box-card {
+  max-height: 100%;
+  overflow: auto!important;
+  margin-bottom: 20px;
+  padding: 20px;
+}
+.cell{
+  font-size: 13px;
+}

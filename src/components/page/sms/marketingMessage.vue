@@ -8,7 +8,7 @@
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
             <el-tab-pane label="短信任务" name="second"></el-tab-pane>
             <el-tab-pane label="模板管理" name="third"></el-tab-pane>
-            <!--<el-tab-pane label="模板库" name="fourth">模板库</el-tab-pane>-->
+            <el-tab-pane label="签名管理" name="fourth"></el-tab-pane>
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName === 'first'">
@@ -20,7 +20,7 @@
                 <el-form-item label="短信签名" prop="signatureValue">
                   <el-select v-model="ruleForm.signatureValue" placeholder="请选择" filterable allow-create
                              default-first-option>
-                    <el-option v-for="item in signature" :key="item.value" :label="item.label" :value="item.value">
+                    <el-option v-for="item in signature" :key="item.id" :label="item._title" :value="item._title">
                     </el-option>
                   </el-select>
                 </el-form-item>
@@ -68,7 +68,10 @@
             </div>
           </div>
           <div v-if="activeName === 'third'">
-            <v-business-temp></v-business-temp>
+            <v-business-temp :type="6"></v-business-temp>
+          </div>
+          <div v-if="activeName === 'fourth'">
+            <v-signature-list :type="6" :list="signatureList" :total="signaTotal"></v-signature-list>
           </div>
           <div v-if="activeName === 'fifth'">
             <v-black-list></v-black-list>
@@ -86,6 +89,7 @@
   import vBusinessTemp from './components/businessTemp'
   import vBlackList from './components/blackList'
   import vDataInfo from './components/dataInfo'
+  import vSignatureList from './components/signatureList'
 
   export default {
     name: "marketingMessage",
@@ -93,14 +97,14 @@
       vProductTemp,
       vBusinessTemp,
       vBlackList,
-      vDataInfo
+      vDataInfo,
+      vSignatureList
     },
     data() {
       return {
         sms_text: '',
-        signature: [
-
-        ],
+        signature: [],
+        signatureList: [],
         ruleForm: {
           content: '',
           phone: '',
@@ -125,7 +129,8 @@
         num: 0,
         textLength: 0,
         disabled: false,
-        messageNum:0
+        messageNum:0,
+        signaTotal:0
       }
     },
     watch: {
@@ -148,6 +153,40 @@
       }
     },
     methods: {
+      getSignature(){
+        let that = this
+        that.$request({
+          url:'user/getUserSignature',
+          data:{
+            business_id:6,
+            page:1,
+            pageNum:20
+          },
+          success(res) {
+            that.signature = that.disSign(res.result)
+            that.signatureList = res.result
+            that.signaTotal = res.total
+          }
+        })
+      },
+      disSign(data){
+        let arr= []
+        for (let i=0;i<data.length;i++){
+          data[i]._title = data[i].title.replace(/【/,'').replace(/】/,'')
+          switch (parseInt(data[i].audit_status)) {
+            case 1:
+              data[i]._audit_status = '待审核';
+              break;
+            case 2:
+              data[i]._audit_status = '通过';
+              break;
+            case 3:
+              data[i]._audit_status = '不通过'
+          }
+        }
+        console.log(data)
+        return data
+      },
       disPhone(){
         // console.log(this.ruleForm.phone)
         let phoneStr = this.ruleForm.phone
@@ -235,6 +274,7 @@
     mounted() {
       this.emit()
       this.getMessageNum()
+      this.getSignature()
     }
   }
 </script>

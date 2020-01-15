@@ -47,6 +47,7 @@ const settlement = r => require.ensure([], () => r(require('../components/page/s
 
 // const payRank = r => require.ensure([],()=>r(require('../components/page/settlement/settlement')),'settlement')
 
+const signature = r => require.ensure([], () => r(require('../components/page/sms/components/signature')), 'signature')
 
 Vue.use(Router)
 
@@ -126,6 +127,9 @@ export default new Router({
       }, {
         path: '/settlement',
         component: settlement
+      }, {
+        path: '/signature',
+        component: signature
       }]
   }, {
     path: '/login',
