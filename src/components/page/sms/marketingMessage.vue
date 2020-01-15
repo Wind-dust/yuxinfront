@@ -254,10 +254,7 @@
                 mobile: that.ruleForm.phone
               },
               success(res) {
-                if (res.code == 200){
-                  Message({message: '提交成功', type: 'success'})
-                }
-
+                
               }
             })
           } else {
