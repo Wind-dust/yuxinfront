@@ -1,7 +1,7 @@
 <template>
   <div class="tcontent">
     <div class="table-header clearfix">
-      <el-button size="small" class="add fr" type="primary" icon="el-icon-plus" @click="createTemp()">新建模板</el-button>
+      <!--<el-button size="small" class="add fr" type="primary" icon="el-icon-plus" @click="createTemp()">新建模板</el-button>-->
     </div>
 
     <!--<v-screen :screen="screenQuery" @query="onQuery"></v-screen>-->
