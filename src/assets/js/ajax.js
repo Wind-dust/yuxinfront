@@ -116,7 +116,7 @@ function network(code) {
         case 503:
         case 504:
         case 505:
-            text = "服务器错误"
+            text = "Internal Error "+code
             break;
         default:
             text = "网络错误"
@@ -193,7 +193,7 @@ let request = function(params = {}) {
                 return
             }
 
-            if (res.code == "200" || res.code == '3000') {
+            if (res.code == "200") {
                 typeof params.success == 'function' ? params.success(res) : '';
                 successHint(params.form)
             } else if (res.code == "3100") {

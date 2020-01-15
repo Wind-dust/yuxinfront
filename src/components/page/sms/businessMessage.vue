@@ -30,10 +30,10 @@
           </div>
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
-            <el-tab-pane label="短信任务" name="second"></el-tab-pane>
+            <el-tab-pane label="发送短信" name="second"></el-tab-pane>
             <el-tab-pane label="个性化发送" name="seventh"></el-tab-pane>
             <el-tab-pane label="模板管理" name="third"></el-tab-pane>
-            <!--<el-tab-pane label="模板库" name="fourth">模板库</el-tab-pane>-->
+            <el-tab-pane label="签名管理" name="fourth"></el-tab-pane>
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
             <el-tab-pane label="发送列表" name="sixth"></el-tab-pane>
           </el-tabs>
@@ -51,14 +51,14 @@
                   <el-input type="text" v-model="ruleForm.taskName"></el-input>
                 </el-form-item>
                 <div v-if="!messageType">
-                  <el-form-item label="模板选择:" prop="signatureValue">
+                  <el-form-item label="模板选择:">
                     <el-input v-model="ruleForm.tempTitle" disabled></el-input>
-                    <el-button size="mini" type="primary" plain>选择模板</el-button>
+                    <el-button size="mini" type="primary" plain @click="showTempList">选择模板</el-button>
                   </el-form-item>
 
-                  <el-form-item label="短信内容:" prop="content">
+                  <el-form-item label="短信内容:">
                     <el-tooltip class="item" effect="dark" placement="top-start">
-                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费</div>
+                      <div slot="content">1、普通短信为70字一条计费<br/>2、超过70字为长短信以67字一条计费 <br>3、短信正文中请不要使用‘【】’，‘<>’等特殊字符</div>
                       <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
                     </el-tooltip>
                     <el-input disabled type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
@@ -71,7 +71,7 @@
                   <el-form-item label="短信签名:" prop="signatureValue">
                     <el-select v-model="ruleForm.signatureValue" placeholder="请选择" filterable allow-create
                                default-first-option>
-                      <el-option v-for="item in signature" :key="item.value" :label="item.label" :value="item.value">
+                      <el-option v-for="item in signature" :key="item.id" :label="item._title" :value="item._title">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -83,7 +83,7 @@
                     </el-tooltip>
                     <el-input type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
                               v-model="ruleForm.content"></el-input>
-                    <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
+                    <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名 <span style="color: #3a8ee6">{{sms_text.length}}</span>个字符、短信内容 <span style="color: #3a8ee6">{{contentLength}}</span>个字符），合计短信计费条数 <span
                       style="color: #3a8ee6;">{{num}}</span> 条</p>
                   </el-form-item>
                 </div>
@@ -91,7 +91,10 @@
                   <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
                             type="textarea" :disabled="disabled"></el-input>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
-                  <div class="phone-num" v-if="ruleForm.phone">总数：<span>{{upload_num}}</span>个，联通：<span>{{lt_num}}</span>个，移动：<span>{{yd_num}}</span>个，电信：<span>{{dx_num}}</span>个，未知：<span>{{wz_num}}</span>个，虚拟：<span>{{xn_num}}</span>个</div>
+                  <el-button class="import" type="primary" size="small " @click="saveNumber">保存</el-button>
+                  <div class="phone-num" >
+                    总数：<span>{{upload_num}}</span>个，联通：<span>{{lt_num}}</span>个，移动：<span>{{yd_num}}</span>个，电信：<span>{{dx_num}}</span>个，未知：<span>{{wz_num}}</span>个，虚拟：<span>{{xn_num}}</span>个
+                  </div>
                 </el-form-item>
                 <el-form-item label="发送时间:" prop="dstime">
                   <el-date-picker v-model="ruleForm.dstime" type="datetime" placeholder="发送日期时间">
@@ -102,6 +105,21 @@
                   <el-button @click="resetForm('ruleForm')">重置</el-button>
                 </el-form-item>
               </el-form>
+
+              <el-dialog title="选择模板" :visible.sync="isShowTemp" width="60%">
+                <el-table :data="list" style="width: 100%">
+                  <el-table-column prop="template_id" label="模板ID" width="180"></el-table-column>
+                  <el-table-column prop="title" label="模板名称" width="180"></el-table-column>
+                  <el-table-column prop="content" :width="500" label="短信内容"></el-table-column>
+                  <el-table-column label="操作">
+                    <template slot-scope="scope">
+                      <el-button type="text" size="small" @click="selected(scope.row)">选择</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+                <el-pagination v-if="total > 10" layout="prev, pager, next" :total="total"></el-pagination>
+              </el-dialog>
+
               <el-dialog title="导入文件" :visible.sync="dialogVisible" width="30%">
                 <p>1：导入文件支持txt、csv、xlsx、xls</p>
                 <p>2：单次最大上传不超过2M！,若导入失败，尝试拆分导入</p>
@@ -124,14 +142,17 @@
             <div class="right">
               <div class="preview">
                 <div class="inner">
-                  <div class="sms-text">{{sms_text+ruleForm.content}}</div>
+                  <div class="sms-text" v-if="messageType">{{sms_text+ruleForm.content}}</div>
+                  <div class="sms-text" v-else>{{ruleForm.tempContent}}</div>
                 </div>
               </div>
             </div>
           </div>
-
           <div v-if="activeName === 'third'">
-            <v-business-temp></v-business-temp>
+            <v-business-temp :type="5" @getActiveName="getActiveName"></v-business-temp>
+          </div>
+          <div v-if="activeName === 'fourth'">
+              <v-signature-list :type="5" :list="signatureList" ></v-signature-list>
           </div>
           <div v-if="activeName === 'fifth'">
             <v-black-list></v-black-list>
@@ -156,6 +177,7 @@
   import vDataInfo from './components/dataInfo'
   import vTaskList from './components/taskList'
   import vCustomSend from './components/customSend'
+  import vSignatureList from './components/signatureList'
 
   export default {
     name: "marketingMessage",
@@ -165,13 +187,15 @@
       vBlackList,
       vDataInfo,
       vTaskList,
-      vCustomSend
+      vCustomSend,
+      vSignatureList
     },
     data() {
       return {
         selectTemp: false,
+        isShowTemp: false,
         messageType: false,
-        sms_text: '...',
+        sms_text: '',
         signatureValue: '',
         signature: [],
         dialogVisible: false,
@@ -215,18 +239,26 @@
         lt_num: 0,
         dx_num: 0,
         wz_num: 0,
-        xn_num:0,
-        upload_num:0
+        xn_num: 0,
+        upload_num: 0,
+        screen: {
+          page: 1,
+          pageNum: 10
+        },
+        list: [],
+        total: 0,
+        contentLength:0,
+        signatureList:[]
       }
     },
     watch: {
       'ruleForm.signatureValue'(newVal, oldVal) {
-        console.log(newVal)
         this.sms_text = '【' + newVal + '】'
         let len = '【' + newVal + '】' + this.ruleForm.content
         this.textLength = len.length
       },
       'ruleForm.content'(newVal, oldVal) {
+        this.contentLength = newVal.length
         let len = this.sms_text + newVal
         this.textLength = len.length
         if (len.length <= 70) {
@@ -255,20 +287,85 @@
 
       }
     },
+    mounted() {
+      if (this.$route.query.activeName) {
+        this.activeName = this.$route.query.activeName
+      }
+      if (this.$route.query.data) {
+        console.log(this.$route.query.data)
+      }
+      this.emit()
+      this.getMessageNum()
+      this.getSignature()
+    },
     methods: {
-      phoneAnalyze(phone = ''){
-        if (phone === ''){
+      saveNumber(){
+        if (!this.ruleForm.phone) {
+          return this.$message.error('请检查号码')
+        }
+      },
+      getSignature(){
+        let that = this
+        that.$request({
+          url:'user/getUserSignature',
+          data:{
+            business_id:5,
+            page:1,
+            pageNum:100
+          },
+          success(res) {
+            that.signature = that.disSign(res.result)
+            that.signatureList = res.result
+          }
+        })
+      },
+      disSign(data){
+        let arr= []
+        for (let i=0;i<data.length;i++){
+          data[i]._title = data[i].title.replace(/【/,'').replace(/】/,'')
+        }
+        console.log(data)
+        return data
+      },
+      getActiveName(data) {
+        this.activeName = 'second';
+        this.ruleForm.tempContent = data.content
+        this.ruleForm.tempTitle = data.title
+      },
+      selected(data) {
+        this.isShowTemp = false
+        this.ruleForm.tempContent = data.content
+        this.ruleForm.tempTitle = data.title
+      },
+      showTempList() {
+        let that = this
+        that.$request({
+          url: 'user/getUserModel',
+          data: {
+            business_id: 5,
+            page: that.screen.page,
+            pageNum: that.screen.pageNum
+          },
+          success(e) {
+            that.isShowTemp = true
+            that.list = e.result
+            that.total = e.total
+          }
+        })
+      },
+      phoneAnalyze(phone = '') {
+        if (phone === '') {
           return
         }
         let that = this
         that.$request({
-          url:'send/getMobilesDetail',
-          data:{
-            phone:phone,
-            appid:that.$globalData.userInfo.appid,
-            appkey:that.$globalData.userInfo.appkey
+          url: 'send/getMobilesDetail',
+          data: {
+            phone: phone,
+            appid: that.$globalData.userInfo.appid,
+            appkey: that.$globalData.userInfo.appkey
           },
-          success(res){
+          success(res) {
             that.yd_num = res.mobile_num
             that.lt_num = res.unicom_num
             that.dx_num = res.telecom_num
@@ -336,19 +433,27 @@
       submitForm(formName) {
         let that = this
         console.log(that.ruleForm)
-
+        let data = this.messageType ? {
+          appid: that.$globalData.userInfo.appid || '',
+          appkey: that.$globalData.userInfo.appkey || '',
+          content: that.sms_text + that.ruleForm.content,
+          mobile: that.ruleForm.phone,
+          dstime: that.ruleForm.dstime,
+          taskname: that.ruleForm.taskName
+        } : {
+          appid: that.$globalData.userInfo.appid || '',
+          appkey: that.$globalData.userInfo.appkey || '',
+          content: that.ruleForm.tempContent,
+          mobile: that.ruleForm.phone,
+          dstime: that.ruleForm.dstime,
+          taskname: that.ruleForm.taskName
+        }
         this.$refs[formName].validate((valid) => {
           if (valid) {
             that.$request({
               url: 'send/getSmsMarketingTask',
-              data: {
-                appid: that.$globalData.userInfo.appid || '',
-                appkey: that.$globalData.userInfo.appkey || '',
-                content: that.sms_text + that.ruleForm.content,
-                mobile: that.ruleForm.phone,
-                dstime: that.ruleForm.dstime,
-                taskname: that.ruleForm.taskName
-              },
+              data: data,
+              form: 1,
               success(res) {
 
               }
@@ -365,13 +470,7 @@
         this.$refs[formName].resetFields();
       }
     },
-    mounted() {
-      if (this.$route.query.activeName) {
-        this.activeName = this.$route.query.activeName
-      }
-      this.emit()
-      this.getMessageNum()
-    }
+
   }
 </script>
 
@@ -438,7 +537,8 @@
     min-height: 10px;
     word-break: break-all;
   }
-.phone-num span{
-  color: #1889ff;
-}
+
+  .phone-num span {
+    color: #1889ff;
+  }
 </style>

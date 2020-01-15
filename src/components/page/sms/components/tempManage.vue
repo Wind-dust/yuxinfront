@@ -7,16 +7,16 @@
           <div class="temp">
             <div class="form">
               <el-form ref="form" label-position="left" style="width: 85%;" :model="form" label-width="110px">
-                <el-form-item label="模板名称：">
+                <el-form-item prop="temp_name" label="模板名称：" :rules="[{required:true,message:'请输入模板名称',trigger:'blur'}]">
                   <el-input v-model="form.temp_name" placeholder="请输入模板名称"></el-input>
                 </el-form-item>
-                <el-form-item label="短信签名：">
+                <el-form-item prop="sign" label="短信签名：" :rules="[{required: true,message: '请输入短信签名',trigger: 'blur'}]">
                   <el-input v-model="form.sign" placeholder="请输入短信签名"></el-input>
                   <el-alert title="建议输入产品名称或公司名称" type="warning"></el-alert>
                 </el-form-item>
-                <el-form-item label="短信内容：">
+                <el-form-item prop="content" label="短信内容：" :rules="[{required:true,message:'请输入模板内容',trigger:'blur'}]">
                   <el-tooltip class="item" effect="dark" placement="top-start">
-                    <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符</div>
+                    <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符 <br>请使用{{bl}}...作为短信内的变量，替换动态内容如验证码，订单号等</div>
                     <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
                   </el-tooltip>
                   <el-input type="textarea" placeholder="请输入短信内容，不超过500字" v-model="form.content" :rows="6"></el-input>
@@ -32,7 +32,7 @@
                   </div>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" size="small">提交</el-button>
+                  <el-button type="primary" size="small" @click="submit">提交</el-button>
                   <el-button type="primary" size="small" plain @click="back">取消</el-button>
                 </el-form-item>
                 <el-form-item><p style="font-size: 12px;line-height: 10px">审核时间：<span
@@ -64,7 +64,9 @@
           content: ''
         },
         inner: '',
-        num: 0
+        num: 0,
+        bl:"{{var1}}、{{var2}}",
+        type:0
       }
     },
     watch: {
@@ -87,8 +89,26 @@
       }
     },
     mounted() {
+      this.type = this.$route.query.type
     },
     methods: {
+      submit(){
+        let that = this
+        that.$request({
+          url:'send/textTemplateSignatureReport',
+          data:{
+            appid:that.$globalData.userInfo.appid || '',
+            appkey:that.$globalData.userInfo.appkey || '',
+            type:that.type || 0,
+            title:that.form.temp_name,
+            connect:'【'+that.form.sign+'】' + that.form.content
+          },
+          form:1,
+          success(e){
+
+          }
+        })
+      },
       back() {
         this.$router.push({path: '/businessMessage', query: {activeName: 'third'}})
       }

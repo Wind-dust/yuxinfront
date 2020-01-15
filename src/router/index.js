@@ -58,6 +58,7 @@ const createVideo = r => require.ensure([], () => r(require('../components/page/
 const createMms = r => require.ensure([], () => r(require('../components/page/sms/components/createMmsTemp')), 'createMms')
 
 const test = r=> require.ensure([],()=>r(require('../components/page/sms/test')),'test')
+const signature = r => require.ensure([],()=>r(require('../components/page/sms/components/signature')),'signature')
 
 Vue.use(Router)
 
@@ -175,6 +176,9 @@ export default new Router({
     }, {
       path: '/createMms',
       component: createMms
+    },{
+      path:'/signature',
+      component:signature
     }]
   }, {
     path: '/login',

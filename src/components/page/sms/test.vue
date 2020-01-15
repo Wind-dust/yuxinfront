@@ -17,7 +17,7 @@
             <div class="item pre-title" @click="selected = 2" :class="selected === 2?'active':''">添加签名</div>
             <draggable
               :options="{ group: 'people',animation:150,scroll:true,scrollSensitivity:200,}"
-              @start="drag = true" @end="update" id="draggable">
+              @start="drag = true" @end="update($event)" id="draggable">
               <component v-for="(v,k) in dom" :key="k" :is="v" :selected="selected" @del="del" :ind="k"
                          @getText="getText"></component>
             </draggable>
@@ -131,6 +131,7 @@
       update(e) {
         //只可能是在拖动完成后，才换位置,根据左边的顺序是最好的
         //每次拖动完成触发该方法，获取里面的元素
+        console.log(e)
         let dom = document.getElementById('draggable')
         console.log(dom.childNodes[0].firstChild)
         // this.arrCopy = []

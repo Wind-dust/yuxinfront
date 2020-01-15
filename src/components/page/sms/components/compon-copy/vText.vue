@@ -1,31 +1,32 @@
 <template>
-  <div class="item text" @mouseover="mouseOver"
-       @mouseleave="mouseLeave" @click="selectCard(ind)">
+  <div class="item text" id @mouseover="mouseOver"
+       @mouseleave="mouseLeave" >
 
-   <p @click="showcard = true" class="value">{{text?text:'添加文字'}}</p>
+   <p class="value" @click="selectCard(ind)">{{text?text:'添加文字'}}</p>
     <div class="btn-handle" :style="active">
       <div class="icon-jt jt-left">
-        <i class="icon iconfont icon-tuodong down" @click="moveUp($event)"></i>
+        <i class=" el-icon-sort-up down" @click="moveUp(ind,$event)"></i>
+        <i class="el-icon-sort-down down" @click="moveDown(ind,$event)"></i>
       </div>
       <div class="icon-jt jt-right">
         <i class="el-icon-delete" @click="del"></i>
       </div>
     </div>
-    <el-dialog :visible.sync="showcard" draggable="false">
-      <el-card >
-        <el-input v-model="text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="6"
-                  style="width: 100%;height: 100%" :maxlength="500"></el-input>
-        <el-button type="primary" size="small" @click="save">保存</el-button>
-        <el-button type="primary" size="small" plain @click="showcard = false">取消</el-button>
-      </el-card>
-    </el-dialog>
+    <!--<el-dialog :visible.sync="showcard" draggable="false">-->
+      <!--<el-card >-->
+        <!--<el-input v-model="text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="6"-->
+                  <!--style="width: 100%;height: 100%" :maxlength="500"></el-input>-->
+        <!--<el-button type="primary" size="small" @click="save">保存</el-button>-->
+        <!--<el-button type="primary" size="small" plain @click="showcard = false">取消</el-button>-->
+      <!--</el-card>-->
+    <!--</el-dialog>-->
   </div>
 </template>
 
 <script>
   export default {
     name: "vText",
-    props: ['selected', 'ind', 'arr'],
+    props: [ 'ind', 'arr','text'],
     data() {
       return {
         active: '',
@@ -35,14 +36,13 @@
         inactive: false,
         selectStatus: 0,
         index: 0,
-        text: '',
         showcard:false
       }
     },
     watch: {
       //没有触发，也就是不是值改变的
       text(val) {
-        this.content = val
+        console.log(val)
       },
       arr(val){
         console.log(val)
@@ -53,8 +53,13 @@
     },
 
     methods: {
-      moveUp(e){
+      moveUp(index,e){
+        console.log(index)
         console.log(e)
+        this.$emit('moveUp',index)
+      },
+      moveDown(index,e){
+        this.$emit('moveDown',index)
       },
       save(){
         this.showcard = false
@@ -69,11 +74,16 @@
       mouseLeave() {
         this.active = 'display:none'
       },
-      selectCard(idx, selected) {
+      selectCard(idx) {
+        console.log(123)
         this.index = -1
         this.index = idx
-        this.selectStatus = selected
-        this.$emit('getInd',idx)
+        let text = {
+          type:'text',
+          value:this.text
+        }
+        // this.selectStatus = selected
+        this.$emit('getInd',idx,3,text)
       }
 
     }

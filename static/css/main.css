@@ -283,11 +283,6 @@ a {
   border-radius: 4px;
 }
 .cell{
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
   text-align: center!important;
 }
 .el-submenu__title:focus, .el-submenu__title:hover{
@@ -329,4 +324,7 @@ a {
 }
 .margin{
   margin: 14px 0;
+}
+.cell{
+  font-size: 13px!important;
 }

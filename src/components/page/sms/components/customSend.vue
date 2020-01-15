@@ -12,7 +12,7 @@
       <p>1、只能上传xls、xlsx、csv文件</p>
       <p>2、上传本地文件最大不超过300M</p>
       <!--暂定五列：手机号，内容，姓名，地址，签名-->
-      <p>3、表格文件 <span>第一列</span> 为 <span>手机号</span>，<span>第二列</span> 为 <span>短信签名</span> ，<span>第三列</span> 为 <span>短信内容</span>。前三列为必填项。第四列为接收人昵称或姓名，如填写将会替换短信内容中的第一个变量。第五列为其他详细内容，如订单号、快递单号等，如填写将会替换短信内容中的第二个变量</p>
+      <p>3、表格文件 <span>第一列</span> 为 <span>手机号</span>，<span>第二列</span> 为 <span>短信签名+短信内容</span> ，实际内容不要有变量</p>
       <p>4、计费方式：短信以 <span>70字</span> 为一条，超过 70字 以 <span>67字</span> 为一条进行计费。字数包含短信签名。</p>
     </div>
   </div>
@@ -28,8 +28,35 @@
 
     },
     methods: {
-      upload() {
+      upload(file) {
+        let that = this
+        let formData = new FormData()
+        formData.append('appid',this.$globalData.userInfo.appid)
+        formData.append('appkey',this.$globalData.userInfo.appkey)
+        formData.append('filename',file.file)
+        that.$request({
+          url:'upload/uploadModelExcel',
+          data:formData,
+          success(e){
+            console.log(e.send_data)
+            that.customBusiness(e.send_data)
+          }
+        })
+      },
+      customBusiness(data){
+        let that = this
+        that.$request({
+          url:'send/submitBatchCustomBusiness',
+          form:1,
+          data:{
+            appid:that.$globalData.userInfo.appid,
+            appkey:that.$globalData.userInfo.appkey,
+            connect:data
+          },
+          success(e) {
 
+          }
+        })
       },
       beforeAvatarUpload() {
 

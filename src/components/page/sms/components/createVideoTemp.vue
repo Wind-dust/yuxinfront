@@ -16,12 +16,12 @@
             <div class="item pre-title" @click="selected = 1" :class="selected === 1?'active':''" v-else>添加主题</div>
             <div class="item pre-title" @click="selected = 2" :class="selected === 2?'active':''">添加签名</div>
             <!--一个元素是和一个上传或填写对应的必须有多个-->
-            <draggable v-model="dom"
-                       :options="{ group: 'people',animation:150,scroll:true,scrollSensitivity:200,}"
-                       @start="drag = true" @end="drag = false">
-              <component  v-for="(v,k) in dom" :key="k" :is="v" :selected="selected" @del="del" :ind="k"
-                   :text="text" @getText="getText" :arr="arr" @showC="showC" @getInd="getInd"></component >
-            </draggable>
+            <!--<draggable v-model="dom"-->
+                       <!--:options="{ group: 'people',animation:150,scroll:true,scrollSensitivity:200,}"-->
+                       <!--@start="drag = true" @end="drag = false">-->
+              <component  v-for="(v,k) in dom" :key="k" :is="v"  @del="del" :ind="k"
+                   :text="arr[k].value" @getText="getText" @moveUp="moveUp" @moveDown="moveDown" @getInd="getInd"></component >
+            <!--</draggable>-->
           </div>
           <div>
             <el-checkbox v-model="checked">退订回T</el-checkbox>
@@ -58,13 +58,18 @@
             </el-alert>
           </el-form-item>
           <el-form-item label="彩信内容：" v-if="selected === 3">
-            <el-input v-model="$store.state.text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="10"
+            <el-input v-model="text" size="small" placeholder="请输入彩信内容，不超过500个字符" type="textarea" :rows="10"
                       :maxlength="500"></el-input>
           </el-form-item>
           <el-form-item label="添加图片：" v-if="selected === 4">
-            <el-upload class="upload-demo" drag action="" multiple>
+            <el-upload class="upload-demo" drag :http-request="uploadImg" action="" >
+              <div v-if="!img">
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将图片拖到此处，或<em>点击上传</em></div>
+              </div>
+              <div v-else>
+                <img class="img" :src="img" alt="">
+              </div>
             </el-upload>
             <div class="hint">
               <p>当前图片大小：<span>0KB</span></p>
@@ -72,7 +77,7 @@
             </div>
           </el-form-item>
           <el-form-item label="添加视频：" v-if="selected === 5">
-            <el-upload class="upload-demo" drag action="" multiple>
+            <el-upload class="upload-demo" drag action="" :http-request="uploadVideo" >
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将视频拖到此处，或<em>点击上传</em></div>
             </el-upload>
@@ -82,7 +87,7 @@
             </div>
           </el-form-item>
           <el-form-item label="添加音频：" v-if="selected === 6">
-            <el-upload class="upload-demo" drag action="" multiple>
+            <el-upload class="upload-demo" drag action="" >
               <i class="el-icon-upload"></i>
               <div class="el-upload__text">将音频拖到此处，或<em>点击上传</em></div>
             </el-upload>
@@ -125,10 +130,10 @@
 </template>
 
 <script>
-  import vText from './compon/vText'
-  import vImg from './compon/vImg'
-  import vVideo from './compon/vVideo'
-  import vAudio from './compon/vAudio'
+  import vText from './compon-copy/vText'
+  import vImg from './compon-copy/vImg'
+  import vVideo from './compon-copy/vVideo'
+  import vAudio from './compon-copy/vAudio'
   import draggable from 'vuedraggable'
 
   export default {
@@ -152,7 +157,7 @@
         dom: [],
         dragging: null,
         text: '',
-        imgs: '',
+        img: '',
         audio: '',
         video: '',
         oldval:'',
@@ -162,40 +167,112 @@
         num:0,
         s:1,
         showcard:false,
-        ind:0
+        ind:0,
+        index:0
       }
     },
     computed: {},
-    //点击卡片把值传给输入框，输入框值改变就传给卡片，双向绑定
     watch: {
       text(val,oldval){
-        console.log(val)
-        if (val === '' || oldval === ''){
+        //把新的值存起来，但是怎么存，存第几个
+        if (val === ''){
           return '添加文字'
         }
         this.oldval = oldval
-        this.arr.push(val)
+        this.arr[this.ind].value = val
         return val
       }
     },
     mounted() {
     },
     methods: {
-      getInd(v){
-        this.ind = v
+      uploadImg(file){
+        let that = this
+        let formData = new FormData()
+        formData.append('image', file.file)
+        formData.append('appid', that.$globalData.userInfo.appid)
+        formData.append('appkey', that.$globalData.userInfo.appkey)
+        that.$request({
+          url: 'upload/uploadfile',
+          data: formData,
+          success(res) {
+            that.arr[that.ind].value = res.image_path
+            that.img = res.image_path
+          }
+        })
       },
-      save(){
-        this.arr[this.ind] = this.$store.state.text
-        console.log(this.arr)
+      uploadVideo(file){
+        let that = this
+        let formData = new FormData()
+        formData.append('video',file.file)
+        formData.append('appid', that.$globalData.userInfo.appid)
+        formData.append('appkey', that.$globalData.userInfo.appkey)
+        that.$request({
+          url: 'upload/uploadVideo',
+          data: formData,
+          success(res) {
+            that.arr[that.ind].value = res.video_path
+            that.video = res.video_path
+          }
+        })
       },
-      showC(){
-        this.showcard = true
+
+      moveUp(index){
+        let dom = this.dom
+        let idxDom = ''
+        for (let i = 0 ;i<dom.length;i++){
+          if (i === index && i > 0){
+            idxDom = dom[i]
+            dom[i] = dom[i - 1]
+            dom[i - 1] = idxDom
+          }
+        }
+        this.dom = dom
+        this.ind = index - 1 < 0 ? 0 : index - 1
+        let cont = this.arr[index].value
+        this.arr[index].value = this.arr[index - 1].value
+        this.arr[index - 1].value = cont
+        this.$forceUpdate()
+        console.log(dom)
       },
-      xuan(k){
-        console.log(k)
+      moveDown(index){
+        let dom = this.dom
+        let idxDom = ''
+        for (let i = 0 ;i<dom.length;i++){
+          if (i === index && i < dom.length -1){
+            idxDom = dom[i]
+            dom[i] = dom[i + 1]
+            dom[i + 1] = idxDom
+          }
+        }
+        this.dom = dom
+        this.ind = index + 1 > dom.length - 1 ? dom.length - 1 : index + 1
+        let cont = this.arr[index].value
+        this.arr[index].value = this.arr[index + 1].value
+        this.arr[index + 1].value = cont
+
+
+        this.$forceUpdate()
+        console.log(dom)
       },
+      getInd(idx,selected,text){
+        this.ind = idx
+        this.selected = selected
+        if (text.type === 'text') {
+          this.text = text.value
+        } else if (text.type === 'img'){
+          this.img = text.value
+        } else if (text.type === 'audio') {
+          this.audio = text.value
+        } else if (text.type === 'video'){
+          this.video = text.value
+        }
+
+      },
+
       //现在需要考虑的是怎么把输入框的值传给卡片
       getText(val){
+        console.log(val)
         this.text = val
       },
       getNowCard() {
@@ -210,9 +287,9 @@
       },
       add(type, num) {
         this.dom.push(type)
-        let s = this.s
-        this.$set(this.form,type+s,'')
-        this.s++
+        this.ind = this.dom.length - 1
+        this.text = ''
+        this.arr.push({type:type,value:''})
         this.selected = num
         console.log(this)
       },

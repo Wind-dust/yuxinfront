@@ -1,26 +1,25 @@
 <template>
   <div class="tcontent">
-    <div class="table-header clearfix">
-      <el-button size="small" class="add fr" type="primary" icon="el-icon-plus" @click="createTemp()">新建模板</el-button>
-    </div>
-
-    <!--<v-screen :screen="screenQuery" @query="onQuery"></v-screen>-->
-
-    <el-table :data="list"  style="width: 99%">
-      <el-table-column type="index" label="序号"></el-table-column>
-      <el-table-column prop="name" label="模板名称"></el-table-column>
-      <el-table-column prop="type" :show-overflow-tooltip="true" label="短信内容"></el-table-column>
-      <el-table-column prop="mobile" label="	创建时间"></el-table-column>
-      <el-table-column prop="email" label="状态"></el-table-column>
-      <el-table-column fixed="right" label="操作" width="350">
-        <template slot-scope="scope">
-          <!--<el-button type="primary" size="small" @click="setUserInfo(scope.row.id)"></el-button>-->
-          <!--<el-button type="primary" size="small" @click="setUserService(scope.row.id)"></el-button>-->
-        </template>
-      </el-table-column>
-    </el-table>
-    <v-pagination @pageChange="pageChange" :num='num' :total="total" :page="page"></v-pagination>
+  <div class="table-header clearfix">
+    <el-button size="small" class="add fr" type="primary" icon="el-icon-plus" @click="createTemp()">新建模板</el-button>
   </div>
+
+  <!--<v-screen :screen="screenQuery" @query="onQuery"></v-screen>-->
+
+  <el-table :data="list"  style="width: 99%" border>
+    <el-table-column type="index" label="序号"></el-table-column>
+    <el-table-column prop="template_id" label="模板ID"></el-table-column>
+    <el-table-column prop="title" label="模板名称"></el-table-column>
+    <el-table-column prop="content" :width="716" label="短信内容"></el-table-column>
+    <el-table-column fixed="right" label="操作" >
+      <template slot-scope="scope">
+        <el-button type="text" size="small" @click="userTemp(scope.row)">使用模板</el-button>
+        <!--<el-button type="primary" size="small" @click="setUserService(scope.row.id)"></el-button>-->
+      </template>
+    </el-table-column>
+  </el-table>
+  <v-pagination @pageChange="pageChange" :num='num' :total="total" :page="page"></v-pagination>
+</div>
 </template>
 
 <script>
@@ -29,6 +28,7 @@
   import vCard from '../../../component/card'
 
   export default {
+    props:['type'],
     data() {
       return {
         num: 1,
@@ -39,7 +39,7 @@
         ruleType: {},
         screen: {
           page: 1,
-          pagenum: 10
+          pageNum: 10
         },
         page: 1,
         screenQuery: [{
@@ -57,12 +57,35 @@
       vCard
     },
     mounted() {
-      this.screen.page = parseInt(localStorage.getItem("supplier")) || 1
-      this.page = this.screen.page
+      this.getTempList()
     },
     methods: {
+      userTemp(data){
+        if (parseInt(this.type) === 5) {
+          console.log(1)
+          this.$emit('getActiveName',data)
+        } else if (parseInt(this.type) === 6) {
+          this.$router.push({path:'/marketingMessage',query:{activeName:'second',data:data}})
+        }
+
+      },
+      getTempList(){
+        let that = this
+        that.$request({
+          url:'user/getUserModel',
+          data:{
+            business_id: that.type,
+            page:that.screen.page,
+            pageNum:that.screen.pageNum
+          },
+          success(e){
+            that.list = e.result
+            that.total = e.total
+          }
+        })
+      },
       createTemp() {
-        this.$router.push({path:'/sms/template'})
+        this.$router.push({path:'/sms/template',query:{type:this.type}})
       },
       setUser(data) {
         let that = this

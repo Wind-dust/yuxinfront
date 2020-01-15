@@ -104,7 +104,7 @@
       this.getuserInfo()
       this.getMyService()
       this.emit()
-      document.title = '管理中心|控制台'
+      document.title = '管理中心 | 控制台'
     },
     methods: {
       getMyService() {
