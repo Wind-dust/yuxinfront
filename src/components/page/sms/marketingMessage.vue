@@ -24,18 +24,19 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="phone">
-                  <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
-                            type="textarea" :disabled="disabled"></el-input>
-                  <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
-                </el-form-item>
-
                 <el-form-item label="短信内容" prop="content">
                   <el-input type="textarea" :rows="4" v-model="ruleForm.content"></el-input>
                   <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
                     style="color: #3a8ee6;">{{num}}</span> 条</p>
                 </el-form-item>
-
+                <el-form-item label="手机号码" prop="phone">
+                  <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
+                            type="textarea" :disabled="disabled"></el-input>
+                  <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
+                </el-form-item>
+                <el-form-item label="拓展码">
+                  <el-input type="text" v-model="ruleForm.code"></el-input>
+                </el-form-item>
                 <el-form-item>
                   <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
                   <el-button @click="resetForm('ruleForm')">重置</el-button>
@@ -104,7 +105,8 @@
         ruleForm: {
           content: '',
           phone: '',
-          signatureValue: ''
+          signatureValue: '',
+          code:''
         },
         rules: {
           phone: [
@@ -212,7 +214,8 @@
                 appid: that.$globalData.userInfo.appid || '',
                 appkey: that.$globalData.userInfo.appkey || '',
                 content: that.sms_text + that.ruleForm.content,
-                mobile: that.ruleForm.phone
+                mobile: that.ruleForm.phone,
+                develop_no:that.ruleForm.code
               },
               success(res) {
                 if (res.code == 200){

@@ -25,20 +25,21 @@
                     </el-option>
                   </el-select>
                 </el-form-item>
-
+                <el-form-item label="任务名称" prop="taskName">
+                  <el-input type="text" v-model="ruleForm.taskName"></el-input>
+                </el-form-item>
+                <el-form-item label="短信内容" prop="content">
+                  <el-input type="textarea" :rows="4" placeholder="输入短信内容" v-model="ruleForm.content"></el-input>
+                  <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
+                    style="color: #3a8ee6;">{{num}}</span> 条</p>
+                </el-form-item>
                 <el-form-item label="手机号码" prop="phone">
                   <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
                             type="textarea" :disabled="disabled"></el-input>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
                 </el-form-item>
-                <el-form-item label="任务名称" prop="taskName">
-                  <el-input type="text" v-model="ruleForm.taskName"></el-input>
-                </el-form-item>
-
-                <el-form-item label="短信内容" prop="content">
-                  <el-input type="textarea" :rows="4" placeholder="输入短信内容" v-model="ruleForm.content"></el-input>
-                  <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
-                    style="color: #3a8ee6;">{{num}}</span> 条</p>
+                <el-form-item label="拓展码" prop="code">
+                  <el-input type="text" v-model="ruleForm.code"></el-input>
                 </el-form-item>
                 <el-form-item label="发送时间" prop="dstime">
                   <el-date-picker v-model="ruleForm.dstime" type="datetime" placeholder="发送日期时间">
@@ -122,7 +123,8 @@
           phone: '',
           signatureValue: '',
           taskName: '',
-          dstime: ''
+          dstime: '',
+          code:''
         },
         rules: {
           phone: [
@@ -243,7 +245,8 @@
                 content: that.sms_text + that.ruleForm.content,
                 mobile: that.ruleForm.phone,
                 dstime: that.ruleForm.dstime,
-                taskname: that.ruleForm.taskName
+                taskname: that.ruleForm.taskName,
+                develop_no: that.ruleForm.code
               },
               success(res) {
                 if (res.code == 200) {
