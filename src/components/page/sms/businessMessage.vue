@@ -33,7 +33,7 @@
                   <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名、短信内容），合计短信计费条数 <span
                     style="color: #3a8ee6;">{{num}}</span> 条</p>
                 </el-form-item>
-                <el-form-item label="手机号码" prop="phone">
+                <el-form-item label="手机号码" prop="phone" class="is-required">
                   <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
                             type="textarea" :disabled="disabled"></el-input>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
@@ -132,9 +132,6 @@
           code:''
         },
         rules: {
-          phone: [
-            {required: true, message: '请输入正确的手机号码', trigger: 'blur'}
-          ],
           content: [
             {required: true, message: '内容不能为空', trigger: 'blur'},
             {min: 1, max: 500, message: '内容不能超过500个字符'}

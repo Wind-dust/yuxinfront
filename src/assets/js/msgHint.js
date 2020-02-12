@@ -86,7 +86,8 @@ let errCollect = {
   upload: {
     uploadUserExcel: {
       3001: '上传文件不能为空',
-      3002: '上传失败'
+      3002: '上传失败',
+      3003:'上传号码为空'
     }
   }
 }
