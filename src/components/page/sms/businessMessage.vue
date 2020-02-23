@@ -13,7 +13,7 @@
             <el-tab-pane label="发送列表" name="sixth"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName === 'first'">
-            <v-product-temp :name="bread" :content="content" type="business" :message-num="messageNum"></v-product-temp>
+            <v-product-temp :name="bread" :content="content" type="business" :message-num="messageNum" :test="true"></v-product-temp>
           </div>
           <div v-if="activeName === 'second'">
             <div class="content-content">

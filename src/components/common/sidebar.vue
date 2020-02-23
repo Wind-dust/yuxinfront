@@ -50,6 +50,10 @@
               name: '行业短信',
               link: 'marketingMessage',
               status: false
+            },{
+              name:'图文彩信',
+              link:'mms',
+              status: false
             }]
           },
           // {

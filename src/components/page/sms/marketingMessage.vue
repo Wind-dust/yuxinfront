@@ -12,7 +12,7 @@
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName === 'first'">
-            <v-product-temp :name="bread" :content="content" type="marketing" :messageNum="messageNum"></v-product-temp>
+            <v-product-temp :name="bread" :content="content" type="marketing" :messageNum="messageNum" :test="true"></v-product-temp>
           </div>
           <div v-if="activeName === 'second'">
             <div class="content-content">
