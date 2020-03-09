@@ -312,3 +312,6 @@ a {
 .cell{
   font-size: 13px;
 }
+.el-upload-list__item{
+  width: 52%!important;
+}

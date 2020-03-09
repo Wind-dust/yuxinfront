@@ -110,7 +110,12 @@
         })
       },
       back() {
-        this.$router.push({path: '/businessMessage', query: {activeName: 'third'}})
+        if(this.type == 5){
+          this.$router.push({path: '/businessMessage', query: {activeName: 'third'}})
+        } else if (this.type == 6){
+          this.$router.push({path: '/marketingMessage', query: {activeName: 'third'}})
+        }
+
       }
     }
   }

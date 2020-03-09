@@ -32,7 +32,7 @@ const accountList = r => require.ensure([], () => r(require('../components/page/
 
 const businessMessage = r => require.ensure([], () => r(require('../components/page/sms/businessMessage')), 'businessMessage')
 const marketingMessage = r => require.ensure([], () => r(require('../components/page/sms/marketingMessage')), 'marketingMessage')
-
+const template = r => require.ensure([], () => r(require('../components/page/sms/components/tempManage')), 'template')
 const dataDetail = r => require.ensure([], () => r(require('../components/page/report/dataDetail')), 'dataDetail')
 const dataInfo = r => require.ensure([], () => r(require('../components/page/report/dataInfo')), 'dataInfo')
 const templateDetail = r => require.ensure([], () => r(require('../components/page/report/templateDetail')), 'templateDetail')
@@ -133,6 +133,9 @@ export default new Router({
       }, {
         path: '/mms',
         component: mms
+      },{
+      path:'/sms/template',
+        component:template
       }]
   }, {
     path: '/login',
