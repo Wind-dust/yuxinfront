@@ -41,8 +41,8 @@
             </div>
             <div class="preview">
               <div class="sms">
-                <div class="inner">
-                  {{inner}}
+                <div class="inner" >
+                  <pre style="width: 100%;word-break: break-all;white-space: pre-wrap;word-wrap: break-word;">{{inner}}</pre>
                 </div>
               </div>
             </div>
@@ -75,10 +75,12 @@
           this.inner = this.form.content
           return
         }
-        this.inner = '【' + newVal + '】' + this.form.content
+        this.inner = ('【' + newVal + '】' + this.form.content)
       },
       'form.content'(newVal, oldVal) {
-        this.inner = '【'+this.form.sign+ '】'+newVal
+        this.inner = ('【'+this.form.sign+ '】'+newVal)
+        console.log(newVal)
+        // this.inner = newVal
       },
       inner(val) {
         if (val.length <= 70) {

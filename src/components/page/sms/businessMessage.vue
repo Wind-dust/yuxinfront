@@ -145,8 +145,12 @@
             <div class="right">
               <div class="preview">
                 <div class="inner">
-                  <div class="sms-text" v-if="messageType">{{sms_text+ruleForm.content}}</div>
-                  <div class="sms-text" v-else>{{ruleForm.tempContent}}</div>
+                  <div class="sms-text" v-if="messageType" >
+                    <pre>{{viewText}}</pre>
+                  </div>
+                  <div class="sms-text" v-else >
+                    <pre>{{ruleForm.tempContent}}</pre>
+                  </div>
                 </div>
               </div>
             </div>
@@ -253,18 +257,23 @@
         total: 0,
         contentLength:0,
         signatureList:[],
-        sign_total:0
+        sign_total:0,
+        viewText:''
       }
     },
     watch: {
       'ruleForm.signatureValue'(newVal, oldVal) {
         this.sms_text = '【' + newVal + '】'
         let len = '【' + newVal + '】' + this.ruleForm.content
+        this.viewText = len
         this.textLength = len.length
       },
       'ruleForm.content'(newVal, oldVal) {
+        console.log(newVal)
         this.contentLength = newVal.length
         let len = this.sms_text + newVal
+        this.viewText = len
+        console.log(len)
         this.textLength = len.length
         if (len.length <= 70) {
           // 字数/70 = 条数

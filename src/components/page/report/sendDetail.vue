@@ -10,19 +10,18 @@
               <el-option v-for="(v,k) in service" :key="k" :label="v.business_name" :value="v.business_id"></el-option>
             </el-select>
             <!--<el-button size="mini" type="primary" @click="query(type)">查询</el-button>-->
-            <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%">
+            <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" border>
               <!--<el-table-column type="selection"></el-table-column>-->
               <el-table-column prop="task_name" show-overflow-tooltip label="名称" v-if="type == 5"></el-table-column>
-              <el-table-column :label="type == 8?'标题':'内容'">
+              <el-table-column :label="type == 8?'标题':'内容'" :width="716" >
                 <template slot-scope="scope">
                   <span v-if="type == 8">{{scope.row.title}} <el-button type="text"
                                                                         @click="preview(scope.row.multimedia_frame,scope.row.title)">查看内容</el-button></span>
-                  <span v-else>{{scope.row.task_content}}</span>
+                  <span v-else >{{scope.row.task_content}}</span>
                 </template>
               </el-table-column>
-              <el-table-column prop="mobile_content" show-overflow-tooltip label="手机号"></el-table-column>
               <el-table-column prop="send_num" label="发送数量"></el-table-column>
-              <el-table-column prop="source" label="来源" show-overflow-tooltip></el-table-column>
+              <!--<el-table-column prop="source" label="来源" show-overflow-tooltip></el-table-column>-->
               <el-table-column prop="create_time" label="创建时间" show-overflow-tooltip></el-table-column>
               <el-table-column prop="address" label="操作" show-overflow-tooltip>
                 <template slot-scope="scope">

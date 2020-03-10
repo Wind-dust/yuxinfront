@@ -13,11 +13,24 @@
       <el-table-column prop="content" :width="716" label="短信内容"></el-table-column>
       <el-table-column fixed="right" label="操作" >
         <template slot-scope="scope">
-          <el-button type="text" size="small" @click="userTemp(scope.row)">使用模板</el-button>
+          <el-button type="text" size="small" @click="userTemp(scope.row)">使用</el-button>
+          <el-button type="text" size="small" @click="review(scope.row)">预览</el-button>
           <!--<el-button type="primary" size="small" @click="setUserService(scope.row.id)"></el-button>-->
         </template>
       </el-table-column>
     </el-table>
+    <el-dialog title="预览" :visible.sync="dialogVisible" width="30%">
+      <div class="preview">
+        <div class="inner">
+          <div class="sms-text" >
+            <pre>{{content}}</pre>
+          </div>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false">关 闭</el-button>
+      </span>
+    </el-dialog>
     <v-pagination @pageChange="pageChange" :num='num' :total="total" :page="page"></v-pagination>
   </div>
 </template>
@@ -49,7 +62,9 @@
           type: 'input',
         }],
         list: [],
-        total: 0
+        total: 0,
+        dialogVisible:false,
+        content:''
       }
     },
     components: {
@@ -60,12 +75,19 @@
       this.getTempList()
     },
     methods: {
+      review(data){
+        console.log(data)
+        this.content = data.content
+        this.dialogVisible = true
+
+      },
       userTemp(data){
         if (parseInt(this.type) === 5) {
           console.log(1)
           this.$emit('getActiveName',data)
         } else if (parseInt(this.type) === 6) {
-          this.$router.push({path:'/marketingMessage',query:{activeName:'second',data:data}})
+          // this.$router.push({path:'/marketingMessage',query:{activeName:'second',data:data}})
+          this.$emit('getActiveName',data)
         }
 
       },
@@ -137,4 +159,30 @@
 </script>
 
 <style scoped>
+  .preview {
+    background-image: url("http://imagesdev.shyuxi.com/preview-phone-bg.bc08f82.png");
+    background-size: 300px 615px;
+    background-repeat: no-repeat;
+    height: 615px;
+    width: 300px;
+    /*background-position-x: 150px;*/
+  }
+
+  .inner {
+    width: 100%;
+    margin: 0px 20px 0 30px;
+    padding-top: 100px;
+  }
+
+  .sms-text {
+    margin-bottom: 5px;
+    background: #e5e4e9;
+    border-radius: 16px;
+    -webkit-border-radius: 16px;
+    -moz-border-radius: 16px;
+    padding: 15px;
+    width: 200px;
+    min-height: 10px;
+    word-break: break-all;
+  }
 </style>

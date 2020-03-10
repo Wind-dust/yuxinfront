@@ -282,14 +282,14 @@ a {
 .border-radius{
   border-radius: 4px;
 }
-.cell{
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  display: -webkit-box !important;
-  -webkit-line-clamp: 2 !important;
-  -webkit-box-orient: vertical !important;
-  text-align: center!important;
-}
+/*.cell{*/
+  /*overflow: hidden !important;*/
+  /*text-overflow: ellipsis !important;*/
+  /*display: -webkit-box !important;*/
+  /*-webkit-line-clamp: 2 !important;*/
+  /*-webkit-box-orient: vertical !important;*/
+  /*text-align: center!important;*/
+/*}*/
 .el-submenu__title:focus, .el-submenu__title:hover{
   background: #60bff3!important;
 }
@@ -311,7 +311,15 @@ a {
 }
 .cell{
   font-size: 13px;
+  text-align: center;
 }
 .el-upload-list__item{
   width: 52%!important;
+
+}
+pre{
+  font-size: 13px;
+  word-break: break-all;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }

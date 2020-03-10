@@ -141,8 +141,12 @@
             <div class="right">
               <div class="preview">
                 <div class="inner">
-                  <div class="sms-text" v-if="messageType">{{sms_text+ruleForm.content}}</div>
-                  <div class="sms-text" v-else>{{ruleForm.tempContent}}</div>
+                  <div class="sms-text" v-if="messageType" >
+                    <pre>{{viewText}}</pre>
+                  </div>
+                  <div class="sms-text" v-else>
+                    <pre>{{ruleForm.tempContent}}</pre>
+                  </div>
                 </div>
               </div>
             </div>
@@ -241,18 +245,21 @@
         },
         contentLength:0,
         signatureList:[],
-        signa_total:0
+        signa_total:0,
+        viewText:''
       }
     },
     watch: {
       'ruleForm.signatureValue'(newVal, oldVal) {
         this.sms_text = '【' + newVal + '】'
         let len = '【' + newVal + '】' + this.ruleForm.content
+        this.viewText = len
         this.textLength = len.length
       },
       'ruleForm.content'(newVal, oldVal) {
         this.contentLength = newVal.length
         let len = this.sms_text + newVal
+        this.viewText = len
         this.textLength = len.length
         if (len.length <= 70) {
           let num = len.length / 70

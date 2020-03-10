@@ -41,12 +41,13 @@
       <p>2、<span>非变量类型上传文件内容第一列是手机号，第二列是签名+内容。变量类型文件内容第一列是手机号，第二列以及后面的列每一列对应一个变量值</span></p>
       <p>3、计费方式：短信以 <span>70字</span> 为一条，超过 70字 以 <span>67字</span> 为一条进行计费。字数包含短信签名。</p>
       <p>4、重新上传请先删除上传列表中的文件</p>
+      <p>5、文件内容中<span>除签名外</span>，短信正文中请不要有特殊符号：【】，<>等，分号，逗号，冒号等基础符号请使用中文符号。</p>
     </div>
     <el-dialog title="选择模板" :visible.sync="isShowTemp" width="60%">
       <el-table :data="list" style="width: 100%">
         <el-table-column prop="template_id" label="模板ID" width="180"></el-table-column>
         <el-table-column prop="title" label="模板名称" width="180"></el-table-column>
-        <el-table-column prop="content" :width="500" label="短信内容"></el-table-column>
+        <el-table-column prop="content" :width="450" label="短信内容"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="small" @click="selected(scope.row)">选择</el-button>
