@@ -32,7 +32,7 @@ const accountList = r => require.ensure([], () => r(require('../components/page/
 
 const businessMessage = r => require.ensure([], () => r(require('../components/page/sms/businessMessage')), 'businessMessage')
 const marketingMessage = r => require.ensure([], () => r(require('../components/page/sms/marketingMessage')), 'marketingMessage')
-
+const template = r => require.ensure([], () => r(require('../components/page/sms/components/tempManage')), 'template')
 const dataDetail = r => require.ensure([], () => r(require('../components/page/report/dataDetail')), 'dataDetail')
 const dataInfo = r => require.ensure([], () => r(require('../components/page/report/dataInfo')), 'dataInfo')
 const templateDetail = r => require.ensure([], () => r(require('../components/page/report/templateDetail')), 'templateDetail')
@@ -46,7 +46,8 @@ const sendDetail = r => require.ensure([], () => r(require('../components/page/r
 const settlement = r => require.ensure([], () => r(require('../components/page/settlement/settlement')), 'settlement')
 
 // const payRank = r => require.ensure([],()=>r(require('../components/page/settlement/settlement')),'settlement')
-
+const mms = r => require.ensure([], () => r(require('../components/page/sms/mms')), 'mms')
+const signature = r => require.ensure([], () => r(require('../components/page/sms/components/signature')), 'signature')
 
 Vue.use(Router)
 
@@ -126,6 +127,15 @@ export default new Router({
       }, {
         path: '/settlement',
         component: settlement
+      }, {
+        path: '/signature',
+        component: signature
+      }, {
+        path: '/mms',
+        component: mms
+      },{
+        path:'/sms/template',
+        component:template
       }]
   }, {
     path: '/login',

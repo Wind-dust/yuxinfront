@@ -50,6 +50,10 @@
               name: '行业短信',
               link: 'marketingMessage',
               status: false
+            },{
+              name:'图文彩信',
+              link:'mms',
+              status: false
             }]
           },
           // {
@@ -64,15 +68,17 @@
             name: '报表中心',
             icon: 'el-icon-document',
             _child: [
-              //   {
-              //   name: '数据总览',
-              //   link: 'dataInfo',
-              //   status: false
-              // }, {
+              {
+                name: '数据总览',
+                link: 'dataInfo',
+                status: false
+              },
+              // {
               //   name: "明细查询",
               //   link: 'dataDetail',
               //   status: false
-              // }, {
+              // },
+              // {
               //   name: '模板查询',
               //   link: 'templateDetail',
               //   status: false

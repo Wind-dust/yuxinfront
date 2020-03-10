@@ -4,26 +4,31 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <h3 class="title">数据总览</h3>
-          <el-date-picker size="small" v-model="date" type="datetimerange" range-separator="--" start-placeholder="开始日期"
-                          end-placeholder="结束日期"></el-date-picker>
-          <el-select size="small" v-model="type">
-            <el-option label="营销短信" value="1"></el-option>
-            <el-option label="行业短信" value="2"></el-option>
-          </el-select>
-          <el-button size="mini" type="primary">查询</el-button>
+          <el-date-picker size="small" v-model="date" type="daterange" range-separator="--" :start-placeholder="startTime"
+                          :end-placeholder="endTime" :picker-options="endDateOpt" ></el-date-picker>
+          <!--<el-select size="small" v-model="type">-->
+            <!--<el-option label="营销短信" value="1"></el-option>-->
+            <!--<el-option label="行业短信" value="2"></el-option>-->
+          <!--</el-select>-->
+          <el-button size="mini" type="primary" @click="search">查询</el-button>
           <div id="main"></div>
           <div class="table">
             <el-table :data="list" style="width: 100%">
               <el-table-column type="index" label="序号"></el-table-column>
-              <el-table-column prop="date" label="日期"></el-table-column>
-              <el-table-column prop="name" label="发送数量"></el-table-column>
-              <el-table-column prop="address" label="成功条数"></el-table-column>
-              <el-table-column prop="address" label="失败条数"></el-table-column>
-              <el-table-column prop="address" label="未知条数"></el-table-column>
-              <el-table-column prop="address" label="成功率"></el-table-column>
+              <el-table-column prop="_business" label="产品类型"></el-table-column>
+              <el-table-column prop="time" label="日期"></el-table-column>
+              <el-table-column prop="num" label="发送数量"></el-table-column>
+              <el-table-column prop="success" label="成功条数"></el-table-column>
+              <el-table-column prop="default" label="失败条数"></el-table-column>
+              <el-table-column prop="unknown" label="未知条数"></el-table-column>
+              <el-table-column prop="ratio" label="成功率"></el-table-column>
               <el-table-column prop="address" label="操作"></el-table-column>
             </el-table>
           </div>
+          <el-pagination
+            layout="prev, pager, next"
+            :total="total">
+          </el-pagination>
         </div>
       </el-col>
     </el-row>
@@ -38,21 +43,58 @@
     components: {},
     data() {
       return {
-        date: '',
+        date: [],
         type: '',
-        list: []
+        list: [],
+        pageScreen:{
+          page:1,
+          pageNum:10
+        },
+        start:'',
+        end:'',
+        startTime:'',
+        endTime:'',
+        endDateOpt:{
+          disabledDate: (time) => {
+            return time.getTime() > new Date().getTime();
+          }
+        },
+        deValue:'',
+        total:0
       }
     },
     watch: {
       date(newVal, oldVal) {
-        console.log(newVal)
+        if (newVal == null){
+          this.start = this.startTime
+          this.end = this.endTime
+          return
+        }
+        const d = new Date(newVal[0])
+        this.start=d.getFullYear() + this.p((d.getMonth() + 1)) + this.p(d.getDate())
+        const c = new Date(newVal[1])
+        this.end = c.getFullYear() + this.p((c.getMonth() + 1)) + this.p(c.getDate())
       }
     },
     mounted() {
+      const s = new Date()
+      this.startTime = s.getFullYear() + '-' + this.p((s.getMonth() + 1)) + '-1'
+      this.start = s.getFullYear() + this.p((s.getMonth() + 1)) + '01'
+      const e = new Date()
+      this.endTime = e.getFullYear() + '-' + this.p((e.getMonth() + 1)) + '-' + this.p(e.getDate())
+      this.end = e.getFullYear() + this.p((e.getMonth() + 1)) + this.p(e.getDate())
+      console.log(this.start)
       this.emit()
       // this.createLine()
+      this.getUserSendInfo()
     },
     methods: {
+      search(){
+        this.getUserSendInfo()
+      },
+      p(s) {
+        return s < 10 ? '0' + s : s
+      },
       createLine() {
         //获取元素
         let main = document.getElementById('main')
@@ -96,6 +138,47 @@
             data: [10, 20, 20, 20, 50, 10]
           }]
         })
+      },
+      getUserSendInfo(){
+        let that = this
+        that.$request({
+          url:'user/getUserStatisticsDay',
+          data:{
+            page:that.pageScreen.page,
+            pageNum:that.pageScreen.pageNum,
+            start_timekey:that.start,
+            end_timekey:that.end
+          },
+          success(res) {
+            that.total=res.total
+            that.list =that.disData(res.data)
+          }
+        })
+      },
+      disData(data){
+        for (let i=0;i<data.length;i++) {
+          switch (parseInt(data[i].business_id)) {
+            case 5:
+              data[i]._business = '营销短信';
+              break;
+            case 6:
+              data[i]._business = '行业短信';
+              break;
+            case 7:
+              data[i]._business = '网贷服务';
+              break;
+            case 8:
+              data[i]._business = '图文彩信';
+              break;
+            case 9:
+              data[i]._business = '游戏服务';
+              break;
+            default:
+              data[i]._business = '--'
+          }
+          data[i].time = (data[i].timekey+'').replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3")
+        }
+        return data
       },
       emit() {
         this.$emit('getBread', '数据总览')

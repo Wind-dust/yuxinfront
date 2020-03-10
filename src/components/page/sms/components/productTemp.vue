@@ -9,8 +9,8 @@
           <p>当前余额（条）：{{messageNum}}</p>
         </div>
       </div>
-      <div class="line"></div>
-      <div class="info-l">
+      <div class="line" v-show="test"></div>
+      <div class="info-l" v-show="test">
         <div class="info-text">
           <p>短信测试</p>
           <p class="in-bu">
@@ -26,7 +26,7 @@
 
 <script>
   export default {
-    props: ['name', 'content', 'type','messageNum'],
+    props: ['name', 'content', 'type','messageNum','test'],
     name: "productTemp",
     data() {
       return {
@@ -49,7 +49,7 @@
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
   }
 
   .info-l {
