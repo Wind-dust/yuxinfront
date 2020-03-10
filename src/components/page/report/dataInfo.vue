@@ -16,7 +16,7 @@
             <el-table :data="list" style="width: 100%">
               <el-table-column type="index" label="序号"></el-table-column>
               <el-table-column prop="_business" label="产品类型"></el-table-column>
-              <el-table-column prop="create_time" label="日期"></el-table-column>
+              <el-table-column prop="time" label="日期"></el-table-column>
               <el-table-column prop="num" label="发送数量"></el-table-column>
               <el-table-column prop="success" label="成功条数"></el-table-column>
               <el-table-column prop="default" label="失败条数"></el-table-column>
@@ -65,6 +65,11 @@
     },
     watch: {
       date(newVal, oldVal) {
+        if (newVal == null){
+          this.start = this.startTime
+          this.end = this.endTime
+          return
+        }
         const d = new Date(newVal[0])
         this.start=d.getFullYear() + this.p((d.getMonth() + 1)) + this.p(d.getDate())
         const c = new Date(newVal[1])
@@ -73,8 +78,8 @@
     },
     mounted() {
       const s = new Date()
-      this.startTime = s.getFullYear() + '-' + this.p((s.getMonth() + 1)) + '-' + this.p(s.getDate())
-      this.start = s.getFullYear() + this.p((s.getMonth() + 1)) + this.p(s.getDate())
+      this.startTime = s.getFullYear() + '-' + this.p((s.getMonth() + 1)) + '-1'
+      this.start = s.getFullYear() + this.p((s.getMonth() + 1)) + '01'
       const e = new Date()
       this.endTime = e.getFullYear() + '-' + this.p((e.getMonth() + 1)) + '-' + this.p(e.getDate())
       this.end = e.getFullYear() + this.p((e.getMonth() + 1)) + this.p(e.getDate())
@@ -171,6 +176,7 @@
             default:
               data[i]._business = '--'
           }
+          data[i].time = (data[i].timekey+'').replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3")
         }
         return data
       },
