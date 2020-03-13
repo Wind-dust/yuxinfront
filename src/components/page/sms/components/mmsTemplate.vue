@@ -8,7 +8,7 @@
     </el-select>
     <el-input size="small" style="width: 150px" v-model="name" placeholder="模板ID/名称/标题"></el-input>
     <el-button size="mini" type="primary" @click="check">查询</el-button>
-    <div class="float-right">
+    <div class="float-right" style="float: right">
       <!--<el-button plain size="mini" type="primary" @click="createMms">新建模板</el-button>-->
     </div>
     <el-table :data="list"  style="width: 99%">
