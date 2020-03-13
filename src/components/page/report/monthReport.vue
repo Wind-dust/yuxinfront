@@ -4,16 +4,15 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <h3 class="title">数据总览</h3>
-          <el-date-picker size="small" v-model="date" type="daterange" range-separator="--" :start-placeholder="startTime"
-                          :end-placeholder="endTime" :picker-options="endDateOpt" ></el-date-picker>
+          <el-date-picker size="small" v-model="date" type="month" :placeholder="startTime"></el-date-picker>
           <!--<el-select size="small" v-model="type">-->
-            <!--<el-option label="营销短信" value="1"></el-option>-->
-            <!--<el-option label="行业短信" value="2"></el-option>-->
+          <!--<el-option label="营销短信" value="1"></el-option>-->
+          <!--<el-option label="行业短信" value="2"></el-option>-->
           <!--</el-select>-->
           <el-button size="mini" type="primary" @click="search">查询</el-button>
           <div id="main"></div>
           <div class="table">
-            <el-table :data="list" style="width: 100%"  :summary-method="getSummaries" show-summary >
+            <el-table :data="list" style="width: 100%" >
               <el-table-column type="index" label="序号"></el-table-column>
               <el-table-column prop="_business" label="产品类型"></el-table-column>
               <el-table-column prop="time" label="日期"></el-table-column>
@@ -30,7 +29,7 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
             :current-page="jumpPage"
-            :page-sizes="[30,50,80, 100]"
+            :page-sizes="[20,40, 60, 80, 100]"
             :page-size="pageSize"
             layout="total, sizes, prev, pager, next, jumper"
             :total="total">
@@ -58,7 +57,7 @@
         list: [],
         pageScreen:{
           page:1,
-          pageNum:30
+          pageNum:20
         },
         start:'',
         end:'',
@@ -73,29 +72,31 @@
         total:0,
         num:1,
         page:1,
-        pageSize:30
+        pageSize:20
       }
     },
     watch: {
       date(newVal, oldVal) {
+        console.log(newVal)
         if (newVal == null){
-          this.start = this.startTime
-          this.end = this.endTime
+          let date = new Date()
+          this.start = date.getFullYear()+'01'
+          this.end = date.getFullYear()+this.p((date.getMonth()+1))
           return
         }
-        const d = new Date(newVal[0])
-        this.start=d.getFullYear() + this.p((d.getMonth() + 1)) + this.p(d.getDate())
-        const c = new Date(newVal[1])
-        this.end = c.getFullYear() + this.p((c.getMonth() + 1)) + this.p(c.getDate())
+        const d = new Date(newVal)
+        this.start=d.getFullYear() + this.p((d.getMonth() + 1))
+        const c = new Date(newVal)
+        this.end = c.getFullYear() + this.p((c.getMonth() + 1))
       }
     },
     mounted() {
       const s = new Date()
-      this.startTime = s.getFullYear() + '-' + this.p((s.getMonth() + 1)) + '-1'
-      this.start = s.getFullYear() + this.p((s.getMonth() + 1)) + '01'
+      this.startTime = s.getFullYear() + '-' + this.p((s.getMonth() + 1))
+      this.start = s.getFullYear() + '01'
       const e = new Date()
-      this.endTime = e.getFullYear() + '-' + this.p((e.getMonth() + 1)) + '-' + this.p(e.getDate())
-      this.end = e.getFullYear() + this.p((e.getMonth() + 1)) + this.p(e.getDate())
+      this.endTime = e.getFullYear() + '-' + this.p((e.getMonth() + 1))
+      this.end = e.getFullYear() + this.p((e.getMonth() + 1))
       console.log(this.start)
       this.emit()
       // this.createLine()
@@ -113,97 +114,16 @@
         this.pageScreen.page = val
         this.getUserSendInfo()
       },
-      getSummaries(param){
-        console.log(param)
-        //data里面是数据 columns里面是列
-        const { columns, data } = param;
-        const sums = [];
-        columns.forEach((column, index) => {
-          if (index === 0) {
-            sums[index] = '合计';
-            return;
-          }
-          if(index === 8) {
-            sums[index] = ((sums[5] / sums[4]) * 100).toFixed(2);
-            return
-          }
-          const values = data.map(item => Number(item[column.property]));
-          if (!values.every(value => isNaN(value))) {
-            sums[index] = values.reduce((prev, curr) => {
-              const value = Number(curr);
-              if (!isNaN(value)) {
-                return prev + curr;
-              } else {
-                return prev;
-              }
-            }, 0);
-            sums[index] += '';
-          } else {
-            sums[index] = '';
-          }
-        });
-
-        return sums;
-      },
-      pageChange(obj) {
-        console.log(obj)
-        this.screen.page = obj.page
-        this.getUserSendInfo()
-      },
       search(){
         this.getUserSendInfo()
       },
       p(s) {
         return s < 10 ? '0' + s : s
       },
-      createLine() {
-        //获取元素
-        let main = document.getElementById('main')
-        //初始化echarts
-        let myChart = echarts.init(main,'walden')
-        myChart.setOption({
-          title: {text:'趋势图'},
-          tooltip: { trigger: 'axis'},
-          toolbox: {
-            show : true,
-            feature : {
-              mark : {show: true},
-//            dataView : {show: true, readOnly: false},     //数据视图按钮
-              magicType : {show: true, type: ['line', 'bar']},
-//            restore : {show: true},       //图表右上角刷新按钮
-              saveAsImage : {show: true}
-            }
-          },
-          // x轴
-          xAxis: [{
-            boundaryGap : true,
-            data: ['10-20','10-21','10-22','10-23','10-26','10-28']
-          }],
-          // y 轴
-          yAxis: {
-            // data:[]
-          },
-          // 图裂
-          legend: {
-            data: ['发送条数', '成功条数']
-          },
-          calculable : true,
-          //连接点
-          series: [{
-            name: '发送条数',
-            type: 'line',
-            data: [5, 30, 36, 10, 60, 60] //数据，对应xAxis时间
-          }, {
-            name: '成功条数',
-            type: 'line',
-            data: [10, 20, 20, 20, 50, 10]
-          }]
-        })
-      },
       getUserSendInfo(){
         let that = this
         that.$request({
-          url:'user/getUserStatisticsDay',
+          url:'user/getUserStatisticsMonth',
           data:{
             page:that.pageScreen.page,
             pageNum:that.pageScreen.pageNum,
@@ -237,7 +157,7 @@
             default:
               data[i]._business = '--'
           }
-          data[i].time = (data[i].timekey+'').replace(/^(\d{4})(\d{2})(\d{2})$/, "$1-$2-$3")
+          data[i].time = (data[i].timekey+'').replace(/^(\d{4})(\d{2})$/, "$1-$2")
         }
         return data
       },

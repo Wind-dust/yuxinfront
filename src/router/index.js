@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 
+
 const routerPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   // console.log(routerPush.call(this, location))
@@ -48,6 +49,8 @@ const settlement = r => require.ensure([], () => r(require('../components/page/s
 // const payRank = r => require.ensure([],()=>r(require('../components/page/settlement/settlement')),'settlement')
 const mms = r => require.ensure([], () => r(require('../components/page/sms/mms')), 'mms')
 const signature = r => require.ensure([], () => r(require('../components/page/sms/components/signature')), 'signature')
+const monthReport = r => require.ensure([], () => r(require('../components/page/report/monthReport')), 'monthReport')
+const yearReport = r => require.ensure([],()=> r(require('../components/page/report/yearReport')),'yearReport')
 
 Vue.use(Router)
 
@@ -133,9 +136,15 @@ export default new Router({
       }, {
         path: '/mms',
         component: mms
-      },{
-      path:'/sms/template',
-        component:template
+      }, {
+        path: '/sms/template',
+        component: template
+      }, {
+        path: '/monthReport',
+        component: monthReport
+      }, {
+        path: '/yearReport',
+        component: yearReport
       }]
   }, {
     path: '/login',

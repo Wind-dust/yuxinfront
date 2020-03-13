@@ -37,7 +37,7 @@
                 name: '账户资质',
                 link: 'qualification',
                 status: false
-              }, ]
+              },]
           },
           {
             name: '产品中心',
@@ -50,9 +50,9 @@
               name: '行业短信',
               link: 'marketingMessage',
               status: false
-            },{
-              name:'图文彩信',
-              link:'mms',
+            }, {
+              name: '图文彩信',
+              link: 'mms',
               status: false
             }]
           },
@@ -68,9 +68,18 @@
             name: '报表中心',
             icon: 'el-icon-document',
             _child: [
-                {
-                name: '数据总览',
+              {
+                name: '日度报表',
                 link: 'dataInfo',
+                status: false
+              },
+              {
+                name: '月度报表',
+                link: 'monthReport',
+                status: false
+              }, {
+                name: '年度报表',
+                link: 'yearReport',
                 status: false
               },
               // {

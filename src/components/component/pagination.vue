@@ -1,6 +1,6 @@
 <template>
   <div class="flex-cen pagination">
-      <el-pagination :hide-on-single-page="true" background @current-change="pageChange"  ref="pagination"  layout="prev, pager, next" :total="vTotal"> </el-pagination>
+      <el-pagination :hide-on-single-page="true" background @current-change="pageChange" :page-size="1" ref="pagination"  layout="prev, pager, next" :total="vTotal"> </el-pagination>
     </div>
 </template>
 
