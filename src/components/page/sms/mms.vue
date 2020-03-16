@@ -4,34 +4,24 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <h3 class="title">图文彩信</h3>
-          <div v-if="selectTemp" class="center">
-            <el-card  body-style="width:800px">
-              <div slot="header" class="clearfix">
-                <span style="font-size: 14px;">选择模板</span>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="selectTemp = false">关闭</el-button>
-              </div>
-              <el-input size="small" style="width: 120px;" placeholder="模板名称"></el-input>
-              <el-button size="mini" type="primary" palin>搜索</el-button>
-              <div>
-                <el-table :data="list" style="width: 100%">
-                  <el-table-column type="index" label="序号"></el-table-column>
-                  <el-table-column prop="title" label="标题" width=""></el-table-column>
-                  <el-table-column  label="图片" >
-                    <template slot-scope="scope">
-                      <img v-if="scope.row.multimedia_frame" :src="scope.row.multimedia_frame[0].image_path" alt="" style="object-fit: contain;max-height: 100px;">
-                    </template>
-                  </el-table-column>
-                  <el-table-column prop="multimedia_frame[0].content" label="内容" ></el-table-column>
-                  <el-table-column label="操作" width="">
-                    <template slot-scope="scope">
-                      <el-button size="mini" type="text" @click="selected(scope.row)">选择</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-              <el-pagination layout="prev, pager, next" :total="0" @current-change="changePage" hide-on-single-page></el-pagination>
-            </el-card>
-          </div>
+          <el-dialog title="选择模板" :visible.sync="selectTemp" width="60%">
+            <el-table :data="list" style="width: 100%">
+              <el-table-column type="index" label="序号"></el-table-column>
+              <el-table-column prop="title" label="标题" width=""></el-table-column>
+              <el-table-column  label="图片" >
+                <template slot-scope="scope">
+                  <img v-if="scope.row.multimedia_frame" :src="scope.row.multimedia_frame[0].image_path" alt="" style="object-fit: contain;max-height: 100px;">
+                </template>
+              </el-table-column>
+              <el-table-column prop="multimedia_frame[0].content" show-overflow-tooltip label="内容" ></el-table-column>
+              <el-table-column label="操作" width="">
+                <template slot-scope="scope">
+                  <el-button size="mini" type="text" @click="selected(scope.row)">选择</el-button>
+                </template>
+              </el-table-column>
+            </el-table>
+            <el-pagination layout="prev, pager, next" :total="0" @current-change="changePage" hide-on-single-page></el-pagination>
+          </el-dialog>
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
             <el-tab-pane label="彩信任务" name="second"></el-tab-pane>
