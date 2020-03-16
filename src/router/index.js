@@ -50,8 +50,8 @@ const settlement = r => require.ensure([], () => r(require('../components/page/s
 const mms = r => require.ensure([], () => r(require('../components/page/sms/mms')), 'mms')
 const signature = r => require.ensure([], () => r(require('../components/page/sms/components/signature')), 'signature')
 const monthReport = r => require.ensure([], () => r(require('../components/page/report/monthReport')), 'monthReport')
-const yearReport = r => require.ensure([],()=> r(require('../components/page/report/yearReport')),'yearReport')
-
+const yearReport = r => require.ensure([], () => r(require('../components/page/report/yearReport')), 'yearReport')
+const createMms = r => require.ensure([], () => r(require('../components/page/sms/components/createMmsTemp')), 'createMmsTemp')
 Vue.use(Router)
 
 export default new Router({
@@ -145,6 +145,9 @@ export default new Router({
       }, {
         path: '/yearReport',
         component: yearReport
+      }, {
+        path: '/createMms',
+        component: createMms
       }]
   }, {
     path: '/login',

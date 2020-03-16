@@ -4,6 +4,34 @@
       <el-col :span="24">
         <div class="box-card box-shadow">
           <h3 class="title">图文彩信</h3>
+          <div v-if="selectTemp" class="center">
+            <el-card  body-style="width:800px">
+              <div slot="header" class="clearfix">
+                <span style="font-size: 14px;">选择模板</span>
+                <el-button style="float: right; padding: 3px 0" type="text" @click="selectTemp = false">关闭</el-button>
+              </div>
+              <el-input size="small" style="width: 120px;" placeholder="模板名称"></el-input>
+              <el-button size="mini" type="primary" palin>搜索</el-button>
+              <div>
+                <el-table :data="list" style="width: 100%">
+                  <el-table-column type="index" label="序号"></el-table-column>
+                  <el-table-column prop="title" label="标题" width=""></el-table-column>
+                  <el-table-column  label="图片" >
+                    <template slot-scope="scope">
+                      <img v-if="scope.row.multimedia_frame" :src="scope.row.multimedia_frame[0].image_path" alt="" style="object-fit: contain;max-height: 100px;">
+                    </template>
+                  </el-table-column>
+                  <el-table-column prop="multimedia_frame[0].content" label="内容" ></el-table-column>
+                  <el-table-column label="操作" width="">
+                    <template slot-scope="scope">
+                      <el-button size="mini" type="text" @click="selected(scope.row)">选择</el-button>
+                    </template>
+                  </el-table-column>
+                </el-table>
+              </div>
+              <el-pagination layout="prev, pager, next" :total="0" @current-change="changePage" hide-on-single-page></el-pagination>
+            </el-card>
+          </div>
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
             <el-tab-pane label="彩信任务" name="second"></el-tab-pane>
@@ -17,6 +45,11 @@
           <div v-if="activeName === 'second'">
             <div class="content-content">
               <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+                <el-form-item label="发送方式">
+                  <el-switch v-model="messageType" active-text="自定义发送" active-color="#13ce66" inactive-color="#1889ff"
+                             :width="50" inactive-text="模板发送"></el-switch>
+                </el-form-item>
+                <div v-if="messageType">
                 <el-form-item label="彩信标题" prop="title">
                   <el-input v-model="ruleForm.title" placeholder="请输入彩信标题"></el-input>
                 </el-form-item>
@@ -46,6 +79,13 @@
                   </el-tabs>
                   <!--图片容量：0KB/80KB-->
                 </el-form-item>
+                </div>
+                <div v-else>
+                  <el-form-item label="模板">
+                    <el-input disabled style="width: 400px;" v-model="tempTitle"></el-input>
+                    <el-button size="small" type="primary" @click="select">选择模板</el-button>
+                  </el-form-item>
+                </div>
                 <el-form-item label="手机号码:" prop="phone" class="is-required">
                   <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
                             type="textarea" :disabled="disabled"></el-input>
@@ -85,13 +125,20 @@
             <div class="right">
               <div class="preview">
                 <div class="inner">
-                  <div class="sms-text">
+                  <div class="sms-text" v-if="messageType">
                     <p style="color: #848a9f;font-weight: bold">{{sms_text+ruleForm.title}}</p>
                     <div v-for="(v,k) in ruleForm.content" :key="k">
                       <p><img class="img" :src="v.image_path" alt=""></p>
                       <p>{{v.content}}</p>
                     </div>
                     <p>{{TD}}</p>
+                  </div>
+                  <div class="sms-text" v-else>
+                    <p style="color: #848a9f;font-weight: bold">{{tempTitle}}</p>
+                    <div v-for="(v,k) in tempContent" :key="k">
+                      <p><img class="img" :src="v.image_path" alt=""></p>
+                      <p>{{v.content}}</p>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -160,7 +207,16 @@
         dx_num: 0,
         wz_num: 0,
         xn_num: 0,
-        upload_num: 0
+        upload_num: 0,
+        messageType:false,
+        selectTemp:false,
+        list:[],
+        tempTitle:'',
+        tempContent:[],
+        screen:{
+          page:1,
+          pageNum:10
+        }
       }
     },
     watch: {
@@ -170,13 +226,59 @@
         } else {
           this.TD = ''
         }
+      },
+      messageType(val){
+        if (!val){
+          this.disabled = false
+        }
       }
     },
     mounted() {
       this.$emit('getBread', '图文彩信')
       this.getMessageNum()
+      if (!this.messageType) {
+        this.checked = false
+      }
     },
     methods: {
+      changePage(page){
+        this.screen.page = page
+        this.getSmsTemp()
+      },
+      selected(data){
+        console.log(data)
+        this.tempTitle = data.title
+        this.tempContent = data.multimedia_frame
+        this.selectTemp = false
+      },
+      select(){
+        this.selectTemp = true
+        this.getSmsTemp()
+      },
+      getSmsTemp(){
+        let that = this
+        that.$request({
+          url:'user/getUserMultimediaTemplate',
+          data:{
+            business_id:8,
+            page:that.screen.page,
+            pageNum:that.screen.pageNum
+          },
+          success(res) {
+            that.list = that.disList(res.result)
+            that.total = res.total
+          }
+        })
+      },
+      disList(data){
+        let arr = []
+        for (let i=0;i<data.length;i++) {
+          if (parseInt(data[i].status) === 2){
+            arr.push(data[i])
+          }
+        }
+        return arr
+      },
       phoneAnalyze(phone = '') {
         if (phone === '') {
           return
@@ -303,19 +405,27 @@
         let that = this
         let content_data = that.ruleForm.content
         content_data[content_data.length - 1].content = content_data[content_data.length - 1].content + that.TD
+        let data = this.messageType ? {
+          appid: that.$globalData.userInfo.appid || '',
+          appkey: that.$globalData.userInfo.appkey || '',
+          content_data: content_data,
+          title:that.ruleForm.title,
+          mobile_content: that.ruleForm.phone,
+          send_time: that.ruleForm.dstime,
+          } :{
+          appid: that.$globalData.userInfo.appid || '',
+          appkey: that.$globalData.userInfo.appkey || '',
+          content_data: that.tempContent,
+          title:that.tempTitle,
+          mobile_content: that.ruleForm.phone,
+          send_time: that.ruleForm.dstime,
+        }
         this.$refs[formName].validate((valid) => {
           if (valid) {
             that.$request({
               url: 'send/getSmsMultimediaMessageTask',
               form: 1,
-              data: {
-                appid: that.$globalData.userInfo.appid || '',
-                appkey: that.$globalData.userInfo.appkey || '',
-                content_data: content_data,
-                title:that.ruleForm.title,
-                mobile_content: that.ruleForm.phone,
-                send_time: that.ruleForm.dstime,
-              },
+              data: data,
               success(res) {
 
               }
@@ -336,6 +446,19 @@
 </script>
 
 <style scoped>
+  .center {
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 99;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .6);
+  }
+
   .box-card {
     background: #ffffff;
     border-radius: 4px;

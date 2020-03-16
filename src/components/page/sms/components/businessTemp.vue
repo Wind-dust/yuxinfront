@@ -31,7 +31,8 @@
         <el-button type="primary" @click="dialogVisible = false">关 闭</el-button>
       </span>
     </el-dialog>
-    <v-pagination @pageChange="pageChange" :num='num' :total="total" :page="page"></v-pagination>
+    <!--<v-pagination @pageChange="pageChange" :num='num' :total="total" :page="page"></v-pagination>-->
+    <el-pagination :total="total" :page-size="10" @current-change="changePage"></el-pagination>
   </div>
 </template>
 
@@ -75,6 +76,10 @@
       this.getTempList()
     },
     methods: {
+      changePage(data){
+        this.screen.page = data
+        this.getTempList()
+      },
       review(data){
         console.log(data)
         this.content = data.content
@@ -152,7 +157,7 @@
       },
       pageChange(obj) {
         this.screen.page = obj.page
-        localStorage.setItem("supplier", obj.page)
+        this.getTempList()
       }
     }
   }

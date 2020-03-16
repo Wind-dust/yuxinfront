@@ -3,30 +3,6 @@
     <el-row>
       <el-col :span="24">
         <div class="box-card box-shadow">
-          <div v-if="selectTemp" class="center">
-            <el-card class="box-card" body-style="width:800px">
-              <div slot="header" class="clearfix">
-                <span style="font-size: 14px;">选择模板</span>
-                <el-button style="float: right; padding: 3px 0" type="text" @click="selectTemp = false">关闭</el-button>
-              </div>
-              <el-input size="small" style="width: 120px;" placeholder="模板名称"></el-input>
-              <el-button size="mini" type="primary" palin>搜索</el-button>
-              <div>
-                <el-table :data="tempList" style="width: 100%">
-                  <el-table-column type="index" label="序号"></el-table-column>
-                  <el-table-column prop="date" label="模板名称" width=""></el-table-column>
-                  <el-table-column prop="date" label="短信内容" width=""></el-table-column>
-                  <el-table-column prop="date" label="字数" width=""></el-table-column>
-                  <el-table-column label="操作" width="">
-                    <template slot-scope>
-                      <el-button size="mini">选择</el-button>
-                    </template>
-                  </el-table-column>
-                </el-table>
-              </div>
-              <el-pagination layout="prev, pager, next" :total="0" hide-on-single-page></el-pagination>
-            </el-card>
-          </div>
           <h3 class="title">行业短信</h3>
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
