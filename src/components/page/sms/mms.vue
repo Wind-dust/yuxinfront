@@ -254,7 +254,8 @@
           data:{
             business_id:8,
             page:that.screen.page,
-            pageNum:that.screen.pageNum
+            pageNum:that.screen.pageNum,
+            status:2
           },
           success(res) {
             that.list = that.disList(res.result)
