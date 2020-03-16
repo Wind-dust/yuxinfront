@@ -88,7 +88,7 @@
           },
           success(res) {
             that.list = that.disList(res.result)
-            that.total = res.totle
+            that.total = res.total
           }
         })
       },
