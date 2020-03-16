@@ -392,10 +392,12 @@
           return
         }
       },
+      //如果带有TD，点一次提交就加上一个，点一个就加上一个
       submitForm(formName) {
         let that = this
         let content_data = that.ruleForm.content
         content_data[content_data.length - 1].content = content_data[content_data.length - 1].content + that.TD
+        // return
         let data = this.messageType ? {
           appid: that.$globalData.userInfo.appid || '',
           appkey: that.$globalData.userInfo.appkey || '',

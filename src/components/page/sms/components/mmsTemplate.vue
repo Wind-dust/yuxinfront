@@ -26,7 +26,6 @@
       <el-table-column fixed="right" label="操作" >
         <template slot-scope="scope">
           <el-button type="text" size="small" @click="review(scope.row)">预览</el-button>
-          <!--<el-button type="primary" size="small" @click="setUserService(scope.row.id)"></el-button>-->
         </template>
       </el-table-column>
     </el-table>

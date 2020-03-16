@@ -97,6 +97,15 @@
           messageNum: 0,
         }
       },
+      watch: {
+        checked(val) {
+          if (val) {
+            this.TD = '退订回T'
+          } else {
+            this.TD = ''
+          }
+        }
+      },
       methods:{
         back(){
           this.$router.go(-1)
