@@ -62,7 +62,11 @@
         viewContent:'',
         dialogVisible:false,
         layout:'pre,next',
-        viewTitle:''
+        viewTitle:'',
+        screen:{
+          page:1,
+          pageNum:10
+        }
       }
     },
     mounted() {
@@ -84,7 +88,9 @@
         that.$request({
           url: 'user/getUserMultimediaTemplate',
           data: {
-            business_id: 8
+            business_id: 8,
+            page:that.screen.page,
+            pageNum: that.screen.pageNum
           },
           success(res) {
             that.list = that.disList(res.result)
