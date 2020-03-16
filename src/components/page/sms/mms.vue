@@ -208,7 +208,8 @@
           page:1,
           pageNum:10
         },
-        total:0
+        total:0,
+        sendTitle:''
       }
     },
     watch: {
@@ -240,6 +241,7 @@
       selected(data){
         console.log(data)
         this.tempTitle = data.name
+        this.sendTitle = data.title
         this.tempContent = data.multimedia_frame
         this.selectTemp = false
       },
@@ -412,7 +414,7 @@
           appid: that.$globalData.userInfo.appid || '',
           appkey: that.$globalData.userInfo.appkey || '',
           content_data: that.tempContent,
-          title:that.tempTitle,
+          title:that.sendTitle,
           mobile_content: that.ruleForm.phone,
           send_time: that.ruleForm.dstime,
         }
