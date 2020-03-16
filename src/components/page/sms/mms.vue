@@ -7,6 +7,7 @@
           <el-dialog title="选择模板" :visible.sync="selectTemp" width="60%">
             <el-table :data="list" style="width: 100%">
               <el-table-column type="index" label="序号"></el-table-column>
+              <el-table-column prop="name" label="模板名称" width=""></el-table-column>
               <el-table-column prop="title" label="标题" width=""></el-table-column>
               <el-table-column  label="图片" >
                 <template slot-scope="scope">
@@ -237,7 +238,7 @@
       },
       selected(data){
         console.log(data)
-        this.tempTitle = data.title
+        this.tempTitle = data.name
         this.tempContent = data.multimedia_frame
         this.selectTemp = false
       },

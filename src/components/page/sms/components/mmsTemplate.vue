@@ -13,6 +13,7 @@
     </div>
     <el-table :data="list" style="width: 99%" border>
       <el-table-column type="index" label="序号"></el-table-column>
+      <el-table-column label="模板名称" prop="name"></el-table-column>
       <el-table-column prop="title" label="彩信标题"></el-table-column>
       <el-table-column  label="缩略图">
         <template slot-scope="scope">

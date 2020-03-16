@@ -22,7 +22,7 @@
               </el-table-column>
               <el-table-column prop="send_num" label="发送数量"></el-table-column>
               <!--<el-table-column prop="source" label="来源" show-overflow-tooltip></el-table-column>-->
-              <el-table-column prop="create_time" label="创建时间" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="create_time" label="提交时间" show-overflow-tooltip></el-table-column>
               <el-table-column prop="address" label="操作" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-button size="small" type="primary" @click="getTaskInfo(scope.row.id)">明细查询</el-button>
@@ -42,7 +42,7 @@
                 <el-table-column prop="mobile" label="手机号"></el-table-column>
                 <!--<el-table-column prop="task_content" show-overflow-tooltip label="短信内容"></el-table-column>-->
                 <!--<el-table-column prop="send_num" label="条数"></el-table-column>-->
-                <el-table-column prop="create_time" label="提交时间" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="create_time" label="发送时间" show-overflow-tooltip></el-table-column>
                 <!--<el-table-column prop="create_time" label="回执时间" show-overflow-tooltip></el-table-column>-->
                 <el-table-column prop="_send_status" label="发送状态" show-overflow-tooltip></el-table-column>
                 <el-table-column prop="explanation" label="回执状态" show-overflow-tooltip></el-table-column>

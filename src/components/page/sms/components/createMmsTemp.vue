@@ -3,6 +3,9 @@
       <h3 @click="back" class="title"><i class="el-icon-arrow-left"></i>返回模板管理</h3>
       <div class="content-content">
         <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
+          <el-form-item label="模板名称" prop="name">
+            <el-input v-model="ruleForm.name" placeholder="请输入模板名称"></el-input>
+          </el-form-item>
           <el-form-item label="彩信标题" prop="title">
             <el-input v-model="ruleForm.title" placeholder="请输入彩信标题"></el-input>
           </el-form-item>
@@ -65,6 +68,7 @@
           content: '以图片＋文字的内容形式发送，图文并茂，生动直观，高效直达。',
           ruleForm: {
             title: '',
+            name:'',
             phone: '',
             content: [{
               num: '1',
@@ -80,6 +84,9 @@
           rules: {
             title: [
               {required: true, message: '彩信标题必填', trigger: 'blur'}
+            ],
+            name: [
+              {required: true, message: '模板名称必填', trigger: 'blur'}
             ],
           },
           editableTabsValue: '1',
@@ -157,7 +164,7 @@
                   appkey: that.$globalData.userInfo.appkey || '',
                   content_data: content_data,
                   title:that.ruleForm.title,
-                  send_time: that.ruleForm.dstime,
+                  name:that.ruleForm.name
                 },
                 success(res) {
 
@@ -260,5 +267,8 @@
     width: 90%;
     margin: 10px auto;
     object-fit: contain;
+  }
+  h3{
+    margin: 20px 0;
   }
 </style>
