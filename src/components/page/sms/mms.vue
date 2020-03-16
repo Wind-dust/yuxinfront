@@ -21,7 +21,7 @@
                 </template>
               </el-table-column>
             </el-table>
-            <el-pagination layout="prev, pager, next" :total="0" @current-change="changePage" hide-on-single-page></el-pagination>
+            <el-pagination  :total="total" @current-change="changePage"></el-pagination>
           </el-dialog>
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
@@ -207,7 +207,8 @@
         screen:{
           page:1,
           pageNum:10
-        }
+        },
+        total:0
       }
     },
     watch: {
@@ -268,6 +269,7 @@
             arr.push(data[i])
           }
         }
+
         return arr
       },
       phoneAnalyze(phone = '') {
