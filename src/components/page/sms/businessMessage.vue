@@ -311,21 +311,15 @@
         })
       },
       disSign(data){
-        for (let i=0;i<data.length;i++){
-          data[i]._title = data[i].title.replace(/【/,'').replace(/】/,'')
-          switch (parseInt(data[i].audit_status)) {
-            case 1:
-              data[i]._audit_status = '待审核';
-              break;
-            case 2:
-              data[i]._audit_status = '通过';
-              break;
-            case 3:
-              data[i]._audit_status = '不通过'
+        let arr = []
+          for (let i=0;i<data.length;i++){
+            if (parseInt(data[i].audit_status) === 2) {
+              data[i]._title = data[i].title.replace(/【/,'').replace(/】/,'')
+              arr.push(data[i])
+            }
           }
-        }
         console.log(data)
-        return data
+        return arr
       },
       getActiveName(data) {
         this.activeName = 'second';

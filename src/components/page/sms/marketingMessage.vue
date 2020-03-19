@@ -44,7 +44,7 @@
                   <el-form-item label="短信签名:" prop="signatureValue">
                     <el-select v-model="ruleForm.signatureValue" placeholder="请选择" filterable allow-create
                                default-first-option>
-                      <el-option v-for="item in signature" :key="item.value" :label="item.label" :value="item.value">
+                      <el-option v-for="item in signature" :key="item.id" :label="item._title" :value="item._title">
                       </el-option>
                     </el-select>
                   </el-form-item>
@@ -275,7 +275,7 @@
             pageNum:100
           },
           success(res) {
-            that.signature = res.result
+            that.signature = that.disSign(res.result)
             that.signatureList = res.result
             that.signa_total = res.total
           }
@@ -284,20 +284,13 @@
       disSign(data){
         let arr= []
         for (let i=0;i<data.length;i++){
-          data[i]._title = data[i].title.replace(/【/,'').replace(/】/,'')
-          switch (parseInt(data[i].audit_status)) {
-            case 1:
-              data[i]._audit_status = '待审核';
-              break;
-            case 2:
-              data[i]._audit_status = '通过';
-              break;
-            case 3:
-              data[i]._audit_status = '不通过'
+          if (parseInt(data[i].audit_status) === 2) {
+            data[i]._title = data[i].title.replace(/【/,'').replace(/】/,'')
+            arr.push(data[i])
           }
         }
 
-        return data
+        return arr
       },
       getActiveName(data) {
         this.activeName = 'second';
