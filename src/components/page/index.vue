@@ -11,7 +11,7 @@
           <div class="left-info">
             <div class="account-info">
               <img class="avatar" v-if="userInfo.logo" :src="userInfo.logo" alt="">
-              <img class="avatar" v-else src="../../assets/imgs/xjylogo.png" alt="">
+              <img class="avatar" v-else src="../../assets/imgs/logoicon.png" alt="">
               <p class="name">Hello! &nbsp;&nbsp;<span>{{name}}</span></p>
               <p class="name">用户等级：0</p>
             </div>
@@ -29,10 +29,7 @@
           <div class="left-title">账户信息</div>
           <div class="left-info">
             <div class="account-type">
-              <p>我的余额：{{userInfo.money}}</p>
-            </div>
-            <div class="account-type">
-              <p>手机号：{{userInfo.mobile}}</p>
+              <p>用户名：{{name}}</p>
             </div>
             <div class="account-type">
               <p>APPID：{{userInfo.appid}}</p>

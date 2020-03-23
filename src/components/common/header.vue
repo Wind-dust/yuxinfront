@@ -7,7 +7,7 @@
           <div class="logo">
             <!--<span class="logo_prefix">上海钰晰科技</span>-->
             <span class="logo_prefix">
-              <img class="header-logo" src="http://imagesdev.shyuxi.com/0ec0186450c6c10b3cf43102fc6bc5f.jpg" alt="">
+              <!--<img class="header-logo" src="http://imagesdev.shyuxi.com/0ec0186450c6c10b3cf43102fc6bc5f.jpg" alt="">-->
             </span>
           </div>
         </el-col>
@@ -16,7 +16,7 @@
             <el-dropdown class="dropdown" trigger="click" menu-align="start">
                       <span class="el-dropdown-link">
                         <img class="userImg fr" v-if="logo" :src="logo" width="50px"/>
-                        <img class="userImg fr avatar" v-else src="../../assets/imgs/xjylogo.png" width="50px"/>
+                        <img class="userImg fr avatar" v-else src="../../assets/imgs/logoicon.png" width="50px"/>
                         <span class="name din fr">{{name}}</span>
                       </span>
               <el-dropdown-menu slot="dropdown">
