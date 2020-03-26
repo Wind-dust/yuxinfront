@@ -34,7 +34,7 @@
 
                   <el-form-item label="短信内容:">
                     <el-tooltip class="item" effect="dark" placement="top-start">
-                      <div slot="content">1、普通短信为70字一条计费<br/>2、超过70字为长短信以67字一条计费 <br>3、短信正文中请不要使用‘【】’，‘<>’等特殊字符</div>
+                      <div slot="content">1、普通短信为70字一条计费<br/>2、超过70字为长短信以67字一条计费 <br>3、短信正文中请不要使用‘【】’，‘<>’等特殊字符<br>4、标点符号请使用中文标点符号</div>
                       <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
                     </el-tooltip>
                     <el-input disabled type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
@@ -54,7 +54,7 @@
 
                   <el-form-item label="短信内容:" prop="content">
                     <el-tooltip class="item" effect="dark" placement="top-start">
-                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符<br>标点符号请使用中文标点符号</div>
+                      <div slot="content">1、普通短信为70字一条计费<br/>2、超过70字为长短信以67字一条计费 <br>3、短信正文中请不要使用‘【】’，‘<>’等特殊字符<br>4、标点符号请使用中文标点符号</div>
                       <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
                     </el-tooltip>
                     <el-input type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
