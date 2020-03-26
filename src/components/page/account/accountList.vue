@@ -16,24 +16,28 @@
       <!--<el-table-column prop="price" label="单价" show-overflow-tooltip></el-table-column>-->
       <!--<el-table-column prop="balance_num" label="余量" show-overflow-tooltip></el-table-column>-->
       <el-table-column prop="create_time" label="创建日期" show-overflow-tooltip></el-table-column>
-      <!--<el-table-column prop="address" label="操作" show-overflow-tooltip>-->
-        <!--<template slot-scope="scope">-->
-          <!--<el-button size="small" type="danger" @click="deleted()">编辑</el-button>-->
-        <!--</template>-->
-      <!--</el-table-column>-->
+      <el-table-column prop="address" label="操作" show-overflow-tooltip>
+        <template slot-scope="scope">
+          <el-button size="small" type="text" @click="agent(scope.row.nick_name)">分配条数</el-button>
+        </template>
+      </el-table-column>
     </el-table>
         </div>
       </el-col>
     </el-row>
+    <v-card width="150" name="分配条数" :card-status="cardStatus" :rules="rules" :rule-form="ruleForm" :rule-type="ruleType"
+            @submit="submit" @hideCard="hidCard" :is_hiden="true"></v-card>
   </div>
 </template>
 
 <script>
   import vScreen from '../../component/screen'
+  import vCard from '../../component/card'
 
   export default {
     components: {
-      vScreen
+      vScreen,
+      vCard
     },
     name: "accountList",
     data() {
@@ -52,14 +56,68 @@
         screen: {
           page: 1,
           pageNum: 10
-        }
+        },
+        rules: ['business_id','number'],
+        ruleType: {
+          'business_id': {
+            type: 'select',
+            label: '服务',
+            placeholder: '请选择服务',
+            option: []
+          },
+          'number': {
+            type: 'input',
+            label: '划拨数量',
+            placeholder: '请输入划拨数量'
+          }
+        },
+        ruleForm: {},
+        cardStatus:false,
+        name:''
       }
     },
     mounted() {
       this.emit()
       this.getAccountList()
+      this.getService()
     },
     methods: {
+      agent(name){
+        this.name = name
+        this.cardStatus = true
+      },
+      getService() {
+        let that = this
+        that.$request({
+          url: 'user/getUserEquitises',
+          success(res) {
+            that.disService(res.userEquities)
+          }
+        })
+      },
+      disService(data) {
+        for (let i = 0; i < data.length; i++) {
+          this.ruleType.business_id.option.push({
+            value:data[i].business_id,
+            label:data[i].business_name + `(${data[i].num_balance}条)`
+          })
+        }
+      },
+      hidCard(){
+        this.cardStatus = false
+      },
+      submit: function (data) {
+        let that = this
+        data.ruleForm.nick_name = this.name
+        that.$request({
+          url: 'user/allocateAgentNumber',
+          data: data.ruleForm,
+          form: 1,
+          success(res) {
+
+          }
+        })
+      },
       getAccountList() {
         let that = this
         that.$request({

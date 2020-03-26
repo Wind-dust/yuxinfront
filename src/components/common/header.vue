@@ -16,7 +16,7 @@
             <el-dropdown class="dropdown" trigger="click" menu-align="start">
                       <span class="el-dropdown-link">
                         <img class="userImg fr" v-if="logo" :src="logo" width="50px"/>
-                        <img class="userImg fr avatar" v-else src="../../assets/imgs/logoicon.png" width="50px"/>
+                        <img class="userImg fr avatar" v-else :src="logoicon" width="50px"/>
                         <span class="name din fr">{{name}}</span>
                       </span>
               <el-dropdown-menu slot="dropdown">
@@ -52,14 +52,23 @@
     props: ['name', 'breadText','logo'],
     data() {
       return {
-        bread: ''
+        bread: '',
+        logoicon:''
       }
     },
     mounted() {
       this.bread = this.$root.bread
+
     },
     watch: {
       'bread': function (oldval, newval) {
+      }
+    },
+    created(){
+      if (location.host == 'mms.xjy-group.com.cn') {
+        this.logoicon = 'http://imagesdev.shyuxi.com/xjylogo.png'
+      }else if (location.host == 'senddev.shyuxi.com') {
+        this.logoicon = 'http://imagesdev.shyuxi.com/logoicon.png'
       }
     },
     methods: {

@@ -9,7 +9,7 @@
           <slot name="province"></slot>
           <slot name="input"></slot>
           <el-form-item v-for="(v,k) of cRuleType" :key="k" :label="v.label" :prop="k" v-show="!v.hdplay" >
-            <el-input v-if="v.type === 'input'" v-model="cRuleForm[k]" :type='v.inpType || "text"' :placeholder="v.placeholder"></el-input>
+            <el-input v-if="v.type === 'input'" v-model="cRuleForm[k]" :type='v.inpType || "text"' :placeholder="v.placeholder" :disabled="v.disabled"></el-input>
             
             <el-input v-if="v.type === 'number'" v-model.number="cRuleForm[k]" type='number' :placeholder="v.placeholder"></el-input>
             <el-select v-if="v.type === 'select'" :filterable="v.filterable || false" class="" v-model="cRuleForm[k]" @change="getVal" :placeholder="v.placeholder" :multiple="v.multiple || false">

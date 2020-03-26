@@ -11,7 +11,7 @@
           <div class="left-info">
             <div class="account-info">
               <img class="avatar" v-if="userInfo.logo" :src="userInfo.logo" alt="">
-              <img class="avatar" v-else src="../../assets/imgs/logoicon.png" alt="">
+              <img class="avatar" v-else :src="logoicon" alt="">
               <p class="name">Hello! &nbsp;&nbsp;<span>{{name}}</span></p>
               <p class="name">用户等级：0</p>
             </div>
@@ -92,7 +92,8 @@
       return {
         name: '',
         userInfo: {},
-        bread: '控制台'
+        bread: '控制台',
+        logoicon:''
       }
     },
     components: {},
@@ -101,6 +102,13 @@
       this.getuserInfo()
       this.emit()
       document.title = '管理中心|控制台'
+    },
+    created(){
+      if (location.host == 'mms.xjy-group.com.cn') {
+        this.logoicon = 'http://imagesdev.shyuxi.com/xjylogo.png'
+      }else if (location.host == 'senddev.shyuxi.com') {
+        this.logoicon = 'http://imagesdev.shyuxi.com/logoicon.png'
+      }
     },
     methods: {
       emit() {

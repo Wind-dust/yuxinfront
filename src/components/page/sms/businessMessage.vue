@@ -54,7 +54,7 @@
 
                   <el-form-item label="短信内容:" prop="content">
                     <el-tooltip class="item" effect="dark" placement="top-start">
-                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符</div>
+                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符<br>标点符号请使用中文标点符号</div>
                       <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
                     </el-tooltip>
                     <el-input type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
@@ -64,13 +64,36 @@
                   </el-form-item>
                 </div>
                 <el-form-item label="手机号码:" prop="phone">
-                  <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
-                            type="textarea" :disabled="disabled"></el-input>
+                  <!--<el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"-->
+                  <!--type="textarea" :disabled="disabled"></el-input>-->
+                  <div class="wai">
+                    <div class="item-1">
+                      <div>总号码数</div>
+                      <div>{{upload_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>移动</div>
+                      <div>{{yd_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>联通</div>
+                      <div>{{lt_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>电信</div>
+                      <div>{{dx_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>虚拟</div>
+                      <div>{{xn_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>未知</div>
+                      <div>{{wz_num}}</div>
+                    </div>
+                  </div>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
-                  <!--<el-button class="import" type="primary" size="small " @click="saveNumber">保存</el-button>-->
-                  <!--<div class="phone-num" >-->
-                    <!--总数：<span>{{upload_num}}</span>个，联通：<span>{{lt_num}}</span>个，移动：<span>{{yd_num}}</span>个，电信：<span>{{dx_num}}</span>个，未知：<span>{{wz_num}}</span>个，虚拟：<span>{{xn_num}}</span>个-->
-                  <!--</div>-->
+                  <el-button class="import" type="primary" size="small " @click="saveNumber">手动输入</el-button>
                 </el-form-item>
                 <el-form-item label="拓展码:">
                   <el-input v-model="ruleForm.code"></el-input>
@@ -116,6 +139,17 @@
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="confirmUpload">确 定</el-button>
               </span>
+              </el-dialog>
+              <el-dialog title="输入号码" :visible.sync="isShowNumInput" width="30%">
+                <el-form :model="ruleForm">
+                  <el-form-item>
+                    <el-input v-model="ruleForm.phone" type="textarea" :rows="4" placeholder="多个号码以英文逗号隔开，或以回车键分隔"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="small" @click="disPhone">确定</el-button>
+                    <el-button size="small" @click="isShowNumInput = false">取消</el-button>
+                  </el-form-item>
+                </el-form>
               </el-dialog>
             </div>
             <div class="right">
@@ -234,7 +268,8 @@
         contentLength:0,
         signatureList:[],
         sign_total:0,
-        viewText:''
+        viewText:'',
+        isShowNumInput:false
       }
     },
     watch: {
@@ -289,10 +324,8 @@
       this.getSignature()
     },
     methods: {
-      saveNumber(){
-        if (!this.ruleForm.phone) {
-          return this.$message.error('请检查号码')
-        }
+      saveNumber() {
+        this.isShowNumInput = true
       },
       getSignature(){
         let that = this
@@ -371,10 +404,11 @@
       },
       disPhone() {
         // console.log(this.ruleForm.phone)
+        this.isShowNumInput = false
         let phoneStr = this.ruleForm.phone
         phoneStr = phoneStr.trim()
         this.ruleForm.phone = phoneStr.replace(/\s+/g, ",").replace(/\r\n/g, ',').replace(/\r/g, ',').replace(/\n/g, ',').replace(/,{2,}/g, ',')
-        // this.phoneAnalyze(this.ruleForm.phone)
+        this.phoneAnalyze(this.ruleForm.phone)
       },
       getMessageNum() {
         let that = this
@@ -537,4 +571,33 @@
   .phone-num span {
     color: #1889ff;
   }
+  .wai{
+    width: 600px;
+    height: 130px;
+    border: 1px solid #e7eaed;
+    background: #f8f8f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+  }
+  .item-1 {
+    text-align: center;
+    width: 16.66%;
+    height: 57%;
+    display: flex;
+    align-items: center;
+    flex-direction:column;
+  }
+  .item-1 div:last-child{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    height: 32px;
+    color: #1875f0;
+  }
+  .import {
+    margin-top: 10px;
+  }
+
 </style>

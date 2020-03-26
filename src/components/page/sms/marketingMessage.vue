@@ -24,12 +24,12 @@
                              :width="50" inactive-text="模板发送"></el-switch>
                 </el-form-item>
                 <div v-if="!messageType">
-                  <el-form-item label="模板选择:" >
+                  <el-form-item label="模板选择:">
                     <el-input v-model="ruleForm.tempTitle" disabled></el-input>
                     <el-button size="mini" type="primary" plain @click="showTempList">选择模板</el-button>
                   </el-form-item>
 
-                  <el-form-item label="短信内容:" >
+                  <el-form-item label="短信内容:">
                     <el-tooltip class="item" effect="dark" placement="top-start">
                       <div slot="content">1、普通短信为70字一条计费<br/>2、超过70字为长短信以67字一条计费 <br>3、短信正文中请不要使用‘【】’，‘<>’等特殊字符</div>
                       <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
@@ -51,23 +51,47 @@
 
                   <el-form-item label="短信内容:" prop="content">
                     <el-tooltip class="item" effect="dark" placement="top-start">
-                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符</div>
+                      <div slot="content">普通短信为70字一条计费<br/>超过70字为长短信以67字一条计费 <br>请您避免在短信正文中使用【】，<>等特殊字符<br>标点符号请使用中文标点符号</div>
                       <span style="color: #1889ff">编辑须知 <i class="el-icon-question"></i></span>
                     </el-tooltip>
                     <el-input type="textarea" :rows="4" placeholder="请输入短信内容，最多500个字符"
                               v-model="ruleForm.content"></el-input>
-                    <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名 <span style="color: #3a8ee6">{{sms_text.length}}</span>个字符、短信内容 <span style="color: #3a8ee6">{{contentLength}}</span>个字符），合计短信计费条数 <span
-                      style="color: #3a8ee6;">{{num}}</span> 条</p>
+                    <p>现共输入 <span style="color: #3a8ee6">{{textLength}}</span> 个字符（包含短信签名 <span style="color: #3a8ee6">{{sms_text.length}}</span>个字符、短信内容
+                      <span style="color: #3a8ee6">{{contentLength}}</span>个字符），合计短信计费条数 <span
+                        style="color: #3a8ee6;">{{num}}</span> 条</p>
                   </el-form-item>
                 </div>
                 <el-form-item label="手机号码:" prop="phone">
-                  <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
-                            type="textarea" :disabled="disabled"></el-input>
+                  <!--<el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"-->
+                  <!--type="textarea" :disabled="disabled"></el-input>-->
+                  <div class="wai">
+                    <div class="item-1">
+                      <div>总号码数</div>
+                      <div>{{upload_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>移动</div>
+                      <div>{{yd_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>联通</div>
+                      <div>{{lt_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>电信</div>
+                      <div>{{dx_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>虚拟</div>
+                      <div>{{xn_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>未知</div>
+                      <div>{{wz_num}}</div>
+                    </div>
+                  </div>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
-                  <!--<el-button class="import" type="primary" size="small " @click="saveNumber">保存</el-button>-->
-                  <!--<div class="phone-num" v-if="ruleForm.phone">-->
-                    <!--总数：<span>{{upload_num}}</span>个，联通：<span>{{lt_num}}</span>个，移动：<span>{{yd_num}}</span>个，电信：<span>{{dx_num}}</span>个，未知：<span>{{wz_num}}</span>个，虚拟：<span>{{xn_num}}</span>个-->
-                  <!--</div>-->
+                  <el-button class="import" type="primary" size="small " @click="saveNumber">手动输入</el-button>
                 </el-form-item>
                 <el-form-item label="拓展码:">
                   <el-input v-model="ruleForm.code"></el-input>
@@ -86,7 +110,7 @@
                   <el-table-column prop="template_id" label="模板ID" width="180"></el-table-column>
                   <el-table-column prop="title" label="模板名称" width="180"></el-table-column>
                   <el-table-column prop="content" :width="500" label="短信内容"></el-table-column>
-                  <el-table-column  label="操作">
+                  <el-table-column label="操作">
                     <template slot-scope="scope">
                       <el-button type="text" size="small" @click="selected(scope.row)">选择</el-button>
                     </template>
@@ -113,11 +137,22 @@
                 <el-button type="primary" @click="confirmUpload">确 定</el-button>
               </span>
               </el-dialog>
+              <el-dialog title="输入号码" :visible.sync="isShowNumInput" width="30%">
+                <el-form :model="ruleForm">
+                  <el-form-item>
+                  <el-input v-model="ruleForm.phone" type="textarea" :rows="4" placeholder="多个号码以英文逗号隔开，或以回车键分隔"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                  <el-button type="primary" size="small" @click="disPhone">确定</el-button>
+                  <el-button size="small" @click="isShowNumInput = false">取消</el-button>
+                  </el-form-item>
+                </el-form>
+              </el-dialog>
             </div>
             <div class="right">
               <div class="preview">
                 <div class="inner">
-                  <div class="sms-text" v-if="messageType" >
+                  <div class="sms-text" v-if="messageType">
                     <pre>{{viewText}}</pre>
                   </div>
                   <div class="sms-text" v-else>
@@ -172,8 +207,8 @@
     },
     data() {
       return {
-        list:[],
-        total:0,
+        list: [],
+        total: 0,
         tempList: [],
         selectTemp: false,
         sms_text: '',
@@ -183,7 +218,7 @@
           phone: '',
           signatureValue: '',
           tempContent: '',
-          code:''
+          code: ''
         },
         rules: {
           phone: [
@@ -214,15 +249,16 @@
         wz_num: 0,
         xn_num: 0,
         upload_num: 0,
-        isShowTemp:false,
-        screen:{
-          page:1,
-          pageNum:10
+        isShowTemp: false,
+        screen: {
+          page: 1,
+          pageNum: 10
         },
-        contentLength:0,
-        signatureList:[],
-        signa_total:0,
-        viewText:''
+        contentLength: 0,
+        signatureList: [],
+        signa_total: 0,
+        viewText: '',
+        isShowNumInput:false
       }
     },
     watch: {
@@ -259,20 +295,23 @@
       }
     },
     methods: {
+      savePhone(){
 
-      saveNumber(){
-        if (!this.ruleForm.phone) {
-          return this.$message.error('请检查号码')
-        }
       },
-      getSignature(){
+      saveNumber() {
+        // if (!this.ruleForm.phone) {
+        //   return this.$message.error('请检查号码')
+        // }
+        this.isShowNumInput = true
+      },
+      getSignature() {
         let that = this
         that.$request({
-          url:'user/getUserSignature',
-          data:{
-            business_id:6,
-            page:1,
-            pageNum:100
+          url: 'user/getUserSignature',
+          data: {
+            business_id: 6,
+            page: 1,
+            pageNum: 100
           },
           success(res) {
             that.signature = that.disSign(res.result)
@@ -281,11 +320,11 @@
           }
         })
       },
-      disSign(data){
-        let arr= []
-        for (let i=0;i<data.length;i++){
+      disSign(data) {
+        let arr = []
+        for (let i = 0; i < data.length; i++) {
           if (parseInt(data[i].audit_status) === 2) {
-            data[i]._title = data[i].title.replace(/【/,'').replace(/】/,'')
+            data[i]._title = data[i].title.replace(/【/, '').replace(/】/, '')
             arr.push(data[i])
           }
         }
@@ -297,21 +336,21 @@
         this.ruleForm.tempContent = data.content
         this.ruleForm.tempTitle = data.title
       },
-      selected(data){
+      selected(data) {
         this.isShowTemp = false
         this.ruleForm.tempContent = data.content
         this.ruleForm.tempTitle = data.title
       },
-      showTempList(){
+      showTempList() {
         let that = this
         that.$request({
-          url:'user/getUserModel',
-          data:{
+          url: 'user/getUserModel',
+          data: {
             business_id: 6,
-            page:that.screen.page,
-            pageNum:that.screen.pageNum
+            page: that.screen.page,
+            pageNum: that.screen.pageNum
           },
-          success(e){
+          success(e) {
             that.isShowTemp = true
             that.list = e.result
             that.total = e.total
@@ -342,10 +381,11 @@
       },
       disPhone() {
         // console.log(this.ruleForm.phone)
+        this.isShowNumInput = false
         let phoneStr = this.ruleForm.phone
         phoneStr = phoneStr.trim()
         this.ruleForm.phone = phoneStr.replace(/\s+/g, ",").replace(/\r\n/g, ',').replace(/\r/g, ',').replace(/\n/g, ',').replace(/,{2,}/g, ',')
-        // this.phoneAnalyze(this.ruleForm.phone)
+        this.phoneAnalyze(this.ruleForm.phone)
       },
       confirmUpload() {
         this.dialogVisible = false
@@ -404,22 +444,22 @@
           mobile: that.ruleForm.phone,
           dstime: that.ruleForm.dstime,
           taskname: that.ruleForm.taskName,
-          develop_no:that.ruleForm.code
-        }:{
+          develop_no: that.ruleForm.code
+        } : {
           appid: that.$globalData.userInfo.appid || '',
           appkey: that.$globalData.userInfo.appkey || '',
           content: that.ruleForm.tempContent,
           mobile: that.ruleForm.phone,
           dstime: that.ruleForm.dstime,
           taskname: that.ruleForm.taskName,
-          develop_no:that.ruleForm.code
+          develop_no: that.ruleForm.code
         }
         this.$refs[formName].validate((valid) => {
           if (valid) {
             that.$request({
               url: 'send/getSmsBuiness',
               data: data,
-              form:1,
+              form: 1,
               success(res) {
 
               }
@@ -544,5 +584,30 @@
   .upload {
     display: block;
     margin-top: 20px;
+  }
+  .wai{
+    width: 600px;
+    height: 130px;
+    border: 1px solid #e7eaed;
+    background: #f8f8f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+  }
+  .item-1 {
+    text-align: center;
+    width: 16.66%;
+    height: 57%;
+    display: flex;
+    align-items: center;
+    flex-direction:column;
+  }
+  .item-1 div:last-child{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    height: 32px;
+    color: #1875f0;
   }
 </style>
