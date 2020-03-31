@@ -23,6 +23,7 @@
               <el-table-column prop="send_num" label="发送数量"></el-table-column>
               <!--<el-table-column prop="source" label="来源" show-overflow-tooltip></el-table-column>-->
               <el-table-column prop="create_time" label="提交时间" show-overflow-tooltip></el-table-column>
+              <el-table-column prop="_appointment_time" label="定时时间" show-overflow-tooltip></el-table-column>
               <el-table-column prop="address" label="操作" show-overflow-tooltip>
                 <template slot-scope="scope">
                   <el-button size="small" type="primary" @click="getTaskInfo(scope.row.id)">明细查询</el-button>
@@ -71,7 +72,7 @@
 
 <script>
   import vPagination from '../../component/pagination'
-
+  import {format} from '../../../assets/js/formdate'
   export default {
     components: {
       vPagination
@@ -149,7 +150,7 @@
           url: 'user/getUserMultimediaMessageTask',
           data: screen,
           success(res) {
-            that.list = res.message_data
+            that.list = that.disTask(res.message_data)
             that.total = res.total
           }
         })
@@ -161,7 +162,7 @@
           url: 'user/getUserBusinessSubmitTask',
           data: screen,
           success(res) {
-            that.list = res.data
+            that.list = that.disTask(res.data)
             that.total = res.total
           }
         })
@@ -177,6 +178,17 @@
             that.query(res.userEquities[0].business_id)
           }
         })
+      },
+      disTask(data){
+        for (let i=0;i<data.length;i++){
+          if (data[i].appointment_time) {
+            data[i]._appointment_time = format(data[i].appointment_time)
+          } else {
+            data[i]._appointment_time = '--:--:--'
+          }
+
+        }
+        return data
       },
       disService(data) {
         for (let i = 0; i < data.length; i++) {
@@ -287,7 +299,7 @@
           url: 'user/getUserSubmitTask',
           data: screen,
           success(res) {
-            that.list = res.data
+            that.list = that.disTask(res.data)
             that.total = res.total
           }
         })

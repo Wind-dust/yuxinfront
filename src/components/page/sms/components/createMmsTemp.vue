@@ -49,7 +49,7 @@
               <p style="color: #848a9f;font-weight: bold">{{sms_text+ruleForm.title}}</p>
               <div v-for="(v,k) in ruleForm.content" :key="k">
                 <p><img class="img" :src="v.image_path" alt=""></p>
-                <p>{{v.content}}</p>
+                <pre>{{v.content}}</pre>
               </div>
               <p>{{TD}}</p>
             </div>
