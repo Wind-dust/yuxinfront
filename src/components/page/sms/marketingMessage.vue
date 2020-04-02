@@ -89,6 +89,10 @@
                       <div>未知</div>
                       <div>{{wz_num}}</div>
                     </div>
+                    <div class="item-1">
+                      <div>无效</div>
+                      <div>{{wx_num}}</div>
+                    </div>
                   </div>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
                   <el-button class="import" type="primary" size="small " @click="saveNumber">手动输入</el-button>
@@ -249,6 +253,7 @@
         wz_num: 0,
         xn_num: 0,
         upload_num: 0,
+        wx_num:0,
         isShowTemp: false,
         screen: {
           page: 1,
@@ -376,6 +381,7 @@
             that.wz_num = res.unknown_num
             that.xn_num = res.virtual_num
             that.upload_num = res.submit_num
+            that.wx_num = res.default_num
           }
         })
       },

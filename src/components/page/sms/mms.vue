@@ -26,6 +26,7 @@
           <el-tabs v-model="activeName">
             <el-tab-pane label="产品信息" name="first"></el-tab-pane>
             <el-tab-pane label="彩信任务" name="second"></el-tab-pane>
+            <!--<el-tab-pane label="个性化发送" name="sixth"></el-tab-pane>-->
             <el-tab-pane label="模板管理" name="third"></el-tab-pane>
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
             <!--<el-tab-pane label="发送列表" name="sixth"></el-tab-pane>-->
@@ -77,13 +78,41 @@
                     <el-button size="small" type="primary" @click="select">选择模板</el-button>
                   </el-form-item>
                 </div>
-                <el-form-item label="手机号码:" prop="phone" class="is-required">
-                  <el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"
-                            type="textarea" :disabled="disabled"></el-input>
+                <el-form-item label="手机号码:" prop="phone">
+                  <!--<el-input @blur="disPhone" v-model="ruleForm.phone" :rows="4" placeholder="选择导入号码或直接填写号码，多个号码使用英文逗号隔开"-->
+                  <!--type="textarea" :disabled="disabled"></el-input>-->
+                  <div class="wai">
+                    <div class="item-1">
+                      <div>总号码数</div>
+                      <div>{{upload_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>移动</div>
+                      <div>{{yd_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>联通</div>
+                      <div>{{lt_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>电信</div>
+                      <div>{{dx_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>虚拟</div>
+                      <div>{{xn_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>未知</div>
+                      <div>{{wz_num}}</div>
+                    </div>
+                    <div class="item-1">
+                      <div>无效</div>
+                      <div>{{wx_num}}</div>
+                    </div>
+                  </div>
                   <el-button class="import" type="primary" size="small " @click="dialogVisible = true">文件导入</el-button>
-                  <!--<div class="phone-num" v-if="ruleForm.phone">-->
-                    <!--总数：<span>{{upload_num}}</span>个，联通：<span>{{lt_num}}</span>个，移动：<span>{{yd_num}}</span>个，电信：<span>{{dx_num}}</span>个，未知：<span>{{wz_num}}</span>个，虚拟：<span>{{xn_num}}</span>个-->
-                  <!--</div>-->
+                  <el-button class="import" type="primary" size="small " @click="saveNumber">手动输入</el-button>
                 </el-form-item>
                 <el-form-item label="发送时间:" prop="dstime">
                   <el-date-picker v-model="ruleForm.dstime" type="datetime" placeholder="发送日期时间">
@@ -111,6 +140,17 @@
                 <el-button @click="dialogVisible = false">取 消</el-button>
                 <el-button type="primary" @click="confirmUpload">确 定</el-button>
               </span>
+              </el-dialog>
+              <el-dialog title="输入号码" :visible.sync="isShowNumInput" width="30%">
+                <el-form :model="ruleForm">
+                  <el-form-item>
+                    <el-input v-model="ruleForm.phone" type="textarea" :rows="4" placeholder="多个号码以英文逗号隔开，或以回车键分隔"></el-input>
+                  </el-form-item>
+                  <el-form-item>
+                    <el-button type="primary" size="small" @click="disPhone">确定</el-button>
+                    <el-button size="small" @click="isShowNumInput = false">取消</el-button>
+                  </el-form-item>
+                </el-form>
               </el-dialog>
             </div>
             <div class="right">
@@ -142,7 +182,7 @@
             <v-black-list></v-black-list>
           </div>
           <div v-if="activeName==='sixth'">
-            <v-task-list></v-task-list>
+            <v-mms-custom-send></v-mms-custom-send>
           </div>
         </div>
       </el-col>
@@ -155,13 +195,14 @@
   import vBlackList from './components/blackList'
   import vTaskList from './components/taskList'
   import vMmsTemplate from './components/mmsTemplate'
-
+  import vMmsCustomSend from './components/mmsCustomSend'
   export default {
     components: {
       vProductTemp,
       vBlackList,
       vTaskList,
-      vMmsTemplate
+      vMmsTemplate,
+      vMmsCustomSend
     },
     name: "mms",
     data() {
@@ -199,6 +240,7 @@
         wz_num: 0,
         xn_num: 0,
         upload_num: 0,
+        wx_num:0,
         messageType:false,
         selectTemp:false,
         list:[],
@@ -209,7 +251,8 @@
           pageNum:10
         },
         total:0,
-        sendTitle:''
+        sendTitle:'',
+        isShowNumInput:false
       }
     },
     watch: {
@@ -234,6 +277,9 @@
       }
     },
     methods: {
+      saveNumber() {
+        this.isShowNumInput = true
+      },
       changePage(page){
         this.screen.page = page
         this.getSmsTemp()
@@ -294,6 +340,7 @@
             that.wz_num = res.unknown_num
             that.xn_num = res.virtual_num
             that.upload_num = res.submit_num
+            that.wx_num = res.default_num
           }
         })
       },
@@ -335,10 +382,11 @@
         console.log(fileList)
       },
       disPhone() {
+        this.isShowNumInput = false
         let phoneStr = this.ruleForm.phone
         phoneStr = phoneStr.trim()
         this.ruleForm.phone = phoneStr.replace(/\s+/g, ",").replace(/\r\n/g, ',').replace(/\r/g, ',').replace(/\n/g, ',').replace(/,{2,}/g, ',')
-        // this.phoneAnalyze(this.ruleForm.phone)
+        this.phoneAnalyze(this.ruleForm.phone)
       },
       beforeUpload() {
 
@@ -565,5 +613,33 @@
     width: 90%;
     margin: 10px auto;
     object-fit: contain;
+  }
+  .wai{
+    width: 600px;
+    height: 130px;
+    border: 1px solid #e7eaed;
+    background: #f8f8f9;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+  }
+  .item-1 {
+    text-align: center;
+    width: 16.66%;
+    height: 57%;
+    display: flex;
+    align-items: center;
+    flex-direction:column;
+  }
+  .item-1 div:last-child{
+    font-size: 18px;
+    font-weight: 500;
+    margin-bottom: 20px;
+    height: 32px;
+    color: #1875f0;
+  }
+  .import {
+    margin-top: 10px;
   }
 </style>
