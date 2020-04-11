@@ -11,7 +11,6 @@
             <el-tab-pane label="模板管理" name="third"></el-tab-pane>
             <el-tab-pane label="签名管理" name="fourth"></el-tab-pane>
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
-            <el-tab-pane label="发送列表" name="sixth"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName === 'first'">
             <v-product-temp :name="bread" :content="content" type="business" :message-num="messageNum"></v-product-temp>
@@ -578,7 +577,7 @@
     color: #1889ff;
   }
   .wai{
-    width: 600px;
+    width: 515px;
     height: 130px;
     border: 1px solid #e7eaed;
     background: #f8f8f9;

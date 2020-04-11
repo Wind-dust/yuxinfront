@@ -3,13 +3,17 @@
     <el-row>
       <el-col :span="24">
         <div class="box-card box-shadow">
-          <h3 class="title">数据总览</h3>
+          <h3 class="title">日度报表</h3>
           <el-date-picker size="small" v-model="date" type="daterange" range-separator="--" :start-placeholder="startTime"
                           :end-placeholder="endTime" :picker-options="endDateOpt" ></el-date-picker>
           <!--<el-select size="small" v-model="type">-->
             <!--<el-option label="营销短信" value="1"></el-option>-->
             <!--<el-option label="行业短信" value="2"></el-option>-->
           <!--</el-select>-->
+          <el-select style="width: 150px" size="small" v-model="type" placeholder="请选择产品" >
+            <el-option v-for="(v,k) in service" :key="k" :label="v.business_name"
+                       :value="v.business_id"></el-option>
+          </el-select>
           <el-button size="mini" type="primary" @click="search">查询</el-button>
           <div id="main"></div>
           <div class="table">
@@ -73,7 +77,8 @@
         total:0,
         num:1,
         page:1,
-        pageSize:30
+        pageSize:30,
+        service:[]
       }
     },
     watch: {
@@ -99,19 +104,31 @@
       console.log(this.start)
       this.emit()
       // this.createLine()
-      this.getUserSendInfo()
+      this.getService()
       this.page = this.pageScreen.page
     },
     methods: {
+      getService() {
+        let that = this
+        that.$request({
+          url: 'user/getUserEquitises',
+          success(res) {
+            // that.disService(res.userEquities)
+            that.service = res.userEquities
+            that.type = res.userEquities[0].business_id
+            that.getUserSendInfo(res.userEquities[0].business_id)
+          }
+        })
+      },
       handleSizeChange(val) {
         this.pageSize = val
         this.pageScreen.pageNum = val
-        this.getUserSendInfo()
+        this.getUserSendInfo(this.type)
       },
       handleCurrentChange(val) {
         this.jumpPage = val
         this.pageScreen.page = val
-        this.getUserSendInfo()
+        this.getUserSendInfo(this.type)
       },
       getSummaries(param){
         console.log(param)
@@ -148,7 +165,7 @@
       pageChange(obj) {
         console.log(obj)
         this.screen.page = obj.page
-        this.getUserSendInfo()
+        this.getUserSendInfo(this.type)
       },
       search(){
         this.getUserSendInfo()
@@ -200,7 +217,7 @@
           }]
         })
       },
-      getUserSendInfo(){
+      getUserSendInfo(type){
         let that = this
         that.$request({
           url:'user/getUserStatisticsDay',
@@ -208,7 +225,8 @@
             page:that.pageScreen.page,
             pageNum:that.pageScreen.pageNum,
             start_timekey:that.start,
-            end_timekey:that.end
+            end_timekey:that.end,
+            business_id:that.type
           },
           success(res) {
             that.total=res.total
@@ -234,6 +252,9 @@
             case 9:
               data[i]._business = '游戏服务';
               break;
+            case 10:
+              data[i]._business = '视频彩信';
+              break;
             default:
               data[i]._business = '--'
           }
@@ -242,7 +263,7 @@
         return data
       },
       emit() {
-        this.$emit('getBread', '数据总览')
+        this.$emit('getBread', '日度报表')
       },
       submitForm(formName) {
         let that = this

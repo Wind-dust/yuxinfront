@@ -3,12 +3,16 @@
     <el-row>
       <el-col :span="24">
         <div class="box-card box-shadow">
-          <h3 class="title">数据总览</h3>
+          <h3 class="title">月度报表</h3>
           <el-date-picker size="small" v-model="date" type="month" :placeholder="startTime"></el-date-picker>
           <!--<el-select size="small" v-model="type">-->
           <!--<el-option label="营销短信" value="1"></el-option>-->
           <!--<el-option label="行业短信" value="2"></el-option>-->
           <!--</el-select>-->
+          <el-select style="width: 150px" size="small" v-model="type" placeholder="请选择产品" >
+            <el-option v-for="(v,k) in service" :key="k" :label="v.business_name"
+                       :value="v.business_id"></el-option>
+          </el-select>
           <el-button size="mini" type="primary" @click="search">查询</el-button>
           <div id="main"></div>
           <div class="table">
@@ -72,7 +76,8 @@
         total:0,
         num:1,
         page:1,
-        pageSize:20
+        pageSize:20,
+        service:[]
       }
     },
     watch: {
@@ -100,10 +105,24 @@
       console.log(this.start)
       this.emit()
       // this.createLine()
-      this.getUserSendInfo()
+      // this.getUserSendInfo()
+      this.getService()
       this.page = this.pageScreen.page
     },
     methods: {
+      getService() {
+        let that = this
+        that.$request({
+          url: 'user/getUserEquitises',
+          success(res) {
+            // that.disService(res.userEquities)
+            that.service = res.userEquities
+            that.type = res.userEquities[0].business_id
+
+            that.getUserSendInfo()
+          }
+        })
+      },
       handleSizeChange(val) {
         this.pageSize = val
         this.pageScreen.pageNum = val
@@ -120,7 +139,7 @@
       p(s) {
         return s < 10 ? '0' + s : s
       },
-      getUserSendInfo(){
+      getUserSendInfo(type){
         let that = this
         that.$request({
           url:'user/getUserStatisticsMonth',
@@ -128,7 +147,8 @@
             page:that.pageScreen.page,
             pageNum:that.pageScreen.pageNum,
             start_timekey:that.start,
-            end_timekey:that.end
+            end_timekey:that.end,
+            business_id:that.type
           },
           success(res) {
             that.total=res.total
@@ -154,6 +174,9 @@
             case 9:
               data[i]._business = '游戏服务';
               break;
+            case 10:
+              data[i]._business = '视频彩信';
+              break;
             default:
               data[i]._business = '--'
           }
@@ -162,7 +185,7 @@
         return data
       },
       emit() {
-        this.$emit('getBread', '数据总览')
+        this.$emit('getBread', '月度报表')
       },
       submitForm(formName) {
         let that = this

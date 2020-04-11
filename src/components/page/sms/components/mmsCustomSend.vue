@@ -136,7 +136,7 @@
         that.$request({
           url: 'user/getUserMultimediaTemplate',
           data: {
-            business_id: 9,
+            business_id: 8,
             page: that.screen.page,
             pageNum: that.screen.pageNum,
             status:2

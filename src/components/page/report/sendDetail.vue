@@ -1,71 +1,80 @@
 <template>
-  <div class="tcontent">
-    <el-row>
-      <el-col :span="24">
-        <div class="box-card box-shadow">
-          <!--<v-screen :screen="screenQuery" @query="onQuery"></v-screen>-->
-          <div v-if="status">
-            <h3 class="title">任务列表</h3>
-            <el-select style="width: 150px" size="small" v-model="type" placeholder="请选择产品" @change="query(type)">
-              <el-option v-for="(v,k) in service" :key="k" :label="v.business_name" :value="v.business_id"></el-option>
-            </el-select>
-            <!--<el-button size="mini" type="primary" @click="query(type)">查询</el-button>-->
-            <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" border>
-              <!--<el-table-column type="selection"></el-table-column>-->
-              <el-table-column prop="task_name" show-overflow-tooltip label="名称" v-if="type == 5"></el-table-column>
-              <el-table-column :label="type == 8?'标题':'内容'" :width="716" >
-                <template slot-scope="scope">
+  <div class="box-card box-shadow">
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="明细查询" name="first"></el-tab-pane>
+      <el-tab-pane label="上行查询" name="second"></el-tab-pane>
+    </el-tabs>
+    <div v-if="activeName == 'first'">
+      <el-row>
+        <el-col :span="24">
+          <div class="">
+            <!--<v-screen :screen="screenQuery" @query="onQuery"></v-screen>-->
+            <div v-if="status">
+              <el-select style="width: 150px;margin: 10px 0" size="small" v-model="type" placeholder="请选择产品" @change="query(type)">
+                <el-option v-for="(v,k) in service" :key="k" :label="v.business_name"
+                           :value="v.business_id"></el-option>
+              </el-select>
+              <!--<el-button size="mini" type="primary" @click="query(type)">查询</el-button>-->
+              <el-table ref="multipleTable" :data="list" tooltip-effect="dark" style="width: 100%" border>
+                <!--<el-table-column type="selection"></el-table-column>-->
+                <el-table-column prop="task_name" show-overflow-tooltip label="名称" v-if="type == 5"></el-table-column>
+                <el-table-column :label="type == 8?'标题':'内容'" :width="716">
+                  <template slot-scope="scope">
                   <span v-if="type == 8">{{scope.row.title}} <el-button type="text"
                                                                         @click="preview(scope.row.multimedia_frame,scope.row.title)">查看内容</el-button></span>
-                  <span v-else >{{scope.row.task_content}}</span>
-                </template>
-              </el-table-column>
-              <el-table-column prop="send_num" label="发送数量"></el-table-column>
-              <!--<el-table-column prop="source" label="来源" show-overflow-tooltip></el-table-column>-->
-              <el-table-column prop="create_time" label="提交时间" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="_appointment_time" label="定时时间" show-overflow-tooltip></el-table-column>
-              <el-table-column prop="address" label="操作" show-overflow-tooltip>
-                <template slot-scope="scope">
-                  <el-button size="small" type="primary" @click="getTaskInfo(scope.row.id)">明细查询</el-button>
-                </template>
-              </el-table-column>
-            </el-table>
-            <v-pagination @pageChange="pageChange" :num='num' :total="total" :page-size="10"
-                          :page="page"></v-pagination>
-          </div>
-          <div v-else>
-            <h3 class="title">明细查询</h3>
-            <el-button size="small" type="primary" @click="back">返回</el-button>
-            <div class="tabs">
-              <el-table ref="multipleTable" :data="task_log" tooltip-effect="dark" style="width: 100%">
-                <!--<el-table-column type="selection"></el-table-column>-->
-                <!--<el-table-colum type="index"></el-table-colum>-->
-                <el-table-column prop="mobile" label="手机号"></el-table-column>
-                <!--<el-table-column prop="task_content" show-overflow-tooltip label="短信内容"></el-table-column>-->
-                <!--<el-table-column prop="send_num" label="条数"></el-table-column>-->
-                <el-table-column prop="create_time" label="发送时间" show-overflow-tooltip></el-table-column>
-                <!--<el-table-column prop="create_time" label="回执时间" show-overflow-tooltip></el-table-column>-->
-                <el-table-column prop="_send_status" label="发送状态" show-overflow-tooltip></el-table-column>
-                <el-table-column prop="explanation" label="回执状态" show-overflow-tooltip></el-table-column>
+                    <span v-else>{{scope.row.task_content}}</span>
+                  </template>
+                </el-table-column>
+                <el-table-column prop="send_num" label="发送数量"></el-table-column>
+                <!--<el-table-column prop="source" label="来源" show-overflow-tooltip></el-table-column>-->
+                <el-table-column prop="create_time" label="提交时间" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="_appointment_time" label="定时时间" show-overflow-tooltip></el-table-column>
+                <el-table-column prop="address" label="操作" show-overflow-tooltip>
+                  <template slot-scope="scope">
+                    <el-button size="small" type="primary" @click="getTaskInfo(scope.row.id)">明细查询</el-button>
+                  </template>
+                </el-table-column>
               </el-table>
-              <v-pagination @pageChange="pageChangeDetail" :num='detailNum' :total="detailTotal" :page-size="10"
-                            :page="detailPage"></v-pagination>
+              <v-pagination @pageChange="pageChange" :num='num' :total="total" :page-size="10"
+                            :page="page"></v-pagination>
+            </div>
+            <div v-else>
+              <h3 class="title">明细查询</h3>
+              <el-button size="small" type="primary" @click="back">返回</el-button>
+              <div class="tabs">
+                <el-table ref="multipleTable" :data="task_log" tooltip-effect="dark" style="width: 100%">
+                  <!--<el-table-column type="selection"></el-table-column>-->
+                  <!--<el-table-colum type="index"></el-table-colum>-->
+                  <el-table-column prop="mobile" label="手机号"></el-table-column>
+                  <!--<el-table-column prop="task_content" show-overflow-tooltip label="短信内容"></el-table-column>-->
+                  <!--<el-table-column prop="send_num" label="条数"></el-table-column>-->
+                  <el-table-column prop="create_time" label="发送时间" show-overflow-tooltip></el-table-column>
+                  <!--<el-table-column prop="create_time" label="回执时间" show-overflow-tooltip></el-table-column>-->
+                  <el-table-column prop="_send_status" label="发送状态" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="explanation" label="回执状态" show-overflow-tooltip></el-table-column>
+                </el-table>
+                <v-pagination @pageChange="pageChangeDetail" :num='detailNum' :total="detailTotal" :page-size="10"
+                              :page="detailPage"></v-pagination>
+              </div>
             </div>
           </div>
-        </div>
-      </el-col>
-    </el-row>
+        </el-col>
+      </el-row>
 
-    <el-dialog title="详细内容" :visible.sync="dialogVisible" width="30%">
-      <p style="color: #848a9f;font-weight: bold;margin-bottom: 20px">{{title}}</p>
-      <div v-for="v,k in content">
-        <img style="object-fit: cover;max-width: 80%;" :src="v.image_path" alt="">
-        <p style="margin: 10px 0;max-width: 80%;">{{v.content}}</p>
-      </div>
-      <span slot="footer" class="dialog-footer">
+      <el-dialog title="详细内容" :visible.sync="dialogVisible" width="30%">
+        <p style="color: #848a9f;font-weight: bold;margin-bottom: 20px">{{title}}</p>
+        <div v-for="v,k in content">
+          <img style="object-fit: cover;max-width: 80%;" :src="v.image_path" alt="">
+          <p style="margin: 10px 0;max-width: 80%;">{{v.content}}</p>
+        </div>
+        <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="dialogVisible = false">关 闭</el-button>
       </span>
-    </el-dialog>
+      </el-dialog>
+    </div>
+    <div  v-else-if="activeName == 'second'">
+      <v-reply :service="service"></v-reply>
+    </div>
   </div>
 </template>
 
@@ -73,9 +82,11 @@
 <script>
   import vPagination from '../../component/pagination'
   import {format} from '../../../assets/js/formdate'
+  import vReply from './components/reply'
   export default {
     components: {
-      vPagination
+      vPagination,
+      vReply
     },
     props: [],
     name: "taskList",
@@ -83,7 +94,7 @@
       return {
         status: true,
         list: [],
-        content:[],
+        content: [],
         screen: {
           page: 1,
           pageNum: 10
@@ -108,8 +119,9 @@
         },
         service: [],
         type: '',
-        dialogVisible:false,
-        title:''
+        dialogVisible: false,
+        title: '',
+        activeName:'first'
       }
     },
     mounted() {
@@ -121,7 +133,7 @@
       this.getService()
     },
     methods: {
-      preview(data,title) {
+      preview(data, title) {
         console.log(data)
         this.content = data
         this.title = title
@@ -179,8 +191,8 @@
           }
         })
       },
-      disTask(data){
-        for (let i=0;i<data.length;i++){
+      disTask(data) {
+        for (let i = 0; i < data.length; i++) {
           if (data[i].appointment_time) {
             data[i]._appointment_time = format(data[i].appointment_time)
           } else {
@@ -219,16 +231,16 @@
           this.getTaskInfoDetail(id)
         } else if (this.type == 6) {
           this.getCodeTaskDetail(id)
-        } else if (this.type == 8){
+        } else if (this.type == 8) {
           this.getMmsTasDetailk(id)
         }
       },
-      getMmsTasDetailk(id){
+      getMmsTasDetailk(id) {
         let that = this
         that.$request({
-          url:'user/getUserMultimediaMessageTaskInfo',
-          data:{id:id,pageNum: that.detailScreen.pageNum, page: that.detailScreen.page},
-          success(res){
+          url: 'user/getUserMultimediaMessageTaskInfo',
+          data: {id: id, pageNum: that.detailScreen.pageNum, page: that.detailScreen.page},
+          success(res) {
             that.task_log = that.disinfo(res.task_log)
             that.detailTotal = res.total
           }
@@ -278,7 +290,7 @@
           this.getTaskList()
         } else if (this.type === 6) {
           this.getCodeTask()
-        } else if (this.type === 8){
+        } else if (this.type === 8) {
           this.getMmsTask()
         }
 

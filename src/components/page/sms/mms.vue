@@ -29,7 +29,7 @@
             <!--<el-tab-pane label="个性化发送" name="sixth"></el-tab-pane>-->
             <el-tab-pane label="模板管理" name="third"></el-tab-pane>
             <el-tab-pane label="黑名单管理" name="fifth"></el-tab-pane>
-            <!--<el-tab-pane label="发送列表" name="sixth"></el-tab-pane>-->
+            <el-tab-pane label="上行查询" name="seventh"></el-tab-pane>
           </el-tabs>
           <div v-if="activeName === 'first'">
             <v-product-temp name="图文彩信" :content="content" :messageNum="messageNum" :test="false"></v-product-temp>
@@ -615,7 +615,7 @@
     object-fit: contain;
   }
   .wai{
-    width: 600px;
+    width: 515px;
     height: 130px;
     border: 1px solid #e7eaed;
     background: #f8f8f9;
