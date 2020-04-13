@@ -60,6 +60,13 @@
                 <p>行业短信</p>
               </router-link>
             </div>
+
+            <div class="product">
+              <router-link class="go" to="/mms">
+                <img src="http://imagesdev.shyuxi.com/hangye.png" alt="">
+                <p>图文彩信</p>
+              </router-link>
+            </div>
           </div>
         </div>
       </el-col>
