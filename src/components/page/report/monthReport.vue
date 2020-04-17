@@ -22,10 +22,10 @@
               <el-table-column prop="time" label="日期"></el-table-column>
               <el-table-column prop="mobile_num" label="发送号码数量"></el-table-column>
               <el-table-column prop="num" label="发送总计费数"></el-table-column>
-              <el-table-column prop="success" label="成功计费数"></el-table-column>
-              <el-table-column prop="default" label="失败计费数"></el-table-column>
-              <el-table-column prop="unknown" label="未知条数"></el-table-column>
-              <el-table-column prop="ratio" label="成功率（%）"></el-table-column>
+              <el-table-column prop="success" v-if="receipt == 2" label="成功计费数"></el-table-column>
+              <el-table-column prop="default" v-if="receipt == 2" label="失败计费数"></el-table-column>
+              <el-table-column prop="unknown" v-if="receipt == 2" label="未知条数"></el-table-column>
+              <el-table-column prop="ratio" v-if="receipt == 2" label="成功率（%）"></el-table-column>
               <!--<el-table-column prop="address" label="操作"></el-table-column>-->
             </el-table>
           </div>
@@ -48,6 +48,7 @@
   import {Message} from 'element-ui'
   import echarts from 'echarts'
   import vPagination from '../../component/pagination'
+  import {mapGetters,mapState} from 'vuex'
 
   export default {
     components: {
@@ -79,6 +80,11 @@
         pageSize:20,
         service:[]
       }
+    },
+    computed:{
+      ...mapState({
+        receipt:state => state.par.receipt_info
+      })
     },
     watch: {
       date(newVal, oldVal) {

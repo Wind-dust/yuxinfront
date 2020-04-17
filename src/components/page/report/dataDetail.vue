@@ -35,7 +35,7 @@
                 <el-table-column prop="address" label="条数"></el-table-column>
                 <el-table-column prop="create_time" label="提交时间"></el-table-column>
                 <!--<el-table-column prop="address" label="回执时间"></el-table-column>-->
-                <el-table-column prop="address" label="状态"></el-table-column>
+                <el-table-column prop="address" v-if="receipt == 2" label="状态"></el-table-column>
               </el-table>
             </div>
           </div>
@@ -71,7 +71,7 @@
 
 <script>
   import {Message} from 'element-ui'
-
+  import {mapGetters} from 'vuex'
   export default {
     components: {},
     data() {
@@ -85,6 +85,7 @@
         mobile:''
       }
     },
+
     watch: {
       date(newVal, oldVal) {
         console.log(newVal)

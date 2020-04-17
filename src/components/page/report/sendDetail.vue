@@ -2,7 +2,7 @@
   <div class="box-card box-shadow">
     <el-tabs v-model="activeName">
       <el-tab-pane label="明细查询" name="first"></el-tab-pane>
-      <el-tab-pane label="上行查询" name="second"></el-tab-pane>
+      <el-tab-pane label="上行查询" v-if="upriver == 2" name="second"></el-tab-pane>
     </el-tabs>
     <div v-if="activeName == 'first'">
       <el-row>
@@ -51,7 +51,7 @@
                   <el-table-column prop="create_time" label="发送时间" show-overflow-tooltip></el-table-column>
                   <!--<el-table-column prop="create_time" label="回执时间" show-overflow-tooltip></el-table-column>-->
                   <el-table-column prop="_send_status" label="发送状态" show-overflow-tooltip></el-table-column>
-                  <el-table-column prop="explanation" label="回执状态" show-overflow-tooltip></el-table-column>
+                  <el-table-column prop="explanation" v-if="receipt == 2" label="回执状态" show-overflow-tooltip></el-table-column>
                 </el-table>
                 <v-pagination @pageChange="pageChangeDetail" :num='detailNum' :total="detailTotal" :page-size="10"
                               :page="detailPage"></v-pagination>
@@ -83,6 +83,7 @@
   import vPagination from '../../component/pagination'
   import {format} from '../../../assets/js/formdate'
   import vReply from './components/reply'
+  import {mapGetters,mapState} from 'vuex'
   export default {
     components: {
       vPagination,
@@ -123,6 +124,12 @@
         title: '',
         activeName:'first'
       }
+    },
+    computed:{
+      ...mapState({
+        receipt:state=>state.par.receipt,
+        upriver:state=>state.par.upriver
+      })
     },
     mounted() {
       // this.screen.page = parseInt(localStorage.getItem("task")) || 1

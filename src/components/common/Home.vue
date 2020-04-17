@@ -44,6 +44,11 @@
             that.$globalData.userInfo = res.data || {};
             that.name = res.data.nick_name
             that.logo = res.data.logo
+            that.$store.commit('setPrint',{
+              upriver:res.data.need_upriver_api,
+              receipt:res.data.need_receipt_api,
+              receipt_info:res.data.need_receipt_info
+            })
           }
         })
       }
