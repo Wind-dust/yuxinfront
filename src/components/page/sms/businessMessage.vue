@@ -22,7 +22,7 @@
                   <el-switch v-model="messageType" active-text="自定义发送" active-color="#13ce66" inactive-color="#1889ff"
                              :width="50" inactive-text="模板发送"></el-switch>
                 </el-form-item>
-                <el-form-item label="任务名称:" prop="taskName">
+                <el-form-item label="任务名称:" prop="taskName" v-if="messageType">
                   <el-input type="text" v-model="ruleForm.taskName"></el-input>
                 </el-form-item>
                 <div v-if="!messageType">
@@ -480,7 +480,7 @@
           content: that.ruleForm.tempContent,
           mobile: that.ruleForm.phone,
           dstime: that.ruleForm.dstime,
-          taskname: that.ruleForm.taskName,
+          taskname: that.ruleForm.tempTitle,
           develop_no:that.ruleForm.code
         }
         this.$refs[formName].validate((valid) => {
